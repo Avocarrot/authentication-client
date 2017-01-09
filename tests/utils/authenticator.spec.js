@@ -18,27 +18,27 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
   t.test('missing `store` configuration', (assert) => {
     assert.plan(1);
     try {
-      new Authenticator(null, Object(), Object());
+      new Authenticator(null, client, host);
     } catch (err) {
       assert.equals(err.message, 'Missing `store` configuration for Authenticator');
-    }
-  });
-
-  t.test('missing `host` configuration', (assert) => {
-    assert.plan(1);
-    try {
-      new Authenticator(Object(), Object(), null);
-    } catch (err) {
-      assert.equals(err.message, 'Missing `host` configuration for Authenticator');
     }
   });
 
   t.test('missing `client` configuration', (assert) => {
     assert.plan(1);
     try {
-      new Authenticator(Object(), null, Object());
+      new Authenticator(Store, null, host);
     } catch (err) {
       assert.equals(err.message, 'Missing `client` configuration for Authenticator');
+    }
+  });
+
+  t.test('missing `host` configuration', (assert) => {
+    assert.plan(1);
+    try {
+      new Authenticator(Store, client, null);
+    } catch (err) {
+      assert.equals(err.message, 'Missing `host` configuration for Authenticator');
     }
   });
 

@@ -1,6 +1,6 @@
 import Authenticator from './utils/authenticator';
 import Store from 'store';
-import Client from './utils/Client';
+import Client from './utils/client';
 import Host from './utils/host';
 
 const client = new Client("id", "secret");

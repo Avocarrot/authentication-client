@@ -1,6 +1,7 @@
 "use strict";
 const assert = require('assert');
-const axios = require('axios');
+const Host = require('./host');
+const Client = require('./client');
 
 /**
  * @module Authenticator
@@ -15,10 +16,11 @@ class Authenticator {
    * @param {Client} client - The authentication Client
    * @param {Host} host - The authentication Host
    */
+
   constructor(store, client, host) {
     assert(store, 'Missing `store` configuration for Authenticator');
-    assert(client, 'Missing `client` configuration for Authenticator');
-    assert(host, 'Missing `host` configuration for Authenticator');
+    assert(client instanceof Client, 'Missing `client` configuration for Authenticator');
+    assert(host instanceof Host, 'Missing `host` configuration for Authenticator');
     this.store = store;
     this.host = host;
     this.client = client;
@@ -60,8 +62,8 @@ class Authenticator {
    * @param {String} password - password value
    */
   authenticate(username, password) {
-    assert(password, 'Missing `password`');
     assert(username, 'Missing `username`');
+    assert(password, 'Missing `password`');
   }
 }
 
