@@ -6,4 +6,4 @@ stages:
 unit_test:
   stage: test
   script:
-    - npm test
+    - npm run cov
