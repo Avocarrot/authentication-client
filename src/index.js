@@ -1,9 +1,10 @@
-import Authenticator from './utils/authenticator';
-import Store from 'store';
-import Client from './utils/client';
-import Host from './utils/host';
+const Authenticator = require('./utils/authenticator');
+const Store = require('./utils/store');
+const Client = require('./utils/client');
+const Host = require('./utils/host');
 
-const client = new Client("id", "secret");
-const host = new Host("https://auth.avocarrot.com", "https://login.avocarrot.com");
+let client = new Client("id", "secret");
+let host = new Host("https://auth.avocarrot.com", "https://login.avocarrot.com");
+let store = new Store("avocarrot");
 
-global.window.AuthenticationClient = new Authenticator(Store, client, host);
+global.window.AuthenticationClient = new Authenticator(store, client, host);

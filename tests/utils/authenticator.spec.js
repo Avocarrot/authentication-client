@@ -1,13 +1,16 @@
 const test = require('tape');
 const Authenticator = require('../../src/utils/authenticator');
-const Store = require('store');
+const Store = require('../../src/utils/store');
 const Client = require('../../src/utils/client');
 const Host = require('../../src/utils/host');
 
-// Mocks
+/**
+ * Mocks
+ */
 
-const client = new Client("id", "secret");
-const host = new Host("endpoint", "login_url");
+const store = new Store('namespace');
+const client = new Client('id', 'secret');
+const host = new Host('endpoint', 'login_url');
 
 /**
  * Authenticator.constructor(options)
@@ -27,7 +30,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
   t.test('missing `client` configuration', (assert) => {
     assert.plan(1);
     try {
-      new Authenticator(Store, null, host);
+      new Authenticator(store, null, host);
     } catch (err) {
       assert.equals(err.message, 'Missing `client` configuration for Authenticator');
     }
@@ -36,7 +39,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
   t.test('missing `host` configuration', (assert) => {
     assert.plan(1);
     try {
-      new Authenticator(Store, client, null);
+      new Authenticator(store, client, null);
     } catch (err) {
       assert.equals(err.message, 'Missing `host` configuration for Authenticator');
     }
@@ -46,10 +49,10 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
 
 test('Authenticator.constructor(options) should store valid options', (assert) => {
   assert.plan(3);
-  var authenticator = new Authenticator(Store, client, host);
+  var authenticator = new Authenticator(store, client, host);
   assert.deepEquals(authenticator.host, host);
   assert.deepEquals(authenticator.client, client);
-  assert.deepEquals(authenticator.store, Store);
+  assert.deepEquals(authenticator.store, store);
 });
 
 /**
@@ -58,7 +61,7 @@ test('Authenticator.constructor(options) should store valid options', (assert) =
 
 test('Authenticator.invalidate(username, password) should throw an error for', (t) => {
 
-  var authenticator = new Authenticator(Store, client, host);
+  var authenticator = new Authenticator(store, client, host);
 
   t.test('missing `username`', (assert) => {
     assert.plan(1);
