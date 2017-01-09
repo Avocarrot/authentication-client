@@ -1,5 +1,5 @@
 "use strict";
-const nconf = require('../../config');
+const assert = require('assert');
 
 /**
  * @module Authenticator
@@ -8,12 +8,18 @@ class Authenticator {
   /**
    * Initializes Authenticator state
    * @constructor
-   * @param {string} host - The authentication api host
-   * @param {string} login_page_endpoint - The login page endpoint
+   * @param {object} options.store - The Store.js instance to use
+   * @param {string} options.host - The authentication API host
+   * @param {string} options.login_page_endpoint - The login page endpoint
    */
-  constructor(host, login_page_endpoint) {
-    this.host = host || nconf.get('host');
-    this.login_page_endpoint = login_page_endpoint || nconf.get('login_page_endpoint');
+  constructor(options) {
+    options = options || {};
+    assert(options.store, 'Missing `store` configuration for Authenticator');
+    assert(options.host, 'Missing `host` configuration for Authenticator');
+    assert(options.login_page_endpoint, 'Missing `login_page_endpoint` configuration for Authenticator');
+    this.store = options.store;
+    this.host = options.host;
+    this.login_page_endpoint = options.login_page_endpoint;
   }
 
   /**
