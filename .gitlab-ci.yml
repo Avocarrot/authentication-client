@@ -1,9 +1,9 @@
 image: node:6.9.0
 
 before_script:
-  - npm install -g istanbul
-  - npm install
-
+  - npm install -g yarn
+  - make yarn
+  
 stages:
   - test
 
