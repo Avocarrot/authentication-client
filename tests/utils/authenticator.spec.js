@@ -5,40 +5,43 @@ const Authenticator = require('../../src/utils/authenticator');
  * Authenticator.constructor(options)
  */
 
-test('Authenticator.constructor(options) should show error message for missing store configuration', (assert) => {
-  assert.plan(1);
-  try {
-    new Authenticator({
-      host: "host",
-      login_page_endpoint: "login_page_endpoint"
-    });
-  } catch (err) {
-    assert.equals(err.message, 'Missing store configuration for Authenticator');
-  }
-});
+test('Authenticator.constructor(options) should throw an error for', (t) => {
+  t.test('missing store configuration', (assert) => {
+    assert.plan(1);
+    try {
+      new Authenticator({
+        host: "host",
+        login_page_endpoint: "login_page_endpoint"
+      });
+    } catch (err) {
+      assert.equals(err.message, 'Missing store configuration for Authenticator');
+    }
+  });
 
-test('Authenticator.constructor(options) should show error message for missing host configuration', (assert) => {
-  assert.plan(1);
-  try {
-    new Authenticator({
-      store: Object(),
-      login_page_endpoint: "login_page_endpoint"
-    });
-  } catch (err) {
-    assert.equals(err.message, 'Missing host configuration for Authenticator');
-  }
-});
+  t.test('missing host configuration', (assert) => {
+    assert.plan(1);
+    try {
+      new Authenticator({
+        store: Object(),
+        login_page_endpoint: "login_page_endpoint"
+      });
+    } catch (err) {
+      assert.equals(err.message, 'Missing host configuration for Authenticator');
+    }
+  });
 
-test('Authenticator.constructor(options) should show error message for missing login page endpoint configuration', (assert) => {
-  assert.plan(1);
-  try {
-    new Authenticator({
-      store: Object(),
-      host: "host"
-    });
-  } catch (err) {
-    assert.equals(err.message, 'Missing login page endpoint configuration for Authenticator');
-  }
+  t.test('missing login page endpoint configuration', (assert) => {
+    assert.plan(1);
+    try {
+      new Authenticator({
+        store: Object(),
+        host: "host"
+      });
+    } catch (err) {
+      assert.equals(err.message, 'Missing login page endpoint configuration for Authenticator');
+    }
+  });
+
 });
 
 test('Authenticator.constructor(options) should store valid options', (assert) => {
