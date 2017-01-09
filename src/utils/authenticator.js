@@ -1,4 +1,6 @@
 "use strict";
+const nconf = require('../../config');
+
 /**
  * @module Authenticator
  */
@@ -7,9 +9,11 @@ class Authenticator {
    * Initializes Authenticator state
    * @constructor
    * @param {string} host - The authentication api host
+   * @param {string} login_page_endpoint - The login page endpoint
    */
-  constructor(host) {
-    this.host = host;
+  constructor(host, login_page_endpoint) {
+    this.host = host || nconf.get('host');
+    this.login_page_endpoint = login_page_endpoint || nconf.get('login_page_endpoint');
   }
 
   /**
