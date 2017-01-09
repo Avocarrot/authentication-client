@@ -6,4 +6,5 @@ stages:
 unit_test:
   stage: test
   script:
+    - npm install -g istanbul
     - npm run cov
