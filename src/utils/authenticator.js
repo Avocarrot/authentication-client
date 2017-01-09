@@ -1,4 +1,5 @@
 "use strict";
+const assert = require('assert');
 
 /**
  * @module Authenticator
@@ -13,17 +14,11 @@ class Authenticator {
    */
   constructor(options) {
     options = options || {};
-    if (typeof options.store === 'undefined') {
-      throw new Error('Missing store configuration for Authenticator')
-    }
-    if (typeof options.host === 'undefined') {
-      throw new Error('Missing host configuration for Authenticator')
-    }
-    if (typeof options.login_page_endpoint === 'undefined') {
-      throw new Error('Missing login page endpoint configuration for Authenticator')
-    }
+    assert(options.store, 'Missing store configuration for Authenticator');
     this.store = options.store;
+    assert(options.host, 'Missing host configuration for Authenticator');
     this.host = options.host;
+    assert(options.login_page_endpoint, 'Missing login page endpoint configuration for Authenticator');
     this.login_page_endpoint = options.login_page_endpoint;
   }
 
