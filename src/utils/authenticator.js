@@ -1,14 +1,25 @@
+"use strict";
+const assert = require('assert');
+
 /**
  * @module Authenticator
  */
-export default class {
+class Authenticator {
   /**
    * Initializes Authenticator state
    * @constructor
-   * @param {string} host - The authentication api host
+   * @param {object} options.store - The Store.js instance to use
+   * @param {string} options.host - The authentication API host
+   * @param {string} options.login_page_endpoint - The login page endpoint
    */
-  constructor(host) {
-    this.host = host;
+  constructor(options) {
+    options = options || {};
+    assert(options.store, 'Missing `store` configuration for Authenticator');
+    assert(options.host, 'Missing `host` configuration for Authenticator');
+    assert(options.login_page_endpoint, 'Missing `login_page_endpoint` configuration for Authenticator');
+    this.store = options.store;
+    this.host = options.host;
+    this.login_page_endpoint = options.login_page_endpoint;
   }
 
   /**
@@ -46,6 +57,7 @@ export default class {
    * @param {string} password - password value
    */
   authenticate(email, password) {
-  }
 
+  }
 }
+module.exports = Authenticator;

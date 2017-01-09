@@ -1,6 +1,7 @@
-/* jshint node: true */
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 "use strict";
 var gulp = require('gulp');
+var tape = require('gulp-tape');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
@@ -28,7 +29,9 @@ function bundle() {
   return getBundler()
     .transform(babelify)
     .bundle()
-    .on('error', function(err) { console.log('Error: ' + err.message); })
+    .on('error', function(err) {
+      console.error('Error: ' + err.message);
+    })
     .pipe(source(config.outputFile))
     .pipe(gulp.dest(config.outputDir))
     .pipe(reload({ stream: true }));
@@ -36,6 +39,11 @@ function bundle() {
 
 gulp.task('clean', function(cb){
   rimraf(config.outputDir, cb);
+});
+
+gulp.task('test', function(){
+  return gulp.src('tests/**/*.js')
+    .pipe(tape());
 });
 
 gulp.task('build-persistent', ['clean'], function() {
