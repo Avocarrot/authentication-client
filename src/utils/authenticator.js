@@ -1,30 +1,34 @@
 "use strict";
 const assert = require('assert');
+const Host = require('./host');
+const Client = require('./client');
 
 /**
  * @module Authenticator
  */
+
 class Authenticator {
+
   /**
    * Initializes Authenticator state
    * @constructor
-   * @param {object} options.store - The Store.js instance to use
-   * @param {string} options.host - The authentication API host
-   * @param {string} options.login_page_endpoint - The login page endpoint
+   * @param {Store} store - The Store.js instance to use
+   * @param {Client} client - The authentication Client
+   * @param {Host} host - The authentication Host
    */
-  constructor(options) {
-    options = options || {};
-    assert(options.store, 'Missing `store` configuration for Authenticator');
-    assert(options.host, 'Missing `host` configuration for Authenticator');
-    assert(options.login_page_endpoint, 'Missing `login_page_endpoint` configuration for Authenticator');
-    this.store = options.store;
-    this.host = options.host;
-    this.login_page_endpoint = options.login_page_endpoint;
+
+  constructor(store, client, host) {
+    assert(store, 'Missing `store` configuration for Authenticator');
+    assert(client instanceof Client, 'Missing `client` configuration for Authenticator');
+    assert(host instanceof Host, 'Missing `host` configuration for Authenticator');
+    this.store = store;
+    this.host = host;
+    this.client = client;
   }
 
   /**
    * Returns true if session is authenticated, false otherwise
-   * @returns {boolean} isAuthenticated
+   * @returns {Boolean} isAuthenticated
    */
   get isAuthenticated() {
     return false;
@@ -32,7 +36,7 @@ class Authenticator {
 
   /**
    * Returns user data (id, name email, pusblisher_id) for authenticated user
-   * @returns {object} user - user data for current seesion
+   * @returns {Object} user - user data for current seesion
    */
   get user() {
     return null;
@@ -40,7 +44,7 @@ class Authenticator {
 
   /**
    * Returns JWT bearer for authenticated session, if any
-   * @returns {string} bearer - JWT token
+   * @returns {String} bearer - JWT token
    */
   get bearer() {
     return null;
@@ -49,15 +53,18 @@ class Authenticator {
   /**
    * Invalidates all stored authentication token(s)
    */
-  invalidate() {}
+  invalidate() {
+  }
 
   /**
-   * Retrieves an authentication token for a an email-password combination
-   * @param {string} email - email value
-   * @param {string} password - password value
+   * Retrieves an authentication token for a an username-password combination
+   * @param {String} username - username value
+   * @param {String} password - password value
    */
-  authenticate(email, password) {
-
+  authenticate(username, password) {
+    assert(username, 'Missing `username`');
+    assert(password, 'Missing `password`');
   }
 }
+
 module.exports = Authenticator;
