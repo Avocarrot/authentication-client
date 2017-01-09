@@ -27,6 +27,7 @@
     "gulp-tape": "0.0.9",
     "lodash": "^2.4.1",
     "rimraf": "~2.2.8",
+    "sinon": "^1.17.7",
     "tape": "^4.6.3",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.1.1"
