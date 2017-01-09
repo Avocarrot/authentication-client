@@ -45,6 +45,3 @@ jspm_packages
 
 # Yarn Integrity file
 .yarn-integrity
-
-# Config values
-config/development.yaml
