@@ -11,8 +11,8 @@
     "build": "gulp build",
     "server": "gulp serve",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "NODE_ENV=test gulp test",
-    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape"
+    "test": "gulp test",
+    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover"
   },
   "bugs": {
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client/issues"
