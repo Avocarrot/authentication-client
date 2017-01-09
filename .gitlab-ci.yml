@@ -1,12 +1,15 @@
 image: node:6.9.0
 
+before_script:
+  - npm install -g istanbul
+  - npm install
+
 stages:
   - test
 
 test_coverage:
   stage: test
   script:
-    - npm install -g istanbul
     - npm run cov
   artifacts:
     paths:
