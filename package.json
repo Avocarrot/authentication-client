@@ -12,7 +12,7 @@
     "server": "gulp serve",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "gulp test",
-    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover"
+    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape"
   },
   "bugs": {
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client/issues"
