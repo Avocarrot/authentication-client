@@ -6,5 +6,5 @@ stages:
 test_coverage:
   stage: test
   script:
-    - npm install -g istanbul
+    - npm install -g istanbul tape
     - npm run cov
