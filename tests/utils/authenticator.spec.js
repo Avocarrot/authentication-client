@@ -8,9 +8,9 @@ const Host = require('../../src/utils/host');
  * Mocks
  */
 
-const store = new Store("mock");
-const client = new Client("id", "secret");
-const host = new Host("endpoint", "login_url");
+const store = new Store('mock');
+const client = new Client('id', 'secret');
+const host = new Host('endpoint', 'login_url');
 
 /**
  * Authenticator.constructor(options)
