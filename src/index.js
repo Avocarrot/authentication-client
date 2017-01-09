@@ -1,8 +1,9 @@
 import Authenticator from './utils/authenticator';
-import store from 'store';
+import Store from 'store';
+import Client from './utils/Client';
+import Host from './utils/host';
 
-global.window.AuthenticationClient = new Authenticator({
-  store: store,
-  host: "https://auth.avocarrot.com",
-  login_page_endpoint: "https://login.avocarrot.com"
-});
+const client = new Client("id", "secret");
+const host = new Host("https://auth.avocarrot.com", "https://login.avocarrot.com");
+
+global.window.AuthenticationClient = new Authenticator(Store, client, host);
