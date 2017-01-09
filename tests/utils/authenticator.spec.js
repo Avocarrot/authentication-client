@@ -6,7 +6,8 @@ const Authenticator = require('../../src/utils/authenticator');
  */
 
 test('Authenticator.constructor(options) should throw an error for', (t) => {
-  t.test('missing store configuration', (assert) => {
+
+  t.test('missing `store` configuration', (assert) => {
     assert.plan(1);
     try {
       new Authenticator({
@@ -14,11 +15,11 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
         login_page_endpoint: "login_page_endpoint"
       });
     } catch (err) {
-      assert.equals(err.message, 'Missing store configuration for Authenticator');
+      assert.equals(err.message, 'Missing `store` configuration for Authenticator');
     }
   });
 
-  t.test('missing host configuration', (assert) => {
+  t.test('missing `host` configuration', (assert) => {
     assert.plan(1);
     try {
       new Authenticator({
@@ -26,11 +27,11 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
         login_page_endpoint: "login_page_endpoint"
       });
     } catch (err) {
-      assert.equals(err.message, 'Missing host configuration for Authenticator');
+      assert.equals(err.message, 'Missing `host` configuration for Authenticator');
     }
   });
 
-  t.test('missing login page endpoint configuration', (assert) => {
+  t.test('missing `login_page_endpoint` configuration', (assert) => {
     assert.plan(1);
     try {
       new Authenticator({
@@ -38,7 +39,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
         host: "host"
       });
     } catch (err) {
-      assert.equals(err.message, 'Missing login page endpoint configuration for Authenticator');
+      assert.equals(err.message, 'Missing `login_page_endpoint` configuration for Authenticator');
     }
   });
 

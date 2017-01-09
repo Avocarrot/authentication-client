@@ -14,9 +14,9 @@ class Authenticator {
    */
   constructor(options) {
     options = options || {};
-    assert(options.store, 'Missing store configuration for Authenticator');
-    assert(options.host, 'Missing host configuration for Authenticator');
-    assert(options.login_page_endpoint, 'Missing login page endpoint configuration for Authenticator');
+    assert(options.store, 'Missing `store` configuration for Authenticator');
+    assert(options.host, 'Missing `host` configuration for Authenticator');
+    assert(options.login_page_endpoint, 'Missing `login_page_endpoint` configuration for Authenticator');
     this.store = options.store;
     this.host = options.host;
     this.login_page_endpoint = options.login_page_endpoint;
