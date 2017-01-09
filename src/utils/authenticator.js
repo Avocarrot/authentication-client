@@ -3,6 +3,9 @@ const assert = require('assert');
 const Host = require('./host');
 const Client = require('./client');
 
+/*eslint no-console: ["error", { allow: ["warn", "log", "error"] }] */
+
+
 /**
  * @module Authenticator
  */
@@ -18,7 +21,7 @@ class Authenticator {
    */
 
   constructor(store, client, host) {
-    assert(store, 'Missing `store` configuration for Authenticator');
+    assert(store instanceof Object, 'Missing `store` configuration for Authenticator');
     assert(client instanceof Client, 'Missing `client` configuration for Authenticator');
     assert(host instanceof Host, 'Missing `host` configuration for Authenticator');
     this.store = store;
