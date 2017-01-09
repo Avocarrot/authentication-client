@@ -1,7 +1,8 @@
+"use strict";
 /**
  * @module Authenticator
  */
-export default class {
+class Authenticator {
   /**
    * Initializes Authenticator state
    * @constructor
@@ -46,6 +47,7 @@ export default class {
    * @param {string} password - password value
    */
   authenticate(email, password) {
-  }
 
+  }
 }
+module.exports = Authenticator;
