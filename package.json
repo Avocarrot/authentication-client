@@ -12,7 +12,8 @@
     "server": "gulp watch",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "gulp test",
-    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape"
+    "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
+    "docs": "gulp docs"
   },
   "bugs": {
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client/issues"
@@ -23,6 +24,7 @@
     "browserify": "^6.3.3",
     "eslint": "^3.13.0",
     "gulp": "~3.8.10",
+    "gulp-jsdoc3": "^1.0.1",
     "gulp-rename": "^1.2.0",
     "gulp-tape": "0.0.9",
     "lodash": "^2.4.1",

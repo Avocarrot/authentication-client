@@ -38,6 +38,14 @@ To only build the library use
 npm run build
 ```
 
+## Documentation
+
+To generate the [JSDoc](http://usejsdoc.org/) documentation run
+```
+npm run docs
+```
+You can access the generated docs from `docs/index.html`
+
 
 ## Tests
 
@@ -55,16 +63,17 @@ You can access the report from `coverage/lcov/index.html`.
 
 > The test coverage results are published as a build artifact on pipeline builds
 
-## Deployment
 
-N/A
+## Development
 
+Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date 
 
 
 ## Built With
 
 * [Gulp](http://gulpjs.com/)
 * [Browserify](https://github.com/substack/node-browserify)
+* [JSDoc](http://usejsdoc.org/)
 
 ## Versioning
 

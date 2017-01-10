@@ -4,7 +4,7 @@ const Consumer = require('./consumer');
 const Store = require('./store');
 
 /**
- * @module Authenticator
+ * @class Authenticator
  */
 
 class Authenticator {
