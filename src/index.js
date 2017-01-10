@@ -6,8 +6,8 @@ const Client = require('./utils/client');
 const Consumer = require('./utils/consumer');
 
 /**
- * AuthenticationClient Factory
- * @module
+ * AuthenticationClient
+ * @namespace
  */
 var AuthenticationClient = (function() {
 
@@ -20,6 +20,8 @@ var AuthenticationClient = (function() {
   return {
     /**
      * Creates an Authenticator instance for a client_id, client_secret combination
+     * @function getInstanceFor
+     * @memberof AuthenticationClient
      * @param {String} client_id - The Client id
      * @param {String} client_secret - The Client secret
      */
