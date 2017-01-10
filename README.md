@@ -37,6 +37,10 @@ To only build the library use
 ```
 npm run build
 ```
+## Development
+
+Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date
+
 
 ## Documentation
 
@@ -62,11 +66,6 @@ npm run cov
 You can access the report from `coverage/lcov/index.html`.
 
 > The test coverage results are published as a build artifact on pipeline builds
-
-
-## Development
-
-Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date 
 
 
 ## Built With
