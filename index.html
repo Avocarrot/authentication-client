@@ -9,7 +9,8 @@
   </head>
     <script src="./dist/index.js"> </script>
     <script>
-      AuthenticationClient.authenticate('username', 'password');
+      var authenticationClient = AuthenticationClient.getInstanceFor('id', 'secret');
+      authenticationClient.authenticate('username', 'password');
     </script>
   </body>
 </html>

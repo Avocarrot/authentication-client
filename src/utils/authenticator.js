@@ -21,37 +21,6 @@ class Authenticator {
     this.store = store;
     this.consumer = consumer;
   }
-
-  /**
-   * Returns true if session is authenticated, false otherwise
-   * @returns {Boolean} isAuthenticated
-   */
-  get isAuthenticated() {
-    return false;
-  }
-
-  /**
-   * Returns user data (id, name email, pusblisher_id) for authenticated user
-   * @returns {Object} user - user data for current seesion
-   */
-  get user() {
-    return null;
-  }
-
-  /**
-   * Returns JWT bearer for authenticated session, if any
-   * @returns {String} bearer - JWT token
-   */
-  get bearer() {
-    return null;
-  }
-
-  /**
-   * Invalidates all stored authentication token(s)
-   */
-  invalidate() {
-  }
-
   /**
    * Retrieves an authentication token for a an username-password combination
    * @param {String} username - username value
