@@ -1,11 +1,14 @@
 'use strict';
 const assert = require('assert');
+
+/**
+ * @see https://github.com/marcuswestin/store.js/
+ */
 const LocalStorage = require('store');
 
 /**
  * Wrapper arround LocalStorage
  * @module Store
- * @see https://github.com/marcuswestin/store.js/
  */
 
 class Store {

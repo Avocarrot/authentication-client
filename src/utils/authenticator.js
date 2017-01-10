@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 const assert = require('assert');
-const Host = require('./host');
-const Client = require('./client');
+const Consumer = require('./consumer');
 const Store = require('./store');
 
 /**
@@ -14,16 +13,13 @@ class Authenticator {
    * Initializes Authenticator state
    * @constructor
    * @param {Store} store - The Store.js instance to use
-   * @param {Client} client - The authentication Client
-   * @param {Host} host - The authentication Host
+   * @param {Consumer} consumer - The API consumer
    */
-  constructor(store, client, host) {
+  constructor(store, consumer) {
     assert(store instanceof Store, 'Missing `store` configuration for Authenticator');
-    assert(client instanceof Client, 'Missing `client` configuration for Authenticator');
-    assert(host instanceof Host, 'Missing `host` configuration for Authenticator');
+    assert(consumer instanceof Consumer, 'Missing `consumer` configuration for Authenticator');
     this.store = store;
-    this.host = host;
-    this.client = client;
+    this.consumer = consumer;
   }
 
   /**
@@ -64,6 +60,10 @@ class Authenticator {
   authenticate(username, password) {
     assert(username, 'Missing `username`');
     assert(password, 'Missing `password`');
+    return this.consumer.retrieveToken(username, password).then(res => {
+      this.store.set('access_token', res.access_token);
+      this.store.set('refresh_token', res.refresh_token);
+    })
   }
 }
 
