@@ -2,13 +2,14 @@
 const assert = require('assert');
 
 /**
+ * Local Storage wrapper based on `Store.js`
  * @see https://github.com/marcuswestin/store.js/
  */
 const LocalStorage = require('store');
 
 /**
  * Wrapper arround LocalStorage
- * @module Store
+ * @class Store
  */
 
 class Store {
@@ -24,7 +25,7 @@ class Store {
   }
 
   /**
-   * Normalizes key based on namesp
+   * Normalizes key based on namespace
    * @param {String} key - The key to use
    * @returns {String} normalizedKey
    */

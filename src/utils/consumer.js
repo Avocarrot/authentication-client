@@ -5,7 +5,7 @@ const Client = require('./client');
 const Promise = require('es6-promise').Promise;
 
 /**
- * @module Consumer
+ * @class Consumer
  */
 
 class Consumer {

@@ -1,5 +1,5 @@
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
-"use strict";
+'use strict';
 var gulp = require('gulp');
 var tape = require('gulp-tape');
 var browserify = require('browserify');
@@ -9,6 +9,7 @@ var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
 var _ = require('lodash');
 var browserSync = require('browser-sync');
+var jsdoc = require('gulp-jsdoc3');
 var reload = browserSync.reload;
 
 var config = {
@@ -71,4 +72,10 @@ gulp.task('serve', function () {
       baseDir: './'
     }
   });
+});
+
+gulp.task('docs', function (cb) {
+  var jsdoc_config = require('./jsdoc.json');
+  gulp.src(['./src/**/*.js'], { read: false })
+  .pipe(jsdoc(jsdoc_config,cb));
 });

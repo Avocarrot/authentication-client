@@ -2,7 +2,7 @@
 const assert = require('assert');
 
 /**
- * @module Client
+ * @class Client
  */
 
 class Client {
