@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('assert');
-const fetch = require('node-fetch');
+const NodeFetch = require('node-fetch');
 const Client = require('./client');
 const Promise = require('es6-promise').Promise;
 
@@ -16,14 +16,16 @@ class Consumer {
    * @param {Client} client - The client to use
    * @param {String} endpoint - The Consumer endpoint
    * @param {String} login_url - The login page URL
+   * @param {String} api - The api to use for fetching data. Defaults to `NodeFetch`
    */
-  constructor(client, endpoint, login_url) {
+  constructor(client, endpoint, login_url, api) {
     assert(client instanceof Client, 'Missing `client`');
     assert(endpoint, 'Missing `endpoint`');
     assert(login_url, 'Missing `login_url`');
     this._client = client;
     this._endpoint = endpoint;
     this._login_url = login_url;
+    this._api = api || NodeFetch;
   }
 
   /**
@@ -50,7 +52,7 @@ class Consumer {
    */
   retrieveToken(username, password) {
     return new Promise((resolve, reject) => {
-      fetch(this._endpoint + '/token', {
+      this._api(this._endpoint + '/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -62,12 +64,9 @@ class Consumer {
           username: username,
           password: password
         }
-      })
-      .then(res => resolve({
-        access_token: res.access_token,
-        refresh_token: res.refresh_token,
-      }))
-      .catch(err => {
+      }).then(res => {
+        resolve(res);
+      }).catch(err => {
         let message = err && err.hasOwnProperty('error')? err.error: 'Unexpected error';
         reject(new Error(message));
       })
