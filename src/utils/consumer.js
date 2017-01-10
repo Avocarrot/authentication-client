@@ -51,26 +51,19 @@ class Consumer {
    * @returns {Promise} promise
    */
   retrieveToken(username, password) {
-    return new Promise((resolve, reject) => {
-      this._api(this._endpoint + '/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-        },
-        body: {
-          grant_type: 'password',
-          client_id:  this._client.id,
-          client_secret: this._client.secret,
-          username: username,
-          password: password
-        }
-      }).then(res => {
-        resolve(res);
-      }).catch(err => {
-        let message = err && err.hasOwnProperty('error')? err.error: 'Unexpected error';
-        reject(new Error(message));
-      })
-    });
+    return this._api(this._endpoint + '/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      },
+      body: {
+        grant_type: 'password',
+        client_id:  this._client.id,
+        client_secret: this._client.secret,
+        username: username,
+        password: password
+      }
+    }).catch(err => Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error')));
   }
 
 }
