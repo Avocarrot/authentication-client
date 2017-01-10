@@ -28,12 +28,12 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
     }
   });
 
-  t.test('missing `client` configuration', (assert) => {
+  t.test('missing `consumer` configuration', (assert) => {
     assert.plan(1);
     try {
       new Authenticator(store, Object());
     } catch (err) {
-      assert.equals(err.message, 'Missing `client` configuration for Authenticator');
+      assert.equals(err.message, 'Missing `consumer` configuration for Authenticator');
     }
   });
 

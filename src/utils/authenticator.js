@@ -17,7 +17,7 @@ class Authenticator {
    */
   constructor(store, consumer) {
     assert(store instanceof Store, 'Missing `store` configuration for Authenticator');
-    assert(consumer instanceof Consumer, 'Missing `client` configuration for Authenticator');
+    assert(consumer instanceof Consumer, 'Missing `consumer` configuration for Authenticator');
     this.store = store;
     this.consumer = consumer;
   }
