@@ -6,14 +6,13 @@ const Store = require('./store');
 /**
  * @class Authenticator
  */
-
 class Authenticator {
 
   /**
-   * Initializes Authenticator state
+   * Initializes Authenticator
    * @constructor
-   * @param {Store} store - The Store.js instance to use
-   * @param {Consumer} consumer - The API consumer
+   * @param {Store} store - The Store instance to use
+   * @param {Consumer} consumer - The Consumer instance to use
    */
   constructor(store, consumer) {
     assert(store instanceof Store, 'Missing `store` configuration for Authenticator');
@@ -22,9 +21,9 @@ class Authenticator {
     this.consumer = consumer;
   }
   /**
-   * Retrieves an authentication token for a an username-password combination
-   * @param {String} username - username value
-   * @param {String} password - password value
+   * Retrieves authentication tokens for a username-password combination
+   * @param {String} username - The username to use
+   * @param {String} password - The password to use
    */
   authenticate(username, password) {
     assert(username, 'Missing `username`');

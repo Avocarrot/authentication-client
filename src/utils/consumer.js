@@ -7,16 +7,15 @@ const Promise = require('es6-promise').Promise;
 /**
  * @class Consumer
  */
-
 class Consumer {
 
   /**
    * Initializes Consumer
    * @constructor
-   * @param {Client} client - The client to use
-   * @param {String} endpoint - The Consumer endpoint
+   * @param {Client} client - The Client instance to use
+   * @param {String} endpoint - The host endpoint
    * @param {String} login_url - The login page URL
-   * @param {String} api - The api to use for fetching data. Defaults to `NodeFetch`
+   * @param {String} api - The api to use for fetching data - Defaults to `NodeFetch`
    */
   constructor(client, endpoint, login_url, api) {
     assert(client instanceof Client, 'Missing `client`');
@@ -29,23 +28,23 @@ class Consumer {
   }
 
   /**
-   * Returns Client id
-   * @returns {String} id
+   * Returns endpoint
+   * @returns {String} endpoint
    */
   get endpoint() {
     return this._endpoint;
   }
 
   /**
-   * Returns Client id
-   * @returns {String} id
+   * Returns the login_url
+   * @returns {String} login_url
    */
   get login_url() {
     return this._login_url;
   }
 
   /**
-   * Retrieves token from Consumer
+   * Retrieves token from a username-password combination
    * @param {String} username - The username to use
    * @param {String} password - The password to use
    * @returns {Promise} promise

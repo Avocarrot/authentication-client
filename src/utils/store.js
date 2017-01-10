@@ -11,13 +11,12 @@ const LocalStorage = require('store');
  * Wrapper arround LocalStorage
  * @class Store
  */
-
 class Store {
 
   /**
    * Initializes Store
    * @constructor
-   * @param {String} namespace - The namespace to use for all operations
+   * @param {String} namespace - The namespace where all values will be attached
    */
   constructor(namespace) {
     assert(namespace, 'Missing `namespace`');
@@ -34,7 +33,7 @@ class Store {
   }
 
   /**
-   * Set a key value pair
+   * Sets value for a key
    * @param {String} key - The key to use
    * @param {String} value - The value to set
    */
@@ -52,7 +51,7 @@ class Store {
   }
 
   /**
-   * Removes key value pair for a key
+   * Removes key value pair
    * @param {String} key - The key to use
    */
   remove(key) {

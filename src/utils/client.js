@@ -4,7 +4,6 @@ const assert = require('assert');
 /**
  * @class Client
  */
-
 class Client {
 
   /**
@@ -29,8 +28,8 @@ class Client {
   }
 
   /**
-   * Returns Client id
-   * @returns {String} id
+   * Returns Client secret
+   * @returns {String} secret
    */
   get secret() {
     return this._secret;

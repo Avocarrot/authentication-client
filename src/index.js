@@ -12,7 +12,7 @@ const Consumer = require('./utils/consumer');
 var AuthenticationClient = (function() {
 
   /**
-   * Store object
+   * Store instance
    * @private
    */
   const store = new Store(config.store.namespace);
