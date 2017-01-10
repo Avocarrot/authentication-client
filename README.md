@@ -44,7 +44,7 @@ To generate the [JSDoc](http://usejsdoc.org/) documentation run
 ```
 npm run docs
 ```
-You can access the generated docs from `docs/gen/index.html`
+You can access the generated docs from `docs/index.html`
 
 
 ## Tests
