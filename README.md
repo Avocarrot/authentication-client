@@ -64,9 +64,9 @@ You can access the report from `coverage/lcov/index.html`.
 > The test coverage results are published as a build artifact on pipeline builds
 
 
-## Deployment
+## Development
 
-N/A
+Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date 
 
 
 ## Built With
