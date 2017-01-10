@@ -44,7 +44,7 @@ class Store {
    * @returns {String} value
    */
   get(key) {
-    StoreJS.get(this._normalizeKey(key))
+    return StoreJS.get(this._normalizeKey(key))
   }
 
   /**
