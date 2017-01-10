@@ -79,16 +79,19 @@ test('Consumer.retrieveToken(client_id, client_secret, username, password) shoul
     sandbox.restore();
   });
 
-  t.test('reject with error on failure', (assert) => {
+  t.test('reject with specific error on failure', (assert) => {
     assert.plan(1);
-    let client = new Client('id', 'secret');
-    let apiStub = sandbox.stub().returns(Promise.reject({
-      'error':'invalid_request'
-    }));
-    let consumer = new Consumer(client, 'http://auth.com', 'http://login.com', apiStub);
-    consumer.retrieveToken('username', 'password').catch(err => {
-      assert.equals(err.message, 'invalid_request');
-    });
+    let apiStub = sandbox.stub().returns(Promise.reject({'error':'invalid_request'}));
+    let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
+    consumer.retrieveToken('username', 'password').catch(err => assert.equals(err.message, 'invalid_request'));
+    sandbox.restore();
+  });
+
+  t.test('reject with generic error on failure', (assert) => {
+    assert.plan(1);
+    let apiStub = sandbox.stub().returns(Promise.reject());
+    let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
+    consumer.retrieveToken('username', 'password').catch(err => assert.equals(err.message, 'Unexpected error'));
     sandbox.restore();
   });
 
