@@ -1,10 +1,16 @@
 'use strict';
 const test = require('tape');
-const Consumer = require('../../src/utils/consumer');
-const Client = require('../../src/utils/client');
+const Consumer = require('../../../src/utils/consumer');
+const Client = require('../../../src/utils/client');
 const sinon = require('sinon');
 
 var sandbox = sinon.sandbox.create();
+
+/**
+ * Mocks
+ */
+const TokenMocks = require('../../mocks/token');
+const UserMocks = require('../../mocks/user');
 
 /**
  * Consumer.constructor(options)
@@ -62,9 +68,9 @@ test('Consumer._getFromAPI(resource, options) should', (t) => {
 
   t.test('reject with specific error on failure', (assert) => {
     assert.plan(1);
-    let apiStub = sandbox.stub().returns(Promise.reject({'error':'invalid_request'}));
+    let apiStub = sandbox.stub().returns(Promise.reject({'error':'error_message'}));
     let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
-    consumer._getFromAPI().catch(err => assert.equals(err.message, 'invalid_request'));
+    consumer._getFromAPI().catch(err => assert.equals(err.message, 'error_message'));
     sandbox.restore();
   });
 
@@ -83,15 +89,11 @@ test('Consumer._getFromAPI(resource, options) should', (t) => {
  */
 
 test('Consumer.retrieveToken(username, password) should return `access_token` and `refresh_token` on success', (assert) => {
-  assert.plan(5);
-  let apiStub = sandbox.stub().returns(Promise.resolve({
-    'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
-  }));
+  assert.plan(4);
+  let apiStub = sandbox.stub().returns(Promise.resolve(TokenMocks.PaswordGrant));
   let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
   consumer.retrieveToken('username', 'password').then(res => {
-    assert.equals(res.access_token, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
-    assert.equals(res.refresh_token, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+    assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/token');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
     assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'password', password: 'password', username: 'username' });
@@ -104,15 +106,11 @@ test('Consumer.retrieveToken(username, password) should return `access_token` an
  */
 
 test('Consumer.refreshToken(refresh_token) should return a renewed token', (assert) => {
-  assert.plan(5);
-  let apiStub = sandbox.stub().returns(Promise.resolve({
-    'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
-  }));
+  assert.plan(4);
+  let apiStub = sandbox.stub().returns(Promise.resolve(TokenMocks.RefreshGrant));
   let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
   consumer.refreshToken('refresh_token').then(res => {
-    assert.equals(res.access_token, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
-    assert.equals(res.refresh_token, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+    assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/token');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
     assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'refresh_token', refresh_token: 'refresh_token' });
@@ -126,26 +124,11 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
  */
 
 test('Consumer.createUser(email, first_name, last_name, password) should return details for a new User', (assert) => {
-  assert.plan(3);
-  let apiStub = sandbox.stub().returns(Promise.resolve({
-    "id": "44d2c8e0-762b-4fa5-8571-097c81c3130d",
-    "publisher_id": "55f5c8e0-762b-4fa5-8571-197c8183130a",
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@gmail.com",
-    "_links": {
-      "self": {
-        "href": "http://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d",
-        "type": "application/json"
-      },
-      "publisher": {
-        "href": "https://platform.avocarrot.com/publishers/55f5c8e0-762b-4fa5-8571-197c8183130a",
-        "type": "application/vnd.api+json"
-      }
-    }
-  }));
+  assert.plan(4);
+  let apiStub = sandbox.stub().returns(Promise.resolve(UserMocks.CreateUser));
   let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
-  consumer.createUser('email', 'first_name', 'last_name', 'password').then(() => {
+  consumer.createUser('email', 'first_name', 'last_name', 'password').then((res) => {
+    assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/users');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
     assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', email:'email', first_name:'first_name', last_name: 'last_name', password: 'password' });
