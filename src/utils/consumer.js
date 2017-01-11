@@ -34,7 +34,7 @@ class Consumer {
    * @param {Object} options - The options to pass
    * @returns {Promise}
    */
-  _getFromAPI(resource, options){
+  _request(resource, options){
     options = options || {};
     return this._api(this._endpoint + '/'  + resource, {
       method: options.method,
@@ -69,7 +69,7 @@ class Consumer {
    * @returns {Promise}
    */
   retrieveToken(username, password) {
-    return this._getFromAPI('token', {
+    return this._request('token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -88,7 +88,7 @@ class Consumer {
    * @returns {Promise}
    */
   refreshToken(refresh_token) {
-    return this._getFromAPI('token', {
+    return this._request('token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'

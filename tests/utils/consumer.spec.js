@@ -56,16 +56,16 @@ test('Client.id should return correct `endpoint` and `login_url` values', (asser
 });
 
 /**
- * Consumer._getFromAPI(resource, options)
+ * Consumer._request(resource, options)
  */
 
-test('Consumer._getFromAPI(resource, options) should', (t) => {
+test('Consumer._request(resource, options) should', (t) => {
 
   t.test('reject with specific error on failure', (assert) => {
     assert.plan(1);
     let apiStub = sandbox.stub().returns(Promise.reject({'error':'invalid_request'}));
     let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
-    consumer._getFromAPI().catch(err => assert.equals(err.message, 'invalid_request'));
+    consumer._request().catch(err => assert.equals(err.message, 'invalid_request'));
     sandbox.restore();
   });
 
@@ -73,7 +73,7 @@ test('Consumer._getFromAPI(resource, options) should', (t) => {
     assert.plan(1);
     let apiStub = sandbox.stub().returns(Promise.reject());
     let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
-    consumer._getFromAPI('resource', {}).catch(err => assert.equals(err.message, 'Unexpected error'));
+    consumer._request('resource', {}).catch(err => assert.equals(err.message, 'Unexpected error'));
     sandbox.restore();
   });
 
