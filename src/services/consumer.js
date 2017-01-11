@@ -34,16 +34,10 @@ class Consumer {
    * @param {Object} options - The options to pass
    * @returns {Promise}
    */
-  _request(resource, options){
-    options = options || {};
-    return this._api(this._endpoint + '/'  + resource, {
-      method: options.method,
-      headers: options.headers,
-      body: Object.assign(options.body || {}, {
-        client_id: this._client.id,
-        client_secret: this._client.secret
-      })
-    }).catch(err => Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error')));
+  _request(resource, body){
+    return this._api(this._endpoint + '/'  + resource, body).catch(err => {
+      return Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error'))
+    });
   }
 
   /**
@@ -75,9 +69,11 @@ class Consumer {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
       body: {
-        grant_type: 'password',
         username,
-        password
+        password,
+        grant_type: 'password',
+        client_id: this._client.id,
+        client_secret: this._client.secret
       }
     });
   }
@@ -94,8 +90,10 @@ class Consumer {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
       body: {
+        refresh_token,
         grant_type: 'refresh_token',
-        refresh_token
+        client_id: this._client.id,
+        client_secret: this._client.secret
       }
     });
   }
@@ -124,9 +122,24 @@ class Consumer {
   }
 
   /**
+   * Retrives a User
+   * @param {String} token - The `Bearer` token
+   * @returns {Promise}
+   */
+  retrieveUser(token) {
+    return this._request('users/me', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json; charset=utf-8'
+      }
+    });
+  }
+
+  /**
    * Updates a User
    * @param {String} userId - The User id
-   * @param {String} bearer - The `Bearer` token to use
+   * @param {String} bearer - The `Bearer` token
    * @param {String} options.email - The email to use
    * @param {String} options.first_name - The first_name to use
    * @param {String} options.last_name - The last_name to use
@@ -141,6 +154,41 @@ class Consumer {
         'Content-Type': 'application/json; charset=utf-8'
       },
       body: options
+    });
+  }
+
+  /**
+   * Requests for a password reset
+   * @param {String} email - The email to forward the reset token to
+   * @returns {Promise}
+   */
+  requestPasswordReset(email) {
+    return this._request('passwords', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: {
+        email
+      }
+    });
+  }
+
+  /**
+   * Resets password
+   * @param {String} token - The reset token to use
+   * @param {String} password - The new password
+   * @returns {Promise}
+   */
+  resetPassword(token, password) {
+    return this._request('passwords/' + token, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: {
+        password
+      }
     });
   }
 

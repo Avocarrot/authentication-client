@@ -1,7 +1,8 @@
 'use strict';
 const config = require('../config/default');
-const Authenticator = require('./services/authenticator');
+const Authenticator = require('./authenticator');
 const Store = require('./services/store');
+const User = require('./models/user');
 const Client = require('./models/client');
 const Consumer = require('./services/consumer');
 
@@ -26,7 +27,10 @@ var AuthenticationClient = (function() {
      * @param {String} client_secret - The Client secret
      */
     getInstanceFor(client_id, client_secret) {
-      return new Authenticator(store, new Consumer(new Client(client_id, client_secret), config.host.endpoint, config.host.login_url));
+      const consumer =  new Consumer(new Client(client_id, client_secret), config.host.endpoint, config.host.login_url);
+      const user = new User(store, consumer);
+      const authenticator = new Authenticator(user, consumer);
+      return authenticator;
     }
   }
 })();
