@@ -10,6 +10,7 @@ var source = require('vinyl-source-stream');
 var _ = require('lodash');
 var browserSync = require('browser-sync');
 var jsdoc = require('gulp-jsdoc3');
+var tapSpec = require('tap-spec');
 var reload = browserSync.reload;
 
 var config = {
@@ -44,7 +45,9 @@ gulp.task('clean', function(cb){
 
 gulp.task('test', function(){
   return gulp.src('tests/**/*.js')
-    .pipe(tape());
+    .pipe(tape({
+      reporter: tapSpec()
+    }));
 });
 
 gulp.task('build-persistent', ['clean'], function() {
