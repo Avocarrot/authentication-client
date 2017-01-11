@@ -23,7 +23,7 @@ class User {
   }
 
   /**
-   * Returns User id
+  * User id (read-only)
    * @returns {String}
    */
   get id() {
@@ -31,7 +31,7 @@ class User {
   }
 
   /**
-   * Returns User publisherId
+   * User publisherId (read-only)
    * @returns {String}
    */
   get publisherId() {
@@ -39,41 +39,12 @@ class User {
   }
 
   /**
-   * Returns User email
+   * User email (read/write)
    * @returns {String}
    */
   get email() {
     return this._email;
   }
-
-  /**
-   * Returns User firstName
-   * @returns {String}
-   */
-  get firstName() {
-    return this._firstName;
-  }
-
-  /**
-   * Returns User lastName
-   * @returns {String}
-   */
-  get lastName() {
-    return this._lastName;
-  }
-
-  /**
-   * Returns User id
-   * @returns {Object}
-   */
-  get bearer() {
-    return this._store.get('access_token')
-  }
-
-  /**
-   * Sets User email
-   * @returns {String}
-   */
   set email(newEmail) {
     if (newEmail){
       this._email = newEmail;
@@ -81,9 +52,12 @@ class User {
   }
 
   /**
-   * Sets User firstName
+   * User first name (read/write)
    * @returns {String}
    */
+  get firstName() {
+    return this._firstName;
+  }
   set firstName(newFirstName) {
     if (newFirstName){
       this._firstName = newFirstName;
@@ -91,9 +65,12 @@ class User {
   }
 
   /**
-   * Sets User lastName
+   * User last name (read/write)
    * @returns {String}
    */
+  get lastName() {
+    return this._lastName;
+  }
   set lastName(newLastName) {
     if (newLastName){
       this._lastName = newLastName;
@@ -101,10 +78,12 @@ class User {
   }
 
   /**
-   * Sets bearer
-   * @param {String} options.accessToken - The authentication access token
-   * @returns {String}
+   * Bearer token (read/write)
+   * @returns {Object}
    */
+  get bearer() {
+    return this._store.get('access_token')
+  }
   set bearer(accessToken) {
     if (accessToken) {
       this._store.set('access_token', accessToken);
@@ -115,7 +94,6 @@ class User {
    * Updates User details
    * @returns {Promise}
    */
-
   save() {
     if (!this.id){
       return Promise.reject(new Error('Cannot save a non-existent User'));
