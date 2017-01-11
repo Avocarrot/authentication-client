@@ -47,7 +47,12 @@ class Authenticator {
     assert(first_name, 'Missing `first_name`');
     assert(last_name, 'Missing `last_name`');
     assert(password, 'Missing `password`');
-    return this.consumer.createUser(email, first_name, last_name, password);
+    return this.consumer.createUser({
+      email,
+      first_name,
+      last_name,
+      password
+    });
   }
 
 }
