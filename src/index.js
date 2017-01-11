@@ -2,7 +2,7 @@
 const config = require('../config/default');
 const Authenticator = require('./utils/authenticator');
 const Store = require('./utils/store');
-const Client = require('./utils/client');
+const Client = require('./models/client');
 const Consumer = require('./utils/consumer');
 
 /**

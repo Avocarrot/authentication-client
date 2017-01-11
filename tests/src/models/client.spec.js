@@ -1,5 +1,5 @@
 const test = require('tape');
-const Client = require('../../../src/utils/client');
+const Client = require('../../../src/models/client');
 
 /**
  * Client.constructor(options)

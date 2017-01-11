@@ -1,7 +1,7 @@
 'use strict';
 const test = require('tape');
 const Consumer = require('../../../src/utils/consumer');
-const Client = require('../../../src/utils/client');
+const Client = require('../../../src/models/client');
 const sinon = require('sinon');
 
 var sandbox = sinon.sandbox.create();

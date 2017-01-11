@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert');
 const NodeFetch = require('node-fetch');
-const Client = require('./client');
+const Client = require('../models/client');
 const Promise = require('es6-promise').Promise;
 
 /**
