@@ -28,8 +28,27 @@ class Consumer {
   }
 
   /**
+   * Returns data from API
+   * @private
+   * @param {String} resource - The resource to fetch from
+   * @param {Object} options - The options to pass
+   * @returns {Promise}
+   */
+  _request(resource, options){
+    options = options || {};
+    return this._api(this._endpoint + '/'  + resource, {
+      method: options.method,
+      headers: options.headers,
+      body: Object.assign(options.body || {}, {
+        client_id: this._client.id,
+        client_secret: this._client.secret
+      })
+    }).catch(err => Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error')));
+  }
+
+  /**
    * Returns endpoint
-   * @returns {String} endpoint
+   * @returns {String}
    */
   get endpoint() {
     return this._endpoint;
@@ -37,7 +56,7 @@ class Consumer {
 
   /**
    * Returns the login_url
-   * @returns {String} login_url
+   * @returns {String}
    */
   get login_url() {
     return this._login_url;
@@ -47,23 +66,40 @@ class Consumer {
    * Retrieves token from a username-password combination
    * @param {String} username - The username to use
    * @param {String} password - The password to use
-   * @returns {Promise} promise
+   * @returns {Promise}
    */
   retrieveToken(username, password) {
-    return this._api(this._endpoint + '/token', {
+    return this._request('token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
       body: {
         grant_type: 'password',
-        client_id:  this._client.id,
-        client_secret: this._client.secret,
-        username: username,
-        password: password
+        username,
+        password
       }
-    }).catch(err => Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error')));
+    });
+  }
+
+  /**
+   * Returns a renewed token
+   * @param {String} refresh_token - The refresh token to use
+   * @returns {Promise}
+   */
+  refreshToken(refresh_token) {
+    return this._request('token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      },
+      body: {
+        grant_type: 'refresh_token',
+        refresh_token
+      }
+    });
   }
 
 }
+
 module.exports = Consumer;

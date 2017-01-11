@@ -55,35 +55,17 @@ test('Client.id should return correct `endpoint` and `login_url` values', (asser
   assert.equals(consumer.login_url, 'http://login.com');
 });
 
-
 /**
- * Consumer.retrieveToken(client_id, client_secret, username, password)
+ * Consumer._request(resource, options)
  */
 
-test('Consumer.retrieveToken(client_id, client_secret, username, password) should', (t) => {
-
-  t.test('return `access_token` and `refresh_token` on success', (assert) => {
-    assert.plan(4);
-    let client = new Client('id', 'secret');
-    let apiStub = sandbox.stub().returns(Promise.resolve({
-      'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-      'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
-    }));
-    let consumer = new Consumer(client, 'http://auth.com', 'http://login.com', apiStub);
-    consumer.retrieveToken('username', 'password').then(res => {
-      assert.equals(res.access_token, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
-      assert.equals(res.refresh_token, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
-      assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.com/token');
-      assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'password', password: 'password', username: 'username' });
-    });
-    sandbox.restore();
-  });
+test('Consumer._request(resource, options) should', (t) => {
 
   t.test('reject with specific error on failure', (assert) => {
     assert.plan(1);
     let apiStub = sandbox.stub().returns(Promise.reject({'error':'invalid_request'}));
     let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
-    consumer.retrieveToken('username', 'password').catch(err => assert.equals(err.message, 'invalid_request'));
+    consumer._request().catch(err => assert.equals(err.message, 'invalid_request'));
     sandbox.restore();
   });
 
@@ -91,8 +73,52 @@ test('Consumer.retrieveToken(client_id, client_secret, username, password) shoul
     assert.plan(1);
     let apiStub = sandbox.stub().returns(Promise.reject());
     let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com', apiStub);
-    consumer.retrieveToken('username', 'password').catch(err => assert.equals(err.message, 'Unexpected error'));
+    consumer._request('resource', {}).catch(err => assert.equals(err.message, 'Unexpected error'));
     sandbox.restore();
   });
 
+});
+
+/**
+ * Consumer.retrieveToken(username, password)
+ */
+
+test('Consumer.retrieveToken(username, password) should return `access_token` and `refresh_token` on success', (assert) => {
+  assert.plan(5);
+  let client = new Client('id', 'secret');
+  let apiStub = sandbox.stub().returns(Promise.resolve({
+    'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
+  }));
+  let consumer = new Consumer(client, 'http://auth.com', 'http://login.com', apiStub);
+  consumer.retrieveToken('username', 'password').then(res => {
+    assert.equals(res.access_token, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
+    assert.equals(res.refresh_token, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+    assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.com/token');
+    assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'password', password: 'password', username: 'username' });
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.refreshToken(refresh_token)
+ */
+
+test('Consumer.refreshToken(refresh_token) should return a renewed token', (assert) => {
+  assert.plan(5);
+  let client = new Client('id', 'secret');
+  let apiStub = sandbox.stub().returns(Promise.resolve({
+    'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
+  }));
+  let consumer = new Consumer(client, 'http://auth.com', 'http://login.com', apiStub);
+  consumer.refreshToken('refresh_token').then(res => {
+    assert.equals(res.access_token, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
+    assert.equals(res.refresh_token, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+    assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.com/token');
+    assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'refresh_token', refresh_token: 'refresh_token' });
+  });
+  sandbox.restore();
 });

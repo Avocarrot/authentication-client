@@ -21,7 +21,7 @@ class Client {
 
   /**
    * Returns Client id
-   * @returns {String} id
+   * @returns {String}
    */
   get id() {
     return this._id;
@@ -29,7 +29,7 @@ class Client {
 
   /**
    * Returns Client secret
-   * @returns {String} secret
+   * @returns {String}
    */
   get secret() {
     return this._secret;
