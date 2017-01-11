@@ -100,6 +100,30 @@ class Consumer {
     });
   }
 
+  /**
+   * Creates a new User
+   * @param {String} email - The email to use
+   * @param {String} first_name - The first_name to use
+   * @param {String} last_name - The last_name to use
+   * @param {String} password - The password to use
+   * @returns {Promise}
+   */
+  createUser(email, first_name, last_name, password) {
+    return this._getFromAPI('users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: {
+        email,
+        first_name,
+        last_name,
+        password
+      }
+    });
+  }
+
+
 }
 
 module.exports = Consumer;

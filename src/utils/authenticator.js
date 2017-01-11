@@ -20,6 +20,7 @@ class Authenticator {
     this.store = store;
     this.consumer = consumer;
   }
+
   /**
    * Retrieves authentication tokens for a username-password combination
    * @param {String} username - The username to use
@@ -33,6 +34,22 @@ class Authenticator {
       this.store.set('refresh_token', res.refresh_token);
     })
   }
+
+  /**
+   * Registers a new User account
+   * @param {String} email - The email to set
+   * @param {String} first_name - The first_name to set
+   * @param {String} last_name - The last_name to set
+   * @param {String} password - The password to set
+   */
+  register(email, first_name, last_name, password) {
+    assert(email, 'Missing `email`');
+    assert(first_name, 'Missing `first_name`');
+    assert(last_name, 'Missing `last_name`');
+    assert(password, 'Missing `password`');
+    return this.consumer.createUser(email, first_name, last_name, password);
+  }
+
 }
 
 module.exports = Authenticator;

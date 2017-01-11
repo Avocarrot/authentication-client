@@ -16,8 +16,7 @@ var sandbox = sinon.sandbox.create();
 test('Authenticator.constructor(options) should throw an error for', (t) => {
 
   let store = new Store('namespace');
-  let client = new Client('id', 'secret');
-  let consumer = new Consumer(client, 'http://auth.com', 'http://login.com');
+  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com');
 
   t.test('missing `store` configuration', (assert) => {
     assert.plan(1);
@@ -42,7 +41,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
 test('Authenticator.constructor(options) should store valid options', (assert) => {
   assert.plan(2);
   let store = new Store('namespace');
-  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com');
+  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com');
   let authenticator = new Authenticator(store, consumer);
   assert.deepEquals(authenticator.consumer, consumer);
   assert.deepEquals(authenticator.store, store);
@@ -54,10 +53,7 @@ test('Authenticator.constructor(options) should store valid options', (assert) =
 
 test('Authenticator.authenticate(username, password) should throw an error for', (t) => {
 
-  let store = new Store('namespace');
-  let client = new Client('id', 'secret');
-  let consumer = new Consumer(client, 'http://auth.com', 'http://login.com');
-  let authenticator = new Authenticator(store, consumer);
+  let authenticator = new Authenticator(new Store('namespace'), new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com'));
 
   t.test('missing `username`', (assert) => {
     assert.plan(1);
@@ -85,7 +81,7 @@ test('Authenticator.authenticate(username, password) should throw an error for',
 test('Authenticator.authenticate(username, password) should store `access_token` and `refresh_token` on success', (assert) => {
   assert.plan(2);
   let store = new Store('namespace');
-  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.com', 'http://login.com');
+  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com');
   let authenticator = new Authenticator(store, consumer);
   let storeSpy = sandbox.spy();
   store.set = storeSpy;
@@ -102,12 +98,57 @@ test('Authenticator.authenticate(username, password) should store `access_token`
 
 test('Authenticator.authenticate(username, password) should reject with error if authentication fails', (assert) => {
   assert.plan(1);
-  let store = new Store('namespace');
-  let consumer = new Consumer(new Client('id', 'secret'), 'enedpoint', 'http://login.com');
-  let authenticator = new Authenticator(store, consumer);
+  let consumer = new Consumer(new Client('id', 'secret'), 'enedpoint', 'http://login.mock.com');
+  let authenticator = new Authenticator(new Store('namespace'), consumer);
   sandbox.stub(consumer, 'retrieveToken', () => Promise.reject(new Error('invalid_request')));
   authenticator.authenticate('username', 'password').catch(error => {
     assert.equals(error.message, 'invalid_request');
   });
   sandbox.restore();
+});
+
+/**
+ * Authenticator.register(email, first_name, last_name, password)
+ */
+
+test('Authenticator.register(email, first_name, last_name, password) should throw an error for', (t) => {
+
+  let authenticator = new Authenticator(new Store('namespace'), new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com'));
+
+  t.test('missing `email`', (assert) => {
+    assert.plan(1);
+    try {
+      authenticator.register(null, 'first_name', 'last_name', 'password');
+    } catch (err) {
+      assert.equals(err.message, 'Missing `email`');
+    }
+  });
+
+  t.test('missing `first_name`', (assert) => {
+    assert.plan(1);
+    try {
+      authenticator.register('email', null, 'last_name', 'password');
+    } catch (err) {
+      assert.equals(err.message, 'Missing `first_name`');
+    }
+  });
+
+  t.test('missing `last_name`', (assert) => {
+    assert.plan(1);
+    try {
+      authenticator.register('email', 'first_name', null, 'password');
+    } catch (err) {
+      assert.equals(err.message, 'Missing `last_name`');
+    }
+  });
+
+  t.test('missing `password`', (assert) => {
+    assert.plan(1);
+    try {
+      authenticator.register('email', 'first_name', 'last_name', null);
+    } catch (err) {
+      assert.equals(err.message, 'Missing `password`');
+    }
+  });
+
 });
