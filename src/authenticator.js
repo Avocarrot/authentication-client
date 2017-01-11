@@ -28,7 +28,7 @@ class Authenticator {
    */
   requestPasswordReset(email) {
     assert(email, 'Missing `email`');
-    return this._consumer.requestPasswordReset(email)
+    return this._consumer.requestPasswordReset(email);
   }
 
   /**
@@ -40,7 +40,7 @@ class Authenticator {
   resetPassword(token, password) {
     assert(token, 'Missing `token`');
     assert(password, 'Missing `password`');
-    return this._consumer.resetPassword(token, password)
+    return this._consumer.resetPassword(token, password);
   }
 
   /**
