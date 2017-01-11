@@ -2,7 +2,7 @@
 const test = require('tape');
 const sinon = require('sinon');
 const LocalStorage = require('store');
-const Store = require('../../src/utils/store');
+const Store = require('../../../src/utils/store');
 
 const store = new Store('namespace');
 var sandbox = sinon.sandbox.create();
