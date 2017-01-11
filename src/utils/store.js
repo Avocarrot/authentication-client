@@ -25,8 +25,9 @@ class Store {
 
   /**
    * Normalizes key based on namespace
+   * @private
    * @param {String} key - The key to use
-   * @returns {String} normalizedKey
+   * @returns {String} The normalized key
    */
   _normalizeKey(key){
     return this._namespace + '_' + key;
@@ -44,7 +45,7 @@ class Store {
   /**
    * Returns value for a stored key
    * @param {String} key - The key to use
-   * @returns {String} value
+   * @returns {String}
    */
   get(key) {
     return LocalStorage.get(this._normalizeKey(key))
