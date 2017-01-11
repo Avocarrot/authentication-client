@@ -125,13 +125,38 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
 
 test('Consumer.createUser(email, first_name, last_name, password) should return details for a new User', (assert) => {
   assert.plan(4);
-  let apiStub = sandbox.stub().returns(Promise.resolve(UserMocks.CreateUser));
+  let apiStub = sandbox.stub().returns(Promise.resolve(UserMocks.User));
   let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
-  consumer.createUser('email', 'first_name', 'last_name', 'password').then((res) => {
+  consumer.createUser('mock@email.com', 'first_name', 'last_name', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/users');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', email:'email', first_name:'first_name', last_name: 'last_name', password: 'password' });
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', email:'mock@email.com', first_name:'first_name', last_name: 'last_name', password: 'password' });
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.updateUser(userId, bearer, options)
+ */
+
+test('Consumer.updateUser(userId, bearer, options) should update User and return new details', (assert) => {
+  assert.plan(4);
+  let apiStub = sandbox.stub().returns(Promise.resolve(UserMocks.UserWithDetails({
+    email: "mock@email.com",
+    first_name: "first_name",
+    last_name: "last_name"
+  })));
+  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com', apiStub);
+  consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {
+    email: "mock@email.com",
+    first_name: "first_name",
+    last_name: "last_name"
+  }).then((res) => {
+    assert.ok(res, 'Response is filled');
+    assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d');
+    assert.deepEquals(apiStub.getCall(0).args[1].method, 'PATCH');
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', email:'mock@email.com', first_name:'first_name', last_name: 'last_name' });
   });
   sandbox.restore();
 });

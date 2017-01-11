@@ -123,6 +123,26 @@ class Consumer {
     });
   }
 
+  /**
+   * Updates a User
+   * @param {String} userId - The User id
+   * @param {String} bearer - The `Bearer` token to use
+   * @param {String} options.email - The email to use
+   * @param {String} options.first_name - The first_name to use
+   * @param {String} options.last_name - The last_name to use
+   * @param {String} options.password - The password to use
+   * @returns {Promise}
+   */
+  updateUser(userId, bearer, options) {
+    return this._request('users/' + userId, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': 'Bearer ' + bearer,
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: options
+    });
+  }
 
 }
 
