@@ -1,6 +1,6 @@
 'use strict';
 const test = require('tape');
-const Consumer = require('../../../src/utils/consumer');
+const Consumer = require('../../../src/services/consumer');
 const Client = require('../../../src/models/client');
 const sinon = require('sinon');
 

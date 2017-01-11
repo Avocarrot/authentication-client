@@ -1,9 +1,9 @@
 'use strict';
 const config = require('../config/default');
-const Authenticator = require('./utils/authenticator');
-const Store = require('./utils/store');
+const Authenticator = require('./services/authenticator');
+const Store = require('./services/store');
 const Client = require('./models/client');
-const Consumer = require('./utils/consumer');
+const Consumer = require('./services/consumer');
 
 /**
  * AuthenticationClient

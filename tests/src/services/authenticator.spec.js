@@ -1,10 +1,10 @@
 'use strict';
 const test = require('tape');
 const sinon = require('sinon');
-const Authenticator = require('../../../src/utils/authenticator');
-const Store = require('../../../src/utils/store');
+const Authenticator = require('../../../src/services/authenticator');
+const Store = require('../../../src/services/store');
 const Client = require('../../../src/models/client');
-const Consumer = require('../../../src/utils/consumer');
+const Consumer = require('../../../src/services/consumer');
 const Promise = require('es6-promise').Promise;
 
 var sandbox = sinon.sandbox.create();
