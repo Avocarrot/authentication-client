@@ -2,6 +2,7 @@
 const assert = require('assert');
 const Consumer = require('../services/consumer');
 const Store = require('../services/store');
+const Promise = require('es6-promise').Promise;
 
 /**
  * @class User
@@ -114,11 +115,15 @@ class User {
    * Updates User details
    * @returns {Promise}
    */
+
   save() {
+    if (!this.id){
+      return Promise.reject(new Error('Cannot save a non-existent User'));
+    }
     return this._consumer.updateUser(this.id, this.bearer, {
-      email: this.email,
-      first_name: this.first_name,
-      last_name: this.last_name
+      email: this._email,
+      first_name: this._firstName,
+      last_name: this._lastName
     });
   }
 
@@ -138,12 +143,12 @@ class User {
       password,
       first_name: firstName,
       last_name: lastName
-    }).then(userData => {
-      this.id = userData.id;
-      this.publisherId = userData.id;
-      this.firstName = userData.first_name;
-      this.lastName = userData.last_name;
-      this.email = userData.email;
+    }).then(data => {
+      this._id = data.id;
+      this._publisherId = data.publisher_id;
+      this._firstName = data.first_name;
+      this._lastName = data.last_name;
+      this._email = data.email;
     });
   }
 

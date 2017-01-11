@@ -24,6 +24,11 @@ function userInstances() {
 }
 
 /**
+ * Mocks
+ */
+const UserMocks = require('../../mocks/user');
+
+/**
  * User.constructor(options)
  */
 
@@ -186,11 +191,11 @@ test('Authenticator.authenticate(username, password) should store `access_token`
  * User.create(email, firstName, lastName, password)
  */
 
-test('User.create(email, firstName, lastName, password) should throw an error for', (t) => {
+test('User.create(email, firstName, lastName, password) should throw an error', (t) => {
 
   let instances = userInstances();
 
-  t.test('missing `email`', (assert) => {
+  t.test('for missing `email`', (assert) => {
     assert.plan(1);
     try {
       instances.user.create(null, 'password', 'firstName', 'lastName');
@@ -199,13 +204,58 @@ test('User.create(email, firstName, lastName, password) should throw an error fo
     }
   });
 
-  t.test('missing `password`', (assert) => {
+  t.test('for missing `password`', (assert) => {
     assert.plan(1);
     try {
-      instances.user.create('email', null, 'firstName', 'lastName');
+      instances.user.create('mock@email.com', null, 'firstName', 'lastName');
     } catch (err) {
       assert.equals(err.message, 'Missing `password`');
     }
   });
+});
 
+test('User.create(email, firstName, lastName, password) should set User data on success', (assert) => {
+  assert.plan(5);
+  const response = UserMocks.User;
+  let instances = userInstances();
+  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
+  instances.user.create('mock@email.com', 'password', 'firstName', 'lastName').then(() => {
+    assert.equals(instances.user.id, response.id);
+    assert.equals(instances.user.publisherId, response.publisher_id);
+    assert.equals(instances.user.firstName, response.first_name);
+    assert.equals(instances.user.lastName, response.last_name);
+    assert.equals(instances.user.email, response.email);
+  })
+  sandbox.restore();
+});
+
+
+/**
+ * User.save()
+ */
+
+test('User.save() should not allow saving an unauthenticated User', (assert) => {
+  assert.plan(1);
+  let instances = userInstances();
+  instances.user.email = "mock@email.com";
+  instances.user.save().catch(err => {
+    assert.equals(err.message, 'Cannot save a non-existent User');
+  });
+});
+
+test('User.save() should update User with new data', (assert) => {
+  assert.plan(1);
+  let instances = userInstances();
+  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(UserMocks.User));
+  instances.user.create('mock@email.com', 'password').then(() => {
+    instances.user.email = "mock@email.com";
+    instances.user.lastName = "John";
+    instances.user.firstName = "Doe";
+    sandbox.stub(instances.store, 'get', () => 'bearer');
+    let updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+    instances.user.save().then(() => {
+      assert.deepEquals(updateUserStub.getCall(0).args, [ '44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'mock@email.com', first_name: 'Doe', last_name: 'John' } ]);
+    });
+  })
+  sandbox.restore();
 });
