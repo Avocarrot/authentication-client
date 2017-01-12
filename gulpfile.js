@@ -83,6 +83,6 @@ gulp.task('serve', function () {
 
 gulp.task('docs', function (cb) {
   var jsdoc_config = require('./jsdoc.json');
-  gulp.src(['./src/**/*.js'], { read: false })
+  gulp.src(['README.md', './src/**/*.js'], { read: false })
   .pipe(jsdoc(jsdoc_config,cb));
 });
