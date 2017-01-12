@@ -143,7 +143,6 @@ class Consumer {
    * @param {String} options.email - The email to use
    * @param {String} options.firstName - The first ame to use
    * @param {String} options.lastName - The last name to use
-   * @param {String} options.password - The password to use
    * @returns {Promise}
    */
   updateUser(userId, bearer, options) {
