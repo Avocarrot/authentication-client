@@ -50,7 +50,7 @@ npm run docs
 ```
 You can access the generated docs from `docs/index.html`
 
-> The API reference is published as within the `api_reference` artifact on pipeline builds
+> The API reference is published in the `api_reference` artifact on pipeline builds
 
 ## Tests
 
@@ -66,7 +66,7 @@ npm run cov
 ```
 You can access the report from `coverage/lcov/index.html`.
 
-> The test coverage results are published within the `test_coverage` artifact on pipeline builds
+> The test coverage results are published in the `test_coverage` artifact on pipeline builds
 
 
 ## Usage
