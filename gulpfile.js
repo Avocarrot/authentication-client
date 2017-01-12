@@ -11,6 +11,8 @@ var _ = require('lodash');
 var browserSync = require('browser-sync');
 var jsdoc = require('gulp-jsdoc3');
 var tapSpec = require('tap-spec');
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
 var reload = browserSync.reload;
 
 var config = {
@@ -35,6 +37,8 @@ function bundle() {
       console.error('Error: ' + err.message);
     })
     .pipe(source(config.outputFile))
+    .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest(config.outputDir))
     .pipe(reload({ stream: true }));
 }
