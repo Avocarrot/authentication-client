@@ -1,18 +1,22 @@
 # authentication-client
 
-A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer powered by [Browserify](https://github.com/substack/node-browserify)
-
 [![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master)
 
+---
 
-For code coverage results check the  [`test_coverage` pipeline artifact](
+A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer powered by [Browserify](https://github.com/substack/node-browserify)
+
+- For code coverage results check the  [`test_coverage` pipeline artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
-For an API Reference check the  [`api_reference` pipeline artifact](
+- For an API Reference check the  [`api_reference` pipeline artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ---
+
 <a href="https://github.com/gulpjs/gulp" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15748124/467bdc4c-28e6-11e6-87a1-13683a6e8a1e.png" width ="80"/></a> <a href="https://github.com/substack/node-browserify" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15990702/b75d94b2-30a4-11e6-97d1-4f4b623f27ec.jpg" width ="100"/></a> <a href="http://es6-features.org" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/21814827/47164abc-d763-11e6-929b-078a374a2abc.jpg" width ="100"/></a>
+
+---
 
 
 ## Getting Started
@@ -68,16 +72,16 @@ You can access the report from `coverage/lcov/index.html`.
 ## Usage
 
 ### Setup
-```
+```javascript
 /**
  * Create an AuthenticationClient instnace
  */
- var authenticationClient = AuthenticationClient.getInstanceFor('<id>', '<secret>');
+ var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>');
 ```
 
 ### User operations
 
-```
+```javascript
 /**
   * Authenticate a User (login)
   */
@@ -106,7 +110,7 @@ You can access the report from `coverage/lcov/index.html`.
 
 ### Password operations
 
-```
+```javascript
  /**
   * Request a password reset for an email
   */
