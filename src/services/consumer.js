@@ -101,12 +101,12 @@ class Consumer {
   /**
    * Creates a new User
    * @param {String} email - The email to use
-   * @param {String} first_name - The first_name to use
-   * @param {String} last_name - The last_name to use
+   * @param {String} firstName - The first name to use
+   * @param {String} lastName - The last name to use
    * @param {String} password - The password to use
    * @returns {Promise}
    */
-  createUser(email, first_name, last_name, password) {
+  createUser(email, firstName, lastName, password) {
     return this._request('users', {
       method: 'POST',
       headers: {
@@ -114,9 +114,9 @@ class Consumer {
       },
       body: {
         email,
-        first_name,
-        last_name,
-        password
+        password,
+        first_name: firstName,
+        last_name: lastName,
       }
     });
   }
@@ -141,8 +141,8 @@ class Consumer {
    * @param {String} userId - The User id
    * @param {String} bearer - The `Bearer` token
    * @param {String} options.email - The email to use
-   * @param {String} options.first_name - The first_name to use
-   * @param {String} options.last_name - The last_name to use
+   * @param {String} options.firstName - The first ame to use
+   * @param {String} options.lastName - The last name to use
    * @param {String} options.password - The password to use
    * @returns {Promise}
    */
@@ -153,7 +153,11 @@ class Consumer {
         'Authorization': 'Bearer ' + bearer,
         'Content-Type': 'application/json; charset=utf-8'
       },
-      body: options
+      body: {
+        email: options.email,
+        first_name: options.firstName,
+        last_name: options.lastName
+      }
     });
   }
 

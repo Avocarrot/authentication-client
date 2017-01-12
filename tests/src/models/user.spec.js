@@ -254,7 +254,7 @@ test('User.save() should update User with new data', (assert) => {
     sandbox.stub(instances.store, 'get', () => 'bearer');
     let updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
     instances.user.save().then(() => {
-      assert.deepEquals(updateUserStub.getCall(0).args, [ '44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'mock@email.com', first_name: 'Doe', last_name: 'John' } ]);
+      assert.deepEquals(updateUserStub.getCall(0).args, [ '44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'mock@email.com', firstName: 'Doe', lastName: 'John' } ]);
     });
   })
   sandbox.restore();

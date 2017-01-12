@@ -79,7 +79,7 @@ class User {
 
   /**
    * Bearer token (read/write)
-   * @returns {Object}
+   * @returns {String}
    */
   get bearer() {
     return this._store.get('access_token')
@@ -100,16 +100,16 @@ class User {
     }
     return this._consumer.updateUser(this.id, this.bearer, {
       email: this._email,
-      first_name: this._firstName,
-      last_name: this._lastName
+      firstName: this._firstName,
+      lastName: this._lastName
     });
   }
 
   /**
    * Creates a new User
    * @param {String} email - The email to set
-   * @param {String} first_name - The first_name to set
-   * @param {String} last_name - The last_name to set
+   * @param {String} firstName - The first name to set
+   * @param {String} lastName - The last name to set
    * @param {String} password - The password to set
    * @returns {Promise}
    */
@@ -119,8 +119,8 @@ class User {
     return this._consumer.createUser({
       email,
       password,
-      first_name: firstName,
-      last_name: lastName
+      firstName,
+      lastName
     }).then(data => {
       this._id = data.id;
       this._publisherId = data.publisher_id;
@@ -134,6 +134,7 @@ class User {
    * Retrieves authentication tokens for a username-password combination
    * @param {String} username - The username to use
    * @param {String} password - The password to use
+   * @returns {Promise}
    */
   authenticate(username, password) {
     assert(username, 'Missing `username`');

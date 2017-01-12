@@ -132,18 +132,18 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
 
 
 /**
- * Consumer.createUser(email, first_name, last_name, password)
+ * Consumer.createUser(email, firstName, lastName, password)
  */
 
-test('Consumer.createUser(email, first_name, last_name, password) should return details for a new User', (assert) => {
+test('Consumer.createUser(email, firstName, lastName, password) should return details for a new User', (assert) => {
   assert.plan(4);
   let apiStub = sandbox.stub().returns(Promise.resolve(UserMocks.User));
   let instances = consumerInstances(apiStub);
-  instances.consumer.createUser('mock@email.com', 'first_name', 'last_name', 'password').then((res) => {
+  instances.consumer.createUser('mock@email.com', 'John', 'Doe', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/users');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'first_name', last_name: 'last_name', password: 'password' });
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'John', last_name: 'Doe', password: 'password' });
   });
   sandbox.restore();
 });
@@ -162,13 +162,13 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
   let instances = consumerInstances(apiStub);
   instances.consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {
     email: "mock@email.com",
-    first_name: "first_name",
-    last_name: "last_name"
+    firstName: "John",
+    lastName: "Doe"
   }).then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'http://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PATCH');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'first_name', last_name: 'last_name' });
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'John', last_name: 'Doe' });
   });
   sandbox.restore();
 });
