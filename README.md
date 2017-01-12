@@ -9,7 +9,7 @@ A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="
 - For code coverage results check the  [`test_coverage` build artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
-- For an API Reference check the  [`api_reference` build artifact](
+- For the API Reference documentation check the  [`api_reference` build artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ---
