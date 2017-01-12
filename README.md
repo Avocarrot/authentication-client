@@ -19,6 +19,9 @@ https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ---
 
+## Development
+
+Please see the **[CONTRIBUTING instructions](http://test.com)** before contributing to this repository
 
 ## Getting Started
 
@@ -52,7 +55,7 @@ To produce a test coverage report use
 ```
 npm run cov
 ```
-You can access the report by running `open coverage/lcov/index.html`.
+You can access the report by running `open coverage/lcov-report/index.html`.
 
 ## API Reference
 
@@ -62,10 +65,6 @@ npm run docs
 ```
 You can access the generated docs by running `open docs/index.html`
 
-
-## Development
-
-Please see the **[CONTRIBUTING instructions](http://test.com)** before contributing to this repository
 
 ---
 ## Usage
