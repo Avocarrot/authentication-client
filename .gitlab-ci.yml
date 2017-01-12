@@ -3,9 +3,10 @@ image: node:6.9.0
 before_script:
   - npm install -g yarn
   - make yarn
-  
+
 stages:
   - test
+  - documentation
 
 test_coverage:
   stage: test
@@ -14,3 +15,11 @@ test_coverage:
   artifacts:
     paths:
     - coverage/
+
+api_reference:
+  stage: documentation
+  script:
+    - npm run docs
+  artifacts:
+    paths:
+    - docs/
