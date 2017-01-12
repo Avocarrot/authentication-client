@@ -90,7 +90,7 @@ You can access the report from `coverage/lcov/index.html`.
  /**
   * Create a new User (register)
   */
- authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+  authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
 
  /**
   * Retrieve User details
@@ -114,12 +114,12 @@ You can access the report from `coverage/lcov/index.html`.
  /**
   * Request a password reset for an email
   */
-  authenticationClient.requestPasswordReset('<email>');
+  authenticationClient.requestPasswordReset('<email>').then(() => {}).catch(err => { })
 
  /**
   * Reset password
   */
-  authenticationClient.resetPassword('<token>', '<password>');
+  authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch(err => { })
 
 ```
 
