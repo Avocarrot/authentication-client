@@ -8,17 +8,18 @@ A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="
 For code coverage results check the  [`test_coverage` pipeline artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
+For an API Reference check the  [`api_reference` pipeline artifact](
+https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
+
 ---
 <a href="https://github.com/gulpjs/gulp" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15748124/467bdc4c-28e6-11e6-87a1-13683a6e8a1e.png" width ="80"/></a> <a href="https://github.com/substack/node-browserify" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15990702/b75d94b2-30a4-11e6-97d1-4f4b623f27ec.jpg" width ="100"/></a> <a href="http://es6-features.org" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/21814827/47164abc-d763-11e6-929b-078a374a2abc.jpg" width ="100"/></a>
 
 
 ## Getting Started
 
-[Development Guidelines](https://github.com/Avocarrot/company/wiki/Engineering)
 
 [Git Commit Guidelines](https://github.com/DurandalProject/about/blob/master/CONTRIBUTING.md#commit)
 
-### Installation
 
 Install the required dependencies
 ```
@@ -32,24 +33,20 @@ You can run the project with livereload on your machine using
 npm run server
 ```
 
-To only build the library use
+To build the library use
 
 ```
 npm run build
 ```
-## Development
+## API Reference
 
-Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date
-
-
-## Documentation
-
-To generate the [JSDoc](http://usejsdoc.org/) documentation run
+To generate the [JSDoc](http://usejsdoc.org/) API Reference run
 ```
 npm run docs
 ```
 You can access the generated docs from `docs/index.html`
 
+> The test API reference is published as a build artifact on pipeline builds
 
 ## Tests
 
@@ -66,6 +63,65 @@ npm run cov
 You can access the report from `coverage/lcov/index.html`.
 
 > The test coverage results are published as a build artifact on pipeline builds
+
+
+## Usage
+
+### Setup
+```
+/**
+ * Create an AuthenticationClient instnace
+ */
+ var authenticationClient = AuthenticationClient.getInstanceFor('<id>', '<secret>');
+```
+
+### User operations
+
+```
+/**
+  * Authenticate a User (login)
+  */
+  authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch(err => {})
+
+ /**
+  * Create a new User (register)
+  */
+ authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+
+ /**
+  * Retrieve User details
+  */
+  authenticationClient.user.firstName;
+  authenticationClient.user.lastName;
+  authenticationClient.user.email;
+
+ /**
+  * Update User details
+  */
+  authenticationClient.user.firstName = "John";
+  authenticationClient.user.lastName = "Doe";
+  authenticationClient.user.email = "mock@email.com";
+  authenticationClient.user.save().then(() => {}).catch(err => { })
+```
+
+### Password operations
+
+```
+ /**
+  * Request a password reset for an email
+  */
+  authenticationClient.requestPasswordReset('<email>');
+
+ /**
+  * Reset password
+  */
+  authenticationClient.resetPassword('<token>', '<password>');
+
+```
+
+## Development
+
+Make sure that you develop using the [JSDoc guidlines](http://usejsdoc.org/) to ensure that documentation stays up to date
 
 
 ## Built With

@@ -9,8 +9,47 @@
   </head>
     <script src="./dist/index.js"> </script>
     <script>
-      var authenticationClient = AuthenticationClient.getInstanceFor('id', 'secret');
-      authenticationClient.user.authenticate('username', 'password');
+
+     /**
+      * Create an AuthenticationClient instnace
+      */
+      var authenticationClient = AuthenticationClient.getInstanceFor('<id>', '<secret>');
+
+      /**
+       * Authenticate a User (login)
+       */
+       authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch(err => {})
+
+      /**
+       * Create a new User (register)
+       */
+      authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+
+      /**
+       * Retrieve User details
+       */
+       authenticationClient.user.firstName;
+       authenticationClient.user.lastName;
+       authenticationClient.user.email;
+
+      /**
+       * Update User details
+       */
+       authenticationClient.user.firstName = "John";
+       authenticationClient.user.lastName = "Doe";
+       authenticationClient.user.email = "mock@email.com";
+       authenticationClient.user.save().then(() => {}).catch(err => { })
+
+      /**
+       * Request a password reset for an email
+       */
+       authenticationClient.requestPasswordReset('<email>');
+
+      /**
+       * Reset password
+       */
+       authenticationClient.resetPassword('<token>', '<password>');
+
     </script>
   </body>
 </html>
