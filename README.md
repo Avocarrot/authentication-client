@@ -6,10 +6,10 @@
 
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer powered by [Browserify](https://github.com/substack/node-browserify)
 
-- For code coverage results check the  [`test_coverage` pipeline artifact](
+- For code coverage results check the  [`test_coverage` build artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
-- For an API Reference check the  [`api_reference` pipeline artifact](
+- For an API Reference check the  [`api_reference` build artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ---
@@ -50,7 +50,7 @@ npm run docs
 ```
 You can access the generated docs from `docs/index.html`
 
-> The API reference is published as in the `api_reference` artifact on pipeline builds
+> The API reference is published as within the `api_reference` artifact on pipeline builds
 
 ## Tests
 
@@ -66,7 +66,7 @@ npm run cov
 ```
 You can access the report from `coverage/lcov/index.html`.
 
-> The test coverage results are published in the `test_coverage` artifact on pipeline builds
+> The test coverage results are published within the `test_coverage` artifact on pipeline builds
 
 
 ## Usage
