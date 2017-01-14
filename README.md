@@ -21,7 +21,7 @@ https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ## Development
 
-Please see the **[CONTRIBUTING instructions](http://test.com)** before contributing to this repository
+Please see the **[CONTRIBUTING instructions](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/CONTRIBUTING.md)** before contributing to this repository
 
 ## Getting Started
 
