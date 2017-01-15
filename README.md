@@ -45,6 +45,8 @@ npm run build
 
 ## Tests
 
+> The test coverage threshold for continuous-integration is set to **95%**.
+
 To run the tests use
 
 ```
