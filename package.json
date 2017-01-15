@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "A thin Authentication API consumer",
   "homepage": "https://gitlab.glispa.com/avocarrot/authentication-client",
   "repository": {
