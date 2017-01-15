@@ -34,7 +34,7 @@ make npm
 You can run the project with livereload on your machine using
 
 ```
-npm run server
+npm start
 ```
 
 To build the library use

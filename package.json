@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "server": "gulp watch",
+    "start": "gulp watch",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "gulp test",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
