@@ -78,6 +78,14 @@ You can access the generated docs by running `open docs/index.html`
 
 ## Usage
 
+### Installation
+Add the following line in your `package.json` file and replace the `<TAG>` with your target version, ie `v0.10.0`
+```
+"dependencies": {
+  "authentication-client": "git+ssh://git@gitlab.glispa.com/avocarrot/authentication-client#<TAG>"
+}
+```
+
 ### Setup
 ```javascript
 /**
