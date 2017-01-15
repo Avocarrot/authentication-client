@@ -11,7 +11,8 @@ stages:
 test_coverage:
   stage: test
   script:
-    - npm run cov
+    - npm run cov:report
+    - npm run cov:thresdhold
   artifacts:
     paths:
     - coverage/

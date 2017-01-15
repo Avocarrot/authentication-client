@@ -13,6 +13,7 @@
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "gulp test",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
+    "cov:thresdhold": "istanbul check-coverage",
     "docs": "gulp docs"
   },
   "bugs": {

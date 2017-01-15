@@ -5,7 +5,7 @@ const Client = require('../../../src/models/client');
  * Client.constructor(options)
  */
 
-test('Client.constructor(options) should throw an error for', (t) => {
+test.only('Client.constructor(options) should throw an error for', (t) => {
 
   t.test('missing `id`', (assert) => {
     assert.plan(1);

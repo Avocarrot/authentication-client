@@ -2,7 +2,6 @@
 
  - [Code documentation](#documentation)
  - [GIT commit guidelines](#commit)
- - [Testing](#testing)
 
 ---
 
@@ -62,10 +61,3 @@ The body should include the motivation for the change and contrast this with pre
 ### Footer
 
 The footer should contain any information about **Breaking Changes** and is also the place to reference GitHub issues that this commit **Closes**.
-
----
-
-## <a name="testing"></a> Testing
-All Merge Requests should be submitted with the relevant tests. No code should be merged if no supporting tests are provided.
-
-You are strongly encouraged to strive for a 100% test-coverage, even through it is not enforced in the continuous intergation process.
