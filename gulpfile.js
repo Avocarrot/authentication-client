@@ -10,6 +10,7 @@ var source = require('vinyl-source-stream');
 var _ = require('lodash');
 var browserSync = require('browser-sync');
 var jsdoc = require('gulp-jsdoc3');
+var rename = require('gulp-rename');
 var tapSpec = require('tap-spec');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
@@ -39,6 +40,7 @@ function bundle() {
     .pipe(source(config.outputFile))
     .pipe(buffer())
     .pipe(uglify())
+    .pipe(rename('authentication-client.js'))
     .pipe(gulp.dest(config.outputDir))
     .pipe(reload({ stream: true }));
 }
