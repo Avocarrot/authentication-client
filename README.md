@@ -23,6 +23,9 @@ https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 Please see the **[CONTRIBUTING instructions](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/CONTRIBUTING.md)** before contributing to this repository
 
+
+---
+
 ## Getting Started
 
 Install the required dependencies
@@ -43,6 +46,8 @@ To build the library use
 npm run build
 ```
 
+---
+
 ## Tests
 
 > The test coverage threshold for continuous-integration is set to **95%**.
@@ -59,6 +64,8 @@ npm run cov
 ```
 You can access the report by running `open coverage/lcov-report/index.html`.
 
+---
+
 ## API Reference
 
 To generate the [JSDoc](http://usejsdoc.org/) API Reference run
@@ -67,8 +74,8 @@ npm run docs
 ```
 You can access the generated docs by running `open docs/index.html`
 
-
 ---
+
 ## Usage
 
 ### Setup
@@ -129,6 +136,9 @@ You can access the generated docs by running `open docs/index.html`
 * [Gulp](http://gulpjs.com/)
 * [Browserify](https://github.com/substack/node-browserify)
 * [JSDoc](http://usejsdoc.org/)
+
+
+---
 
 ## Versioning
 
