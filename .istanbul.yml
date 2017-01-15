@@ -1,15 +1,4 @@
 verbose: false
-instrumentation:
-  root: .
-  default-excludes: true
-  excludes: ['hydro.conf.js', 'lib/cli']
-  embed-source: false
-  variable: __coverage__
-  compact: true
-  preserve-comments: false
-  complete-copy: false
-  save-baseline: false
-  baseline-file: ./coverage/coverage-baseline.json
 reporting:
   print: summary
   reports:
@@ -17,7 +6,7 @@ reporting:
   dir: ./coverage
 check:
   global:
-    statements: 90
-    lines: 90
-    branches: 90
-    functions: 90
+    statements: 95
+    lines: 95
+    branches: 95
+    functions: 95
