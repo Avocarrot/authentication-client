@@ -53,7 +53,7 @@ npm test
 To produce a test coverage report use
 
 ```
-npm run cov:report
+npm run cov
 ```
 You can access the report by running `open coverage/lcov-report/index.html`.
 
