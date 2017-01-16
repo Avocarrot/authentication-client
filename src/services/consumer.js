@@ -1,8 +1,9 @@
 'use strict';
 const assert = require('assert');
-const NodeFetch = require('node-fetch');
 const Client = require('../models/client');
 const Promise = require('es6-promise').Promise;
+const ProductionAPI = require('../api').Production;
+const SandboxAPI = require('../api').Sandbox;
 
 /**
  * @class Consumer
@@ -13,47 +14,26 @@ class Consumer {
    * Initializes Consumer
    * @constructor
    * @param {Client} client - The Client instance to use
-   * @param {String} endpoint - The host endpoint
-   * @param {String} login_url - The login page URL
-   * @param {String} api - The api to use for fetching data - Defaults to `NodeFetch`
+   * @param {API.Production|API.Sandbox} api - The api to use for fetching data
    */
-  constructor(client, endpoint, login_url, api) {
+  constructor(client, api) {
     assert(client instanceof Client, 'Missing `client`');
-    assert(endpoint, 'Missing `endpoint`');
-    assert(login_url, 'Missing `login_url`');
+    assert(api instanceof ProductionAPI || api instanceof SandboxAPI, 'Missing `api`');
     this._client = client;
-    this._endpoint = endpoint;
-    this._login_url = login_url;
-    this._api = api || NodeFetch;
+    this._api = api;
   }
 
   /**
    * Returns data from API
    * @private
    * @param {String} resource - The resource to fetch from
-   * @param {Object} options - The options to pass
+   * @param {Object} payload - The payload to pass
    * @returns {Promise}
    */
-  _request(resource, body){
-    return this._api(this._endpoint + '/'  + resource, body).catch(err => {
+  _request(resource, payload){
+    return this._api.invoke(resource, payload).catch(err => {
       return Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error'))
     });
-  }
-
-  /**
-   * Returns endpoint
-   * @returns {String}
-   */
-  get endpoint() {
-    return this._endpoint;
-  }
-
-  /**
-   * Returns the login_url
-   * @returns {String}
-   */
-  get login_url() {
-    return this._login_url;
   }
 
   /**

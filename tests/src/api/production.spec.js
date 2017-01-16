@@ -8,7 +8,7 @@ var sandbox = sinon.sandbox.create();
 /**
  * API.Production
  */
-test.only('API.Production.invoke() should call API fetcher with correct resources and payload', (assert) => {
+test('API.Production.invoke() should call API fetcher with correct resources and payload', (assert) => {
   assert.plan(3);
   // Prepare spy
   let clientSpy = sandbox.spy();
