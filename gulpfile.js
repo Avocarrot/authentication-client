@@ -18,7 +18,7 @@ var reload = browserSync.reload;
 var config = {
   entryFile: './src/index.js',
   outputDir: './dist/',
-  outputFile: 'authentication-client.js'
+  outputFile: 'index.js'
 };
 
 var bundler;
