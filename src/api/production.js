@@ -2,19 +2,19 @@
 const NodeFetch = require('node-fetch');
 
 /**
- * @class API.Production
+ * @class Production API
  */
 class ProductionAPI {
 
   /**
-   * Initializes API.Production
+   * Initializes ProductionAPI
    * @constructor
    * @param {String} endpoint - The host endpoint
-   * @param {Client} _fetcher - The function to use for fetching the data - Defaults to `NodeFetch`
+   * @param {Object} fetcher - The function to use for fetching the data - Defaults to `NodeFetch`
    */
-  constructor(endpoint, _fetcher) {
+  constructor(endpoint, fetcher) {
     this._endpoint = endpoint;
-    this._fetcher = _fetcher || NodeFetch;
+    this._fetcher = fetcher || NodeFetch;
   }
 
   /**
