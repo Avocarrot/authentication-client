@@ -10,7 +10,7 @@
  * @return {String}
  */
 const stripBearer = (header) => {
-  return header.replace('Bearer', '').trim();
+  return `${header}`.replace('Bearer', '').trim();
 }
 
 module.exports.stripBearer = stripBearer;

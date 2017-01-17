@@ -139,19 +139,17 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
   assert.plan(4);
   let instances = getConsumerInstances();
   let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(UserMocks.UserWithDetails({
-    email: "mock@email.com",
     first_name: "first_name",
     last_name: "last_name"
   })));
   instances.consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {
-    email: "mock@email.com",
     firstName: "John",
     lastName: "Doe"
   }).then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users/44d2c8e0-762b-4fa5-8571-097c81c3130d');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PATCH');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'John', last_name: 'Doe' });
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { first_name:'John', last_name: 'Doe' });
   });
   sandbox.restore();
 });

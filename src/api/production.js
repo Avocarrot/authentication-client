@@ -1,5 +1,4 @@
 'use strict';
-const NodeFetch = require('node-fetch');
 
 /**
  * @class Production API
@@ -14,7 +13,7 @@ class ProductionAPI {
    */
   constructor(endpoint, fetcher) {
     this._endpoint = endpoint;
-    this._fetcher = fetcher || NodeFetch;
+    this._fetcher = fetcher;
   }
 
   /**

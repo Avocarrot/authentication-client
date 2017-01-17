@@ -133,7 +133,6 @@ class Consumer {
         'Content-Type': 'application/json; charset=utf-8'
       },
       body: {
-        email: options.email,
         first_name: options.firstName,
         last_name: options.lastName
       }
