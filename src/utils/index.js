@@ -2,19 +2,6 @@
 /**
  * @namespace Utils
  */
-
-/**
- * Strips Bearer from Authorization header
- * @memberof Utils
- * @param {String} header - The Authorization header to strip
- * @return {String}
- */
-const stripBearer = (header) => {
-  return `${header}`.replace('Bearer', '').trim();
-}
-
-module.exports.stripBearer = stripBearer;
-
 /**
  * Generates a random string
  * @memberof Utils
@@ -38,3 +25,46 @@ const generateRandomUUID = () => {
 }
 
 module.exports.generateRandomUUID = generateRandomUUID;
+
+/**
+ * Strips Bearer from Authorization header
+ * @memberof Utils
+ * @param {String} header - The Authorization header to strip
+ * @return {String}
+ */
+const stripBearer = (header) => {
+  return `${header}`.replace('Bearer', '').trim();
+}
+
+module.exports.stripBearer = stripBearer;
+
+/**
+ * Returns error message for `errorCode`
+ * @private
+ * @param {String} errorCode - The `errorCode` to map
+ * @return {String}
+ */
+const extractErrorMessage = (errorCode) => {
+  switch (errorCode) {
+  case 'user_exists':
+    return 'User already exists';
+  case 'user_not_found':
+    return 'User not found';
+  case 'invalid_email':
+    return 'Could not find an account for this email';
+  case 'invalid_credentials':
+    return 'You have entered an invalid email password combination';
+  case 'invalid_password':
+    return 'You have entered an invalid password';
+  case 'invalid_client':
+    return 'Client authentication failed';
+  case 'invalid_grant':
+    return 'The provided authorization token is invalid';
+  case 'invalid_request':
+    return 'The request is missing a required parameter';
+  default:
+    return 'Unexpected error';
+  }
+}
+
+module.exports.extractErrorMessage = extractErrorMessage;

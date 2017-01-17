@@ -1,8 +1,10 @@
 'use strict';
 const test = require('tape');
-const generateRandomString = require('../../../src/utils').generateRandomString;
-const generateRandomUUID = require('../../../src/utils').generateRandomUUID;
-const stripBearer = require('../../../src/utils').stripBearer;
+const Utils = require('../../../src/utils');
+const generateRandomString = Utils.generateRandomString;
+const generateRandomUUID = Utils.generateRandomUUID;
+const stripBearer = Utils.stripBearer;
+const extractErrorMessage = Utils.extractErrorMessage;
 
 /**
  * generateRandomString(radix)
@@ -43,4 +45,21 @@ test('generateRandomUUID() should generate', (t) => {
 test('stripBearer(header) should strip Bearer token from Authorization header', (assert) => {
   assert.plan(1);
   assert.equals(stripBearer('Bearer d4149324285e46bfb8065b6c816a12b2'), 'd4149324285e46bfb8065b6c816a12b2');
+});
+
+/**
+ * extractErrorMessage(errorCode)
+ */
+
+test('extractErrorMessage(errorCode) should extract the correct messages', (assert) => {
+  assert.plan(9);
+  assert.equals(extractErrorMessage('user_exists'), 'User already exists');
+  assert.equals(extractErrorMessage('user_not_found'), 'User not found');
+  assert.equals(extractErrorMessage('invalid_email'), 'Could not find an account for this email');
+  assert.equals(extractErrorMessage('invalid_credentials'), 'You have entered an invalid email password combination');
+  assert.equals(extractErrorMessage('invalid_password'), 'You have entered an invalid password');
+  assert.equals(extractErrorMessage('invalid_client'), 'Client authentication failed');
+  assert.equals(extractErrorMessage('invalid_grant'), 'The provided authorization token is invalid');
+  assert.equals(extractErrorMessage('invalid_request'), 'The request is missing a required parameter');
+  assert.equals(extractErrorMessage('error'), 'Unexpected error');
 });

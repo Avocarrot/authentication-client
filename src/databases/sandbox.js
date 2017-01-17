@@ -40,11 +40,11 @@ class SandboxDatabase {
   */
   _extractUser(data) {
     return {
-      'id': `${data.id}`,
-      'publisher_id': `${data.publisher_id}`,
-      'first_name': `${data.first_name}`,
-      'last_name': `${data.last_name}`,
-      'email': `${data.email}`,
+      'id': data.id,
+      'publisher_id': data.publisher_id,
+      'first_name': data.first_name,
+      'last_name': data.last_name,
+      'email': data.email,
     }
   }
 
@@ -90,15 +90,6 @@ class SandboxDatabase {
   }
 
   /**
-   * Determines if database has a specific user based on id
-   * @param {String} id - The id to lookup
-   * @return {Boolean}
-   */
-  hasUserWithId(id) {
-    return !!~this._users.findIndex(user => user.id === id);
-  }
-
-  /**
    * Determines if database has a specific user based on email
    * @param {String} email - The email to lookup
    * @return {Boolean}
@@ -137,8 +128,8 @@ class SandboxDatabase {
    * Adds user to fixtures
    * @param {String} email - The email to set
    * @param {String} password - The password to set
-   * @param {String} firstName - The firstName to set
-   * @param {String} lastName - The lastName to set
+   * @param {String} firstName - The firstName to set - Optional
+   * @param {String} lastName - The lastName to set - Optional
    * @return {Object} The user data merged into an object
    */
   addUser(email, password, firstName, lastName) {
@@ -147,17 +138,17 @@ class SandboxDatabase {
     const accessToken = generateRandomString();
     const refreshToken = generateRandomString();
     const newToken = {
-      'user_id': `${userId}`,
-      'access_token': `${accessToken}`,
-      'refresh_token': `${refreshToken}`,
+      'user_id': userId,
+      'access_token': accessToken,
+      'refresh_token': refreshToken,
     }
     const newUser = {
-      'id': `${userId}`,
-      'publisher_id': `${publisherId}`,
-      'first_name': `${firstName}`,
-      'last_name': `${lastName}`,
-      'email': `${email}`,
-      'password': `${password}`
+      'id': userId,
+      'publisher_id': publisherId,
+      'email': email,
+      'password': password,
+      'first_name': firstName,
+      'last_name': lastName,
     }
     // Store new records
     this._tokens.push(newToken);

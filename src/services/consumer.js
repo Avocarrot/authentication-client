@@ -4,6 +4,7 @@ const Client = require('../models/client');
 const Promise = require('es6-promise').Promise;
 const ProductionAPI = require('../api').Production;
 const SandboxAPI = require('../api').Sandbox;
+const extractErrorMessage = require('../utils').extractErrorMessage;
 
 /**
  * @class Consumer
@@ -31,8 +32,12 @@ class Consumer {
    * @returns {Promise}
    */
   _request(resource, payload){
-    return this._api.invoke(resource, payload).catch(err => {
-      return Promise.reject(new Error(err && err.hasOwnProperty('error')? err.error: 'Unexpected error'))
+    return this._api.invoke(resource, payload).then(res => {
+      const { status, body } = res;
+      if (parseInt(status) >= 400) {
+        return Promise.reject(new Error(extractErrorMessage(body.error)));
+      }
+      return Promise.resolve(body);
     });
   }
 

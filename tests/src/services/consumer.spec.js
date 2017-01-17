@@ -64,15 +64,15 @@ test('Consumer._request(resource, options) should', (t) => {
   t.test('reject with specific error on failure', (assert) => {
     assert.plan(1);
     let instances = getConsumerInstances();
-    sandbox.stub(instances.api, 'invoke', () => Promise.reject({'error':'error_message'}));
-    instances.consumer._request().catch(err => assert.equals(err.message, 'error_message'));
+    sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status: 400, body: {'error':'invalid_client'}}));
+    instances.consumer._request().catch(err => assert.equals(err.message, 'Client authentication failed'));
     sandbox.restore();
   });
 
   t.test('reject with generic error on failure', (assert) => {
     assert.plan(1);
     let instances = getConsumerInstances();
-    sandbox.stub(instances.api, 'invoke', () => Promise.reject());
+    sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status: 500, body: {}}));
     instances.consumer._request('resource', {}).catch(err => assert.equals(err.message, 'Unexpected error'));
     sandbox.restore();
   });
@@ -86,7 +86,7 @@ test('Consumer._request(resource, options) should', (t) => {
 test('Consumer.retrieveToken(username, password) should return `access_token` and `refresh_token` on success', (assert) => {
   assert.plan(4);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(TokenMocks.PaswordGrant));
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:200, body:TokenMocks.PaswordGrant}));
   instances.consumer.retrieveToken('username', 'password').then(res => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
@@ -103,7 +103,7 @@ test('Consumer.retrieveToken(username, password) should return `access_token` an
 test('Consumer.refreshToken(refresh_token) should return a renewed token', (assert) => {
   assert.plan(4);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(TokenMocks.RefreshGrant));
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:200, body:TokenMocks.RefreshGrant}));
   instances.consumer.refreshToken('refresh_token').then(res => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
@@ -121,7 +121,7 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
 test('Consumer.createUser(email, firstName, lastName, password) should return details for a new User', (assert) => {
   assert.plan(4);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(UserMocks.User));
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:201, body:UserMocks.User}));
   instances.consumer.createUser('mock@email.com', 'John', 'Doe', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users');
@@ -138,10 +138,12 @@ test('Consumer.createUser(email, firstName, lastName, password) should return de
 test('Consumer.updateUser(userId, bearer, options) should update User and return new details', (assert) => {
   assert.plan(4);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(UserMocks.UserWithDetails({
-    first_name: "first_name",
-    last_name: "last_name"
-  })));
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+    status:200, body: UserMocks.UserWithDetails({
+      first_name: "first_name",
+      last_name: "last_name"
+    })
+  }));
   instances.consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {
     firstName: "John",
     lastName: "Doe"
@@ -161,7 +163,7 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
 test('Consumer.requestPasswordReset(email) should send a password reset request', (assert) => {
   assert.plan(3);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve());
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:200, body:{}}));
   instances.consumer.requestPasswordReset('mock@email.com').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
@@ -178,7 +180,7 @@ test('Consumer.requestPasswordReset(email) should send a password reset request'
 test('Consumer.resetPassword(token, password) should reset password', (assert) => {
   assert.plan(3);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve());
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status: 200, body: {}}));
   instances.consumer.resetPassword('f734c7f2-0452-414d-867b-84e4166325a', 'password').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords/f734c7f2-0452-414d-867b-84e4166325a');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PUT');
@@ -195,7 +197,7 @@ test('Consumer.resetPassword(token, password) should reset password', (assert) =
 test('Consumer.retrieveUser(token) should retrieve User based on token', (assert) => {
   assert.plan(4);
   let instances = getConsumerInstances();
-  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve(UserMocks.User));
+  let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status: 200, body: UserMocks.User}));
   instances.consumer.retrieveUser('f734c7f2-0452-414d-867b-84e4166325a').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users/me');

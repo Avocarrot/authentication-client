@@ -61,17 +61,6 @@ test('SandboxDatabase.hasUserWithToken(accessToken) should return correct values
 });
 
 /**
- * SandboxDatabase.hasUserWithId(id)
- */
-
-test('SandboxDatabase.hasUserWithId(id) should return correct values', (assert) => {
-  let sandboxDatabase = getSandboxDatabaseInstance();
-  assert.plan(2);
-  assert.equals(sandboxDatabase.hasUserWithId('44d2c8e0-762b-4fa5-8571-097c81c3130d'), true);
-  assert.equals(sandboxDatabase.hasUserWithId('097c88e0-531b-66a5-c3132-8cce26c2571'), false);
-});
-
-/**
  * SandboxDatabase.hasUserWithEmail(email)
  */
 

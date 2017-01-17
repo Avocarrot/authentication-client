@@ -1,14 +1,14 @@
 'use strict';
 const test = require('tape');
-const API = require('../../../src/api').Production;
+const ProductionAPI = require('../../../src/api').Production;
 const sinon = require('sinon');
 
 var sandbox = sinon.sandbox.create();
 
 /**
- * API.Production
+ * ProductionAPI.invoke()
  */
-test('API.Production.invoke() should call API fetcher with correct resources and payload', (assert) => {
+test('ProductionAPI.invoke() should call API fetcher with correct resources and payload', (assert) => {
   assert.plan(3);
   // Prepare spy
   let clientSpy = sandbox.spy();
@@ -19,7 +19,7 @@ test('API.Production.invoke() should call API fetcher with correct resources and
     }
   }
   // Setup api
-  var api = new API('http://auth.mock.com', clientSpy);
+  var api = new ProductionAPI('http://auth.mock.com', clientSpy);
   api.invoke('resource', payload);
   // Assert spy calls
   assert.equals(clientSpy.calledOnce, true);
