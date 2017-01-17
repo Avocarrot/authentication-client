@@ -49,7 +49,6 @@ const AuthenticationClient = (function() {
     if (environment === 'Sandbox'){
       return [new SandboxDatabase(UserFixtures, TokenFixtures)];
     }
-    return [];
   }
 
   /**
@@ -95,9 +94,21 @@ const AuthenticationClient = (function() {
       let instance = generateInstance(client_id, client_secret, environment);
       instances.set(key, instance);
       return instance;
-    }
-  }
+    },
+
+    /**
+     * Flushes cached instances
+     * @function reset
+     * @memberof AuthenticationClient
+     */
+     reset( ) {
+       instances.clear();
+     }
+   }
+
 })();
+
+/* istanbul ignore next */
 
 if (global.window){
   global.window.AuthenticationClient = AuthenticationClient;
