@@ -68,3 +68,27 @@ const extractErrorMessage = (errorCode) => {
 }
 
 module.exports.extractErrorMessage = extractErrorMessage;
+
+/**
+ * Validates a password pair
+ * @private
+ * @param {String} password - The `password` to validate
+ */
+const validatePassword = (password) => {
+  const _invalidPasswordMessage = (message) => ({ isValid: false, message });
+  const containsSpaces = /\s/i.test(password);
+  const containsNumber = /\d/i.test(password);
+  const containsCharacters = /[a-z]/i.test(password);
+  if (containsSpaces) {
+    return _invalidPasswordMessage('Password cannot contain spaces');
+  }
+  if (!containsNumber || !containsCharacters) {
+    return _invalidPasswordMessage('Password must contain both numbers and characters');
+  }
+  if (password.length < 8) {
+    return _invalidPasswordMessage('Password must be at least 8 characters long');
+  }
+  return { isValid: true }
+}
+
+module.exports.validatePassword = validatePassword;

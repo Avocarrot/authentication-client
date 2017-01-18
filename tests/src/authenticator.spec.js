@@ -43,7 +43,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
     try {
       new Authenticator(Object(), instances.consumer);
     } catch (err) {
-      assert.equals(err.message, 'Missing `user` configuration for Authenticator');
+      assert.equals(err.message, '`user` should be instance of User');
     }
   });
 
@@ -52,7 +52,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
     try {
       new Authenticator(instances.user, Object());
     } catch (err) {
-      assert.equals(err.message, 'Missing `consumer` configuration for Authenticator');
+      assert.equals(err.message, '`consumer` should be instance of Consumer');
     }
   });
 
@@ -123,11 +123,21 @@ test('Authenticator.resetPassword(token, password) should', (t) => {
     }
   });
 
+  t.test('reject for invalid password', (assert) => {
+    assert.plan(1);
+    let instances = getAuthenticatorInstances();
+    sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
+    instances.authenticator.resetPassword('token', 'password').catch(err => {
+      assert.equals(err.message, 'Password must contain both numbers and characters');
+    })
+    sandbox.restore();
+  });
+
   t.test('resolve on success', (assert) => {
     assert.plan(1);
     let instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
-    instances.authenticator.resetPassword('token', 'password').then(() => {
+    instances.authenticator.resetPassword('token', 'password123456').then(() => {
       assert.ok('resetPassword() resolved')
     })
     sandbox.restore();

@@ -5,6 +5,7 @@ const generateRandomString = Utils.generateRandomString;
 const generateRandomUUID = Utils.generateRandomUUID;
 const stripBearer = Utils.stripBearer;
 const extractErrorMessage = Utils.extractErrorMessage;
+const validatePassword = Utils.validatePassword;
 
 /**
  * generateRandomString(radix)
@@ -62,4 +63,38 @@ test('extractErrorMessage(errorCode) should extract the correct messages', (asse
   assert.equals(extractErrorMessage('invalid_grant'), 'The provided authorization token is invalid');
   assert.equals(extractErrorMessage('invalid_request'), 'The request is missing a required parameter');
   assert.equals(extractErrorMessage('error'), 'Unexpected error');
+});
+
+/**
+ * validatePassword(password, repeatPassword)
+ */
+
+test('validatePassword(password, repeatPassword) should', (t) => {
+
+  t.test('accept valid passwords', (assert) => {
+    assert.plan(2);
+    assert.deepEquals(validatePassword('abcde123456', 'abcde123456'), { isValid: true });
+    assert.deepEquals(validatePassword('ABCDE123456', 'ABCDE123456'), { isValid: true });
+  });
+
+  t.test('reject invalid passwords', (assert) => {
+    assert.plan(4);
+    assert.deepEquals(validatePassword('abc123', 'abc123'), {
+      isValid: false,
+      message: 'Password must be at least 8 characters long'
+    });
+    assert.deepEquals(validatePassword('abcde 12345', 'abcde 12345'), {
+      isValid: false,
+      message: "Password cannot contain spaces"
+    });
+    assert.deepEquals(validatePassword('abcdefghij', 'abcdefghij'), {
+      isValid: false,
+      message: "Password must contain both numbers and characters"
+    });
+    assert.deepEquals(validatePassword('12345678', '12345678'), {
+      isValid: false,
+      message: "Password must contain both numbers and characters"
+    });
+  });
+
 });

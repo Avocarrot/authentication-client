@@ -101,10 +101,11 @@ const AuthenticationClient = (function() {
      * @function reset
      * @memberof AuthenticationClient
      */
-     reset( ) {
-       instances.clear();
-     }
-   }
+    reset( ) {
+      instances.clear();
+    }
+
+  }
 
 })();
 

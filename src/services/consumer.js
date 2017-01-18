@@ -18,8 +18,8 @@ class Consumer {
    * @param {API.Production|API.Sandbox} api - The api to use for fetching data
    */
   constructor(client, api) {
-    assert(client instanceof Client, 'Missing `client`');
-    assert(api instanceof ProductionAPI || api instanceof SandboxAPI, 'Missing `api`');
+    assert(client instanceof Client, '`client` should be instance of Client');
+    assert(api instanceof ProductionAPI || api instanceof SandboxAPI, '`api` should be instance of API.Production or API.Sandbox');
     this._client = client;
     this._api = api;
   }

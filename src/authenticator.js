@@ -2,6 +2,7 @@
 const assert = require('assert');
 const User = require('./models/user');
 const Consumer = require('./services/consumer');
+const validatePassword = require('./utils').validatePassword;
 
 /**
  * @class Authenticator
@@ -15,8 +16,8 @@ class Authenticator {
    * @param {User} user - The User instance to use
    */
   constructor(user, consumer) {
-    assert(user instanceof User, 'Missing `user` configuration for Authenticator');
-    assert(consumer instanceof Consumer, 'Missing `consumer` configuration for Authenticator');
+    assert(user instanceof User, '`user` should be instance of User');
+    assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
     this._consumer = consumer;
     this._user = user;
   }
@@ -40,6 +41,10 @@ class Authenticator {
   resetPassword(token, password) {
     assert(token, 'Missing `token`');
     assert(password, 'Missing `password`');
+    const { isValid, message } = validatePassword(password);
+    if (!isValid) {
+      return Promise.reject(new Error(message));
+    }
     return this._consumer.resetPassword(token, password);
   }
 

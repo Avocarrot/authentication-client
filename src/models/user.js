@@ -3,6 +3,7 @@ const assert = require('assert');
 const Consumer = require('../services/consumer');
 const Store = require('../services/store');
 const Promise = require('es6-promise').Promise;
+const validatePassword = require('../utils').validatePassword;
 
 /**
  * @class User
@@ -16,8 +17,8 @@ class User {
    * @param {Consumer} consumer - The Consumer instance to use
    */
   constructor(store, consumer) {
-    assert(store instanceof Store, 'Missing `store`');
-    assert(consumer instanceof Consumer, 'Missing `consumer`');
+    assert(store instanceof Store, '`store` should be instance of Store');
+    assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
     this._store = store;
     this._consumer = consumer;
   }
@@ -116,6 +117,10 @@ class User {
   create(email, password, firstName, lastName) {
     assert(email, 'Missing `email`');
     assert(password, 'Missing `password`');
+    const { isValid, message } = validatePassword(password);
+    if (!isValid) {
+      return Promise.reject(new Error(message));
+    }
     return this._consumer.createUser({
       email,
       password,

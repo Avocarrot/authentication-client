@@ -46,7 +46,7 @@ test('User.constructor(options) should throw an error for', (t) => {
     try {
       new User(Object(), instances.consumer)
     } catch (err) {
-      assert.equals(err.message, 'Missing `store`');
+      assert.equals(err.message, '`store` should be instance of Store');
     }
   });
 
@@ -55,7 +55,7 @@ test('User.constructor(options) should throw an error for', (t) => {
     try {
       new User(instances.store, Object())
     } catch (err) {
-      assert.equals(err.message, 'Missing `consumer`');
+      assert.equals(err.message, '`consumer` should be instance of Consumer');
     }
   });
 
@@ -183,7 +183,6 @@ test('User.authenticate(username, password) should store user and token on succe
   let storeSetSpy = sandbox.spy();
   let retrieveUserStub = sandbox.stub();
   let retrieveTokenStub = sandbox.stub();
-  const mockUser = Object.assign(UserMocks.User, {});
   retrieveUserStub.returns({
     id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
@@ -237,12 +236,20 @@ test('User.create(email, firstName, lastName, password) should throw an error', 
   });
 });
 
+test('User.create(email, firstName, lastName, password) should reject invalid password', (assert) => {
+  assert.plan(1);
+  let instances = getUserInstances();
+  instances.user.create('mock@email.com', 'password').catch(err => {
+    assert.equals(err.message, 'Password must contain both numbers and characters');
+  })
+});
+
 test('User.create(email, firstName, lastName, password) should set User data on success', (assert) => {
   assert.plan(5);
   const response = Object.assign(UserMocks.User, {});
   let instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
-  instances.user.create('mock@email.com', 'password', 'firstName', 'lastName').then(() => {
+  instances.user.create('mock@email.com', 'password123456', 'firstName', 'lastName').then(() => {
     assert.equals(instances.user.id, response.id);
     assert.equals(instances.user.publisherId, response.publisher_id);
     assert.equals(instances.user.firstName, response.first_name);
@@ -270,7 +277,7 @@ test('User.save() should update User with new data', (assert) => {
   assert.plan(1);
   let instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User,{})));
-  instances.user.create('mock@email.com', 'password').then(() => {
+  instances.user.create('mock@email.com', 'password123456').then(() => {
     instances.user.email = "mock@email.com";
     instances.user.lastName = "John";
     instances.user.firstName = "Doe";

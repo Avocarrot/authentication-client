@@ -24,7 +24,6 @@ https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 Please see the **[CONTRIBUTING instructions](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/CONTRIBUTING.md)** before contributing to this repository
 
-
 ---
 
 ## Getting Started
@@ -87,57 +86,70 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 }
 ```
 
+### Environments
+
+#### Sandbox
+```
+FIXTURES
+```
+see LINK TO FIXTURES
+
+#### Production
+```
+HOST
+```
+see LINK TO HOST
+
 ### Setup
 ```javascript
-/**
- * Create an AuthenticationClient instnace
- */
- var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>');
+
+import AuthenticationClient from 'authentication-client';
+
+// Create an AuthenticationClient instance - Default environment is PRODUCTION
+var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>');
+
+// Create an AuthenticationClient instance for DEVELOPMENT
+var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.SANDBOX);
+
 ```
 
 ### User operations
 
 ```javascript
- /**
-  * Authenticate a User (login)
-  */
-  authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch(err => {})
+// Authenticate a User (login)
+authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch(err => {})
 
- /**
-  * Create a new User (register)
-  */
-  authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+// Create a new User (register)
+authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
 
- /**
-  * Retrieve User details
-  */
-  authenticationClient.user.firstName;
-  authenticationClient.user.lastName;
-  authenticationClient.user.email;
+// Retrieve User details
+authenticationClient.user.firstName;
+authenticationClient.user.lastName;
+authenticationClient.user.email;
 
- /**
-  * Update User details
-  */
-  authenticationClient.user.firstName = "John";
-  authenticationClient.user.lastName = "Doe";
-  authenticationClient.user.email = "mock@email.com";
-  authenticationClient.user.save().then(() => {}).catch(err => { })
+// Update User details
+authenticationClient.user.firstName = "John";
+authenticationClient.user.lastName = "Doe";
+authenticationClient.user.email = "mock@email.com";
+authenticationClient.user.save().then(() => {}).catch(err => { })
 ```
 
 ### Password operations
 
-```javascript
- /**
-  * Request a password reset for an email
-  */
-  authenticationClient.requestPasswordReset('<email>').then(() => {}).catch(err => { })
+The following rules apply for password acceptance
+- Password must be at least 8 characters long
+- Password must contain both numbers and characters
+- Password cannot contain spaces
 
- /**
-  * Reset password
-  */
-  authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch(err => { })
+```javascript
+// Request a password reset for an email
+authenticationClient.requestPasswordReset('<email>').then(() => {}).catch(err => { })
+
+// Reset password
+authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch(err => { })
 
 ```
+
 ---
 
 ## Built With

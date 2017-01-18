@@ -40,7 +40,7 @@ test('Consumer.constructor(options) should throw an error for', (t) => {
     try {
       new Consumer(Object(), instances.api)
     } catch (err) {
-      assert.equals(err.message, 'Missing `client`');
+      assert.equals(err.message, '`client` should be instance of Client');
     }
   });
 
@@ -49,7 +49,7 @@ test('Consumer.constructor(options) should throw an error for', (t) => {
     try {
       new Consumer(instances.client, Object())
     } catch (err) {
-      assert.equals(err.message, 'Missing `api`');
+      assert.equals(err.message, '`api` should be instance of API.Production or API.Sandbox');
     }
   });
 
