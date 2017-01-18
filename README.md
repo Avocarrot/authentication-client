@@ -88,30 +88,34 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 
 ### Environments
 
-#### Sandbox
-```
-FIXTURES
-```
-see LINK TO FIXTURES
+You can setup the library to run in two Environments:
+- Production (Default if no Environment is setup)
+- Sandbox
+
 
 #### Production
-```
-HOST
-```
-see LINK TO HOST
+All API calls are forwarded to the production Authentication API using the configuration file at [`config/default.js`](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/config/default.js).
 
-### Setup
 ```javascript
-
 import AuthenticationClient from 'authentication-client';
 
-// Create an AuthenticationClient instance - Default environment is PRODUCTION
-var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>');
-
-// Create an AuthenticationClient instance for DEVELOPMENT
-var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.SANDBOX);
+var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.Production);
 
 ```
+#### Sandbox
+All calls to Authentication API are mocked and a temporary session is provided. This means that for each session you will be able to:
+- Authenticate using the default Sandbox User found in [`/fixtures/users.json`](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/fixtures/users.json)
+- Create a new user
+- Update an existing User
+
+
+
+```javascript
+import AuthenticationClient from 'authentication-client';
+
+var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.Sandbox);
+```
+
 
 ### User operations
 
