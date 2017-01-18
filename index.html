@@ -1,0 +1,56 @@
+<!doctype html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Authentication client example</title>
+    <meta name="mobile-web-app-capable" content="yes">
+  </head>
+  <body>
+    <script src="./dist/index.js"> </script>
+    <script>
+
+     /**
+      * Create an AuthenticationClient instnace
+      */
+      var authenticationClient = AuthenticationClient.getInstanceFor('<id>', '<secret>', AuthenticationClient.Environment.Sandbox);
+
+      /**
+       * Authenticate a User (login)
+       */
+      authenticationClient.user.authenticate('<username>', '<password>').then((res) => {}).catch(err => {});
+
+      /**
+       * Create a new User (register)
+       */
+      authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+
+      /**
+       * Retrieve User details
+       */
+       authenticationClient.user.firstName;
+       authenticationClient.user.lastName;
+       authenticationClient.user.email;
+
+      /**
+       * Update User details
+       */
+       authenticationClient.user.firstName = "John";
+       authenticationClient.user.lastName = "Doe";
+       authenticationClient.user.email = "mock@email.com";
+       authenticationClient.user.save().then(() => {}).catch(err => { })
+
+      /**
+       * Request a password reset for an email
+       */
+       authenticationClient.requestPasswordReset('<email>').then(() => {}).catch(err => {});
+
+      /**
+       * Reset password
+       */
+       authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch(err => {});
+
+    </script>
+  </body>
+</html>

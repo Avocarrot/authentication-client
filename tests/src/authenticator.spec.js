@@ -6,6 +6,7 @@ const Store = require('../../src/services/store');
 const User = require('../../src/models/user');
 const Client = require('../../src/models/client');
 const Consumer = require('../../src/services/consumer');
+const API = require('../../src/api').Sandbox;
 const Promise = require('es6-promise').Promise;
 
 var sandbox = sinon.sandbox.create();
@@ -13,12 +14,15 @@ var sandbox = sinon.sandbox.create();
 /**
  * Instances
  */
-function authenticatorInstances() {
+function getAuthenticatorInstances() {
   let store = new Store('namespace');
-  let consumer = new Consumer(new Client('id', 'secret'), 'http://auth.mock.com', 'http://login.mock.com');
+  let api = new API('http://auth.mock.com');
+  let client = new Client('id', 'secret');
+  let consumer = new Consumer(client, api);
   let user = new User(store, consumer);
   let authenticator = new Authenticator(user, consumer);
   return {
+    client,
     store,
     user,
     consumer,
@@ -32,7 +36,7 @@ function authenticatorInstances() {
 
 test('Authenticator.constructor(options) should throw an error for', (t) => {
 
-  let instances = authenticatorInstances();
+  let instances = getAuthenticatorInstances();
 
   t.test('missing `store` configuration', (assert) => {
     assert.plan(1);
@@ -60,7 +64,7 @@ test('Authenticator.constructor(options) should throw an error for', (t) => {
 
 test('Authenticator.user should return User instance', (assert) => {
   assert.plan(1);
-  let instances = authenticatorInstances();
+  let instances = getAuthenticatorInstances();
   assert.deepEquals(instances.authenticator.user, instances.user);
 });
 
@@ -70,7 +74,7 @@ test('Authenticator.user should return User instance', (assert) => {
 
 test('Authenticator.requestPasswordReset(email) should', (t) => {
 
-  let instances = authenticatorInstances();
+  let instances = getAuthenticatorInstances();
 
   t.test('throw error for missing `email`', (assert) => {
     assert.plan(1);
@@ -83,7 +87,7 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
 
   t.test('resolve on success', (assert) => {
     assert.plan(1);
-    let instances = authenticatorInstances();
+    let instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'requestPasswordReset', () => Promise.resolve());
     instances.authenticator.requestPasswordReset('mock@email.com').then(() => {
       assert.ok('requestPasswordReset() resolved')
@@ -99,7 +103,7 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
 
 test('Authenticator.resetPassword(token, password) should', (t) => {
 
-  let instances = authenticatorInstances();
+  let instances = getAuthenticatorInstances();
 
   t.test('throw error for missing `token`', (assert) => {
     assert.plan(1);
@@ -121,7 +125,7 @@ test('Authenticator.resetPassword(token, password) should', (t) => {
 
   t.test('resolve on success', (assert) => {
     assert.plan(1);
-    let instances = authenticatorInstances();
+    let instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
     instances.authenticator.resetPassword('token', 'password').then(() => {
       assert.ok('resetPassword() resolved')
