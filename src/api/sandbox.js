@@ -65,7 +65,6 @@ class SandboxAPI {
       token: {
         POST: (database, id, body) => {
           const { grant_type, username, password, refresh_token } = body;
-          // Token retrieval
           if (grant_type === 'password') {
             if (!database.hasUserWithData(username, password)){
               return response(400, {'error': 'invalid_credentials'});
@@ -73,7 +72,6 @@ class SandboxAPI {
             const user = database.getUserWithData(username, password);
             return response(200, database.getTokenFor(user.id));
           }
-          // Token renewal
           if (grant_type === 'refresh_token') {
             if (!database.hasTokenWithRefresh(refresh_token)){
               return response(400, {'error': 'invalid_token'});

@@ -1,6 +1,6 @@
 # authentication-client
 
-[![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master) [<img width="110" alt="test-coverage-threshold" src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-95%2B.svg">](
+[![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master) [<img width="110" alt="test-coverage-threshold" src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-98%2B.svg">](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ---
@@ -50,7 +50,7 @@ npm run build
 
 ## Tests
 
-> The test coverage threshold for continuous-integration is set to **95%**.
+> The test coverage threshold for continuous-integration is set to **98%**.
 
 To run the tests use
 

@@ -24,8 +24,8 @@ const AuthenticationClient = (function() {
    *
    */
   const ENV = Object.freeze({
-    Production: Symbol.for('Production'),
-    Sandbox: Symbol.for('Sandbox'),
+    Production: Symbol('Production'),
+    Sandbox: Symbol('Sandbox'),
   });
 
   /**
@@ -47,20 +47,22 @@ const AuthenticationClient = (function() {
   const instances = new Map();
 
   /**
-   * Generates an AuthenticationClient instance
+   * Returns an API instaces for an ENV setup
    *
    * @private
+   * @throws {Error}
    * @param {ENV} environment - The environment to set - Defaults to `Production`
-   * @return {Array} - The target API parameters to use (Sandbox / Production)
+   * @return {SandboxAPI|ProductionAPI}
    *
    */
-  function getContextFor(environment) {
-    if (environment === 'Production'){
-      return [config.api.host, NodeFetch];
+  function getAPIFor(environment) {
+    if (environment === ENV.Production){
+      return new API.Production(config.api.host, NodeFetch);
     }
-    if (environment === 'Sandbox'){
-      return [new SandboxDatabase(UserFixtures, TokenFixtures)];
+    if (environment === ENV.Sandbox){
+      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
     }
+    throw new Error('Invalid `environment` passed');
   }
 
   /**
@@ -74,9 +76,7 @@ const AuthenticationClient = (function() {
    *
    */
   function generateInstance(client_id, client_secret, environment = ENV.Production){
-    const env = Symbol.keyFor(environment);
-    const ctx = getContextFor(env);
-    const api = new API[env](...ctx);
+    const api = getAPIFor(environment);
     const client = new Client(client_id, client_secret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);

@@ -6,7 +6,7 @@ reporting:
   dir: ./coverage
 check:
   global:
-    statements: 95
-    lines: 95
-    branches: 95
-    functions: 95
+    statements: 98
+    lines: 98
+    branches: 98
+    functions: 98

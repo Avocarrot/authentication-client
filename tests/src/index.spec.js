@@ -24,10 +24,20 @@ test('AuthenticationClient.getInstanceFor(client_id, client_secret, environment)
     AuthenticationClient.reset();
   });
 
-  t.test('allow setting Sandbox environment', (assert) => {
+  t.test('accepts Sandbox environment', (assert) => {
     assert.plan(1);
     let instance = AuthenticationClient.getInstanceFor('<id>', '<secret>', AuthenticationClient.Environment.Sandbox);
     assert.equals(instance._consumer._api instanceof SandboxAPI, true);
+    AuthenticationClient.reset();
+  });
+
+  t.test('rejects invalid environment setup', (assert) => {
+    assert.plan(1);
+    try {
+      AuthenticationClient.getInstanceFor('<id>', '<secret>', 1);
+    } catch (err) {
+      assert.equals(err.message, 'Invalid `environment` passed')
+    }
     AuthenticationClient.reset();
   });
 
