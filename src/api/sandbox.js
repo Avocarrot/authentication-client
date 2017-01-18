@@ -66,7 +66,8 @@ class SandboxAPI {
             if (!database.hasUserWithData(username, password)){
               return response(400, {'error': 'invalid_credentials'});
             }
-            return response(200, database.getUserWithData(username, password));
+            const user = database.getUserWithData(username, password);
+            return response(200, database.getTokenFor(user.id));
           }
           // Token renewal
           if (grant_type === 'refresh_token') {
@@ -99,7 +100,7 @@ class SandboxAPI {
   /**
    * Initializes SandboxAPI
    * @constructor
-   * @param {JSON} fixtures - The initial fixtures to register
+   * @param {SandboxDatabase} database - The database to use for storing sesssion changes
    */
   constructor (database) {
     this._database = database;
@@ -108,7 +109,7 @@ class SandboxAPI {
   /**
    * Stubs API calls
    * @param {String} resource - The resource to fetch from
-   * @param {Object} payload - The body to pass
+   * @param {Object} payload - The paylod to propagate
    * @returns {Promise}
    */
   invoke(resource, payload) {

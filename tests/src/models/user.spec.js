@@ -177,17 +177,35 @@ test('User.authenticate(username, password) should throw an error for', (t) => {
   });
 });
 
-test('Authenticator.authenticate(username, password) should store `access_token` and `refresh_token` on success', (assert) => {
-  assert.plan(1);
+test('User.authenticate(username, password) should store user and token on success', (assert) => {
+  assert.plan(7);
   let instances = getUserInstances();
   let storeSetSpy = sandbox.spy();
-  instances.store.set = storeSetSpy;
-  sandbox.stub(instances.consumer, 'retrieveToken', () => Promise.resolve({
+  let retrieveUserStub = sandbox.stub();
+  let retrieveTokenStub = sandbox.stub();
+  const mockUser = Object.assign(UserMocks.User, {});
+  retrieveUserStub.returns({
+    id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'john.doe@mail.com',
+  });
+  retrieveTokenStub.returns(Promise.resolve({
     'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
-  }));
+    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
+  }))
+  instances.store.set = storeSetSpy;
+  instances.consumer.retrieveUser = retrieveUserStub;
+  instances.consumer.retrieveToken = retrieveTokenStub;
   instances.user.authenticate('username', 'password').then(() => {
     assert.deepEquals(storeSetSpy.getCall(0).args, ['access_token', 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7']);
+    assert.deepEquals(storeSetSpy.getCall(1).args, ['refresh_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9']);
+    assert.equals(instances.user.id, '44d2c8e0-762b-4fa5-8571-097c81c3130d');
+    assert.equals(instances.user.publisherId, '55f5c8e0-762b-4fa5-8571-197c8183130a');
+    assert.equals(instances.user.email, 'john.doe@mail.com');
+    assert.equals(instances.user.firstName, 'John');
+    assert.equals(instances.user.lastName, 'Doe');
   });
   sandbox.restore();
 });
@@ -221,7 +239,7 @@ test('User.create(email, firstName, lastName, password) should throw an error', 
 
 test('User.create(email, firstName, lastName, password) should set User data on success', (assert) => {
   assert.plan(5);
-  const response = UserMocks.User;
+  const response = Object.assign(UserMocks.User, {});
   let instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
   instances.user.create('mock@email.com', 'password', 'firstName', 'lastName').then(() => {
@@ -251,7 +269,7 @@ test('User.save() should not allow saving an unauthenticated User', (assert) => 
 test('User.save() should update User with new data', (assert) => {
   assert.plan(1);
   let instances = getUserInstances();
-  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(UserMocks.User));
+  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User,{})));
   instances.user.create('mock@email.com', 'password').then(() => {
     instances.user.email = "mock@email.com";
     instances.user.lastName = "John";

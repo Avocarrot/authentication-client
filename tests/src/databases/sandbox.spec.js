@@ -175,3 +175,17 @@ test('SandboxDatabase.updateToken(refreshToken) should update token', (assert) =
   assert.notEquals(sandboxDatabase.tokens[0].access_token, prevAccessToken);
   assert.notEquals(sandboxDatabase.tokens[0].refresh_token, prevRefreshToken);
 });
+
+/**
+ * SandboxDatabase.getTokenFor(userId)
+ */
+
+test('SandboxDatabase.getTokenFor(userId) should return token', (assert) => {
+  let sandboxDatabase = getSandboxDatabaseInstance();
+  assert.plan(1);
+  assert.deepEquals(sandboxDatabase.getTokenFor('44d2c8e0-762b-4fa5-8571-097c81c3130d'), {
+    user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    access_token: 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
+    refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  });
+});

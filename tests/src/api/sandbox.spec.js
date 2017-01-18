@@ -9,6 +9,7 @@ var sandbox = sinon.sandbox.create();
 /**
  * Mocks
  */
+const TokenMocks = require('../../mocks/token');
 const UserMocks = require('../../mocks/user');
 
 /**
@@ -50,7 +51,7 @@ test('APISandbox.invoke() should mock /users GET', (t) => {
     assert.plan(2);
     let instances = getSandboxInstances();
     sandbox.stub(instances.database, 'hasUserWithToken', () => true);
-    sandbox.stub(instances.database, 'getUserWithToken', () => UserMocks.User);
+    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User,{}));
     instances.API.invoke('users/me', {
       method: 'GET',
       headers: {
@@ -58,7 +59,7 @@ test('APISandbox.invoke() should mock /users GET', (t) => {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }).then(res => {
-      assert.deepEquals(res.body, UserMocks.User);
+      assert.deepEquals(res.body, Object.assign(UserMocks.User, {}));
       assert.equals(res.status, 200);
     });
     sandbox.restore();
@@ -152,8 +153,8 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
       first_name: 'Foo',
       last_name: 'Bar'
     });
-    sandbox.stub(instances.database, 'getUserWithToken', () => UserMocks.User);
-    sandbox.stub(instances.database, 'getUserWithId', () => UserMocks.User);
+    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'getUserWithId', () => Object.assign(UserMocks.User, {}));
     sandbox.stub(instances.database, 'updateUser', () => updatedUser);
     instances.API.invoke('users/44d2c8e0-762b-4fa5-8571-097c81c3130d', {
       method: 'PATCH',
@@ -174,7 +175,7 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     let instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'getUserWithToken', () => UserMocks.User);
+    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User, {}));
     sandbox.stub(instances.database, 'getUserWithId', () => {});
     instances.API.invoke('users/44d2c8e0-762b-4fa5-8571-097c81c3130d', {
       method: 'PATCH',
@@ -201,10 +202,11 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
 test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
 
   t.test('on success', (assert) => {
-    assert.plan(2);
+    assert.plan(3);
     let instances = getSandboxInstances();
     sandbox.stub(instances.database, 'hasUserWithData', () => true);
-    sandbox.stub(instances.database, 'getUserWithData', () => UserMocks.User);
+    sandbox.stub(instances.database, 'getUserWithData', () => Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'getTokenFor', () => Object.assign(TokenMocks.PaswordGrant, {}));
     instances.API.invoke('token', {
       method: 'POST',
       headers: {
@@ -218,7 +220,8 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
         client_secret: 'client_secret'
       }
     }).then(res => {
-      assert.deepEquals(res.body, UserMocks.User);
+      assert.ok(res.body.access_token);
+      assert.ok(res.body.refresh_token);
       assert.equals(res.status, 200);
     })
     sandbox.restore();

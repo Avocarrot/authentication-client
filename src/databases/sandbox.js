@@ -35,8 +35,6 @@ class SandboxDatabase {
   /**
    * Extracts `public` user data
    * @private
-   * @param {Object} data - The data to extract
-   * @return {Object}
   */
   _extractUser(data) {
     return {
@@ -51,13 +49,11 @@ class SandboxDatabase {
   /**
   * Extracts `public` token data
   * @private
-  * @param {Object} data - The data to extract
-  * @return {Object}
   */
   _extractToken(data) {
     return {
-      'access_token': `${data.access_token}`,
-      'refresh_token': `${data.refresh_token}`,
+      'access_token': data.access_token,
+      'refresh_token': data.refresh_token,
     }
   }
 
@@ -87,6 +83,14 @@ class SandboxDatabase {
    */
   hasUserWithToken(accessToken) {
     return !!~this._tokens.findIndex(token => token.access_token === accessToken);
+  }
+
+  /**
+   * Reteurns token for a user
+   * @param {String} userId - The user id to lookup
+   */
+  getTokenFor(userId) {
+    return this._tokens.find(token => token.user_id === userId);
   }
 
   /**

@@ -9,7 +9,7 @@ class ProductionAPI {
    * Initializes ProductionAPI
    * @constructor
    * @param {String} endpoint - The host endpoint
-   * @param {Object} fetcher - The function to use for fetching the data - Defaults to `NodeFetch`
+   * @param {Object} fetcher - The function to use for fetching the data
    */
   constructor(endpoint, fetcher) {
     this._endpoint = endpoint;

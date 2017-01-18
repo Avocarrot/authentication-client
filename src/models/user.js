@@ -140,7 +140,19 @@ class User {
     assert(username, 'Missing `username`');
     assert(password, 'Missing `password`');
     return this._consumer.retrieveToken(username, password).then(res => {
-      this._store.set('access_token', res.access_token);
+      const { access_token, refresh_token } = res;
+      // Store tokens
+      this._store.set('access_token', access_token);
+      this._store.set('refresh_token', refresh_token);
+      // Retrieve user data
+      return this._consumer.retrieveUser(access_token);
+    }).then(data => {
+      const { id, publisher_id, email, first_name, last_name } = data;
+      this._id = id;
+      this._publisherId = publisher_id;
+      this._email = email;
+      this._firstName = first_name;
+      this._lastName = last_name;
     })
   }
 }
