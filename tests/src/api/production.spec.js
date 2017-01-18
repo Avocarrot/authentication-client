@@ -15,7 +15,7 @@ test('ProductionAPI.invoke() should call API fetcher with correct resources and 
   let payload = {
     method: 'POST',
     body: {
-      email: 'mock@email.com'
+      email: 'john.doe@mail.com'
     }
   }
   // Setup api

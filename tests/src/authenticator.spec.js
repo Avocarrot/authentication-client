@@ -89,7 +89,7 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
     assert.plan(1);
     let instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'requestPasswordReset', () => Promise.resolve());
-    instances.authenticator.requestPasswordReset('mock@email.com').then(() => {
+    instances.authenticator.requestPasswordReset('john.doe@mail.com').then(() => {
       assert.ok('requestPasswordReset() resolved')
     })
     sandbox.restore();

@@ -122,11 +122,11 @@ test('Consumer.createUser(email, firstName, lastName, password) should return de
   assert.plan(4);
   let instances = getConsumerInstances();
   let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:201, body: Object.assign(UserMocks.User, {})}));
-  instances.consumer.createUser('mock@email.com', 'John', 'Doe', 'password').then((res) => {
+  instances.consumer.createUser('john.doe@mail.com', 'John', 'Doe', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com', first_name:'John', last_name: 'Doe', password: 'password' });
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'john.doe@mail.com', first_name:'John', last_name: 'Doe', password: 'password' });
   });
   sandbox.restore();
 });
@@ -164,10 +164,10 @@ test('Consumer.requestPasswordReset(email) should send a password reset request'
   assert.plan(3);
   let instances = getConsumerInstances();
   let apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({status:200, body:{}}));
-  instances.consumer.requestPasswordReset('mock@email.com').then(() => {
+  instances.consumer.requestPasswordReset('john.doe@mail.com').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'mock@email.com'});
+    assert.deepEquals(apiStub.getCall(0).args[1].body, { email:'john.doe@mail.com'});
   });
   sandbox.restore();
 });
