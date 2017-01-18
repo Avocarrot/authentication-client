@@ -1,4 +1,4 @@
-# CHANGELOG
+# Changelog
 
 ## Version 1.0 (Jan 18, 2017)
 - Adds new Sandbox environment
