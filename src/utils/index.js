@@ -4,9 +4,11 @@
  */
 /**
  * Generates a random string
+ *
  * @memberof Utils
  * @param {Number} radix - The radix to use. Defaults to `18`
  * @return {String}
+ *
  */
 const generateRandomString = () => {
   return Math.random().toString(18).slice(2);
@@ -16,8 +18,10 @@ module.exports.generateRandomString = generateRandomString;
 
 /**
  * Generates a random UUID
+ *
  * @memberof Utils
  * @return {String}
+ *
  */
 const generateRandomUUID = () => {
   let base = `${generateRandomString()}${generateRandomString()}`;
@@ -28,9 +32,11 @@ module.exports.generateRandomUUID = generateRandomUUID;
 
 /**
  * Strips Bearer from Authorization header
+ *
  * @memberof Utils
  * @param {String} header - The Authorization header to strip
  * @return {String}
+ *
  */
 const stripBearer = (header) => {
   return `${header}`.replace('Bearer', '').trim();
@@ -40,9 +46,11 @@ module.exports.stripBearer = stripBearer;
 
 /**
  * Returns error message for `errorCode`
- * @private
+ *
+ * @memberof Utils
  * @param {String} errorCode - The `errorCode` to map
  * @return {String}
+ *
  */
 const extractErrorMessage = (errorCode) => {
   switch (errorCode) {
@@ -70,9 +78,15 @@ const extractErrorMessage = (errorCode) => {
 module.exports.extractErrorMessage = extractErrorMessage;
 
 /**
- * Validates a password pair
- * @private
+ * Validates a password pair agains the following rules:
+ * - Password cannot contain spaces
+ * - Password must contain both numbers and characters
+ * - Password must be at least 8 characters long
+ *
+ * @memberof Utils
  * @param {String} password - The `password` to validate
+ * @return {Object} Contains `isValid {Boolean}` and `message {String}`
+ *
  */
 const validatePassword = (password) => {
   const _invalidPasswordMessage = (message) => ({ isValid: false, message });

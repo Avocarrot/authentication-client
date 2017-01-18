@@ -7,9 +7,11 @@ class ProductionAPI {
 
   /**
    * Initializes ProductionAPI
+   *
    * @constructor
    * @param {String} endpoint - The host endpoint
    * @param {Object} fetcher - The function to use for fetching the data
+   * @return {ProductionAPI}
    */
   constructor(endpoint, fetcher) {
     this._endpoint = endpoint;
@@ -17,10 +19,12 @@ class ProductionAPI {
   }
 
   /**
+   *
    * Propagates invoke call to API _fetcher
    * @param {String} resource - The resource to fetch from
    * @param {Object} payload - The payload to pass
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   invoke(resource, payload) {
     return this._fetcher(`${this._endpoint}/${resource}`, payload);

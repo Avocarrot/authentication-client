@@ -13,9 +13,12 @@ class Consumer {
 
   /**
    * Initializes Consumer
+   *
    * @constructor
    * @param {Client} client - The Client instance to use
    * @param {API.Production|API.Sandbox} api - The api to use for fetching data
+   * @return {Consumer}
+   *
    */
   constructor(client, api) {
     assert(client instanceof Client, '`client` should be instance of Client');
@@ -26,10 +29,12 @@ class Consumer {
 
   /**
    * Returns data from API
+   *
    * @private
    * @param {String} resource - The resource to fetch from
    * @param {Object} payload - The payload to pass
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   _request(resource, payload){
     return this._api.invoke(resource, payload).then(res => {
@@ -43,9 +48,11 @@ class Consumer {
 
   /**
    * Retrieves token from a username-password combination
+   *
    * @param {String} username - The username to use
    * @param {String} password - The password to use
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   retrieveToken(username, password) {
     return this._request('token', {
@@ -65,8 +72,10 @@ class Consumer {
 
   /**
    * Returns a renewed token
+   *
    * @param {String} refresh_token - The refresh token to use
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   refreshToken(refresh_token) {
     return this._request('token', {
@@ -85,11 +94,13 @@ class Consumer {
 
   /**
    * Creates a new User
+   *
    * @param {String} email - The email to use
    * @param {String} firstName - The first name to use
    * @param {String} lastName - The last name to use
    * @param {String} password - The password to use
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   createUser(email, firstName, lastName, password) {
     return this._request('users', {
@@ -108,8 +119,10 @@ class Consumer {
 
   /**
    * Retrives a User
+   *
    * @param {String} token - The `Bearer` token
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   retrieveUser(token) {
     return this._request('users/me', {
@@ -123,12 +136,14 @@ class Consumer {
 
   /**
    * Updates a User
+   *
    * @param {String} userId - The User id
    * @param {String} bearer - The `Bearer` token
    * @param {String} options.email - The email to use
    * @param {String} options.firstName - The first ame to use
    * @param {String} options.lastName - The last name to use
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   updateUser(userId, bearer, options) {
     return this._request('users/' + userId, {
@@ -146,8 +161,10 @@ class Consumer {
 
   /**
    * Requests for a password reset
+   *
    * @param {String} email - The email to forward the reset token to
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   requestPasswordReset(email) {
     return this._request('passwords', {
@@ -163,9 +180,11 @@ class Consumer {
 
   /**
    * Resets password
+   *
    * @param {String} token - The reset token to use
    * @param {String} password - The new password
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   resetPassword(token, password) {
     return this._request('passwords/' + token, {

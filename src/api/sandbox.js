@@ -4,8 +4,10 @@ const stripBearer = Utils.stripBearer;
 
 /**
  * Generates an HTTP response object
+ *
  * @private
  * @return {Object}
+ *
  */
 const response = (status = 200, body = {}) => {
   return Promise.resolve({
@@ -21,7 +23,9 @@ class SandboxAPI {
 
   /**
    * Maps API resources to response objects
+   *
    * @private
+   *
    */
   static get resources() {
     return {
@@ -99,8 +103,11 @@ class SandboxAPI {
 
   /**
    * Initializes SandboxAPI
+   *
    * @constructor
    * @param {SandboxDatabase} database - The database to use for storing sesssion changes
+   * @return {SandboxAPI}
+   *
    */
   constructor (database) {
     this._database = database;
@@ -108,9 +115,11 @@ class SandboxAPI {
 
   /**
    * Stubs API calls
+   *
    * @param {String} resource - The resource to fetch from
    * @param {Object} payload - The paylod to propagate
-   * @returns {Promise}
+   *
+   * @return {Promise}
    */
   invoke(resource, payload) {
     const [ route, id ] = resource.split('/');

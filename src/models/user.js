@@ -12,9 +12,12 @@ class User {
 
   /**
    * Initializes User
+   *
    * @constructor
    * @param {Store} store - The Store instance to use
    * @param {Consumer} consumer - The Consumer instance to use
+   * @return {User}
+   *
    */
   constructor(store, consumer) {
     assert(store instanceof Store, '`store` should be instance of Store');
@@ -24,24 +27,30 @@ class User {
   }
 
   /**
-  * User id (read-only)
-   * @returns {String}
+   * Returns User id
+   *
+   * @return {String} [read-only] id
+   *
    */
   get id() {
     return this._id;
   }
 
   /**
-   * User publisherId (read-only)
-   * @returns {String}
+   * Returns User publisherId
+   *
+   * @return {String} [read-only] publisherId
+   *
    */
   get publisherId() {
     return this._publisherId;
   }
 
   /**
-   * User email (read/write)
-   * @returns {String}
+   * Returns User email
+   *
+   * @return {String} [read-write] email
+   *
    */
   get email() {
     return this._email;
@@ -53,8 +62,10 @@ class User {
   }
 
   /**
-   * User first name (read/write)
-   * @returns {String}
+   * Returns User first Name
+   *
+   * @return {String} [read-write] first Name
+   *
    */
   get firstName() {
     return this._firstName;
@@ -66,8 +77,10 @@ class User {
   }
 
   /**
-   * User last name (read/write)
-   * @returns {String}
+   * Returns User last name
+   *
+   * @return {String} [read-write] last name
+   *
    */
   get lastName() {
     return this._lastName;
@@ -79,8 +92,10 @@ class User {
   }
 
   /**
-   * Bearer token (read/write)
-   * @returns {String}
+   * Returns User bearer token
+   *
+   * @return {String} [read-write] bearer token
+   *
    */
   get bearer() {
     return this._store.get('access_token')
@@ -92,8 +107,10 @@ class User {
   }
 
   /**
-   * Updates User details
-   * @returns {Promise}
+   * Updates User data
+   *
+   * @return {Promise}
+   *
    */
   save() {
     if (!this.id){
@@ -108,11 +125,13 @@ class User {
 
   /**
    * Creates a new User
+   *
    * @param {String} email - The email to set
    * @param {String} firstName - The first name to set
    * @param {String} lastName - The last name to set
    * @param {String} password - The password to set
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   create(email, password, firstName, lastName) {
     assert(email, 'Missing `email`');
@@ -137,9 +156,11 @@ class User {
 
   /**
    * Retrieves authentication tokens for a username-password combination
+   *
    * @param {String} username - The username to use
    * @param {String} password - The password to use
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   authenticate(username, password) {
     assert(username, 'Missing `username`');

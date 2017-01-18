@@ -9,14 +9,18 @@ const LocalStorage = require('store');
 
 /**
  * Wrapper arround LocalStorage
+ *
  * @class Store
  */
 class Store {
 
   /**
    * Initializes Store
+   *
    * @constructor
    * @param {String} namespace - The namespace where all values will be attached
+   * @return {Store}
+   *
    */
   constructor(namespace) {
     assert(namespace, 'Missing `namespace`');
@@ -25,9 +29,11 @@ class Store {
 
   /**
    * Normalizes key based on namespace
+   *
    * @private
    * @param {String} key - The key to use
-   * @returns {String} The normalized key
+   * @return {String} The normalized key
+   *
    */
   _normalizeKey(key){
     return this._namespace + '_' + key;
@@ -35,8 +41,10 @@ class Store {
 
   /**
    * Sets value for a key
+   *
    * @param {String} key - The key to use
    * @param {String} value - The value to set
+   *
    */
   set(key, value) {
     LocalStorage.set(this._normalizeKey(key), value)
@@ -44,8 +52,10 @@ class Store {
 
   /**
    * Returns value for a stored key
+   *
    * @param {String} key - The key to use
-   * @returns {String}
+   * @return {String}
+   *
    */
   get(key) {
     return LocalStorage.get(this._normalizeKey(key))
@@ -53,7 +63,9 @@ class Store {
 
   /**
    * Removes key value pair
+   *
    * @param {String} key - The key to use
+   *
    */
   remove(key) {
     LocalStorage.remove(this._normalizeKey(key))

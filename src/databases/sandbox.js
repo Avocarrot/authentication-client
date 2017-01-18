@@ -9,9 +9,12 @@ class SandboxDatabase {
 
   /**
    * Initializes SandboxAPI
+   *
    * @constructor
    * @param {JSON} users - The initial user fixtures
    * @param {JSON} tokens - The initial token fixtures
+   * @return SandboxDatabase
+   *
    */
   constructor(users, tokens) {
     this._users = [...users];
@@ -20,6 +23,9 @@ class SandboxDatabase {
 
   /**
    * Returns users
+   *
+   * @return {Array}
+   *
    */
   get users() {
     return this._users;
@@ -27,6 +33,9 @@ class SandboxDatabase {
 
   /**
    * Returns tokens
+   *
+   * @return {Array}
+   *
    */
   get tokens() {
     return this._tokens;
@@ -34,7 +43,10 @@ class SandboxDatabase {
 
   /**
    * Extracts `public` user data
+   *
    * @private
+   * @return {Object}
+   *
   */
   _extractUser(data) {
     return {
@@ -47,8 +59,11 @@ class SandboxDatabase {
   }
 
   /**
-  * Extracts `public` token data
-  * @private
+   * Extracts `public` token data
+   *
+   * @private
+   * @return {Object}
+   *
   */
   _extractToken(data) {
     return {
@@ -59,8 +74,10 @@ class SandboxDatabase {
 
   /**
    * Determines if database has a specific token based on refresh_token
+   *
    * @param {String} refreshToken - The refresh token to lookup
    * @return {Boolean}
+   *
    */
   hasTokenWithRefresh(refreshToken) {
     return !!~this._tokens.findIndex(token => token.refresh_token === refreshToken);
@@ -68,9 +85,11 @@ class SandboxDatabase {
 
   /**
    * Determines if database has a specific user based on data
+   *
    * @param {String} email - The email to lookup
    * @param {String} password - The password to lookup
    * @return {Boolean}
+   *
    */
   hasUserWithData(email, password) {
     return !!~this._users.findIndex(user => user.email === email && user.password === password);
@@ -78,16 +97,21 @@ class SandboxDatabase {
 
   /**
    * Determines if database has a specific user based on token
+   *
    * @param {String} accessToken - The token to lookup
    * @return {Boolean}
+   *
    */
   hasUserWithToken(accessToken) {
     return !!~this._tokens.findIndex(token => token.access_token === accessToken);
   }
 
   /**
-   * Reteurns token for a user
+   * Returns token for a user
+   *
    * @param {String} userId - The user id to lookup
+   * @return {Object}
+   *
    */
   getTokenFor(userId) {
     return this._tokens.find(token => token.user_id === userId);
@@ -95,8 +119,10 @@ class SandboxDatabase {
 
   /**
    * Determines if database has a specific user based on email
+   *
    * @param {String} email - The email to lookup
    * @return {Boolean}
+   *
    */
   hasUserWithEmail(email) {
     return !!~this._users.findIndex(user => user.email === email);
@@ -104,16 +130,22 @@ class SandboxDatabase {
 
   /**
    * Returns user from fixtures based on data
+   *
    * @param {String} email - The target user email
    * @param {String} password - The target user password
+   * @return {Boolean}
+   *
    */
   getUserWithData(email, password) {
     return this._extractUser(this._users.find(user => user.email === email && user.password === password));
   }
 
   /**
+   *
    * Returns user from fixtures based on `id`
    * @param {String} id - The user id to lookup
+   * @return {Object} The found user data
+   *
    */
   getUserWithId(id) {
     return this._extractUser(this._users.find(user => user.id === id));
@@ -121,7 +153,10 @@ class SandboxDatabase {
 
   /**
    * Returns user from fixtures based on token
+   *
    * @param {String} accessToken - The token to lookup
+   * @return {Object} The found `access_token` and `refresh_token`
+   *
    */
   getUserWithToken(accessToken) {
     let userId = this._tokens.find(token => token.access_token === accessToken).user_id;
@@ -130,11 +165,13 @@ class SandboxDatabase {
 
   /**
    * Adds user to fixtures
+   *
    * @param {String} email - The email to set
    * @param {String} password - The password to set
    * @param {String} firstName - The firstName to set - Optional
    * @param {String} lastName - The lastName to set - Optional
    * @return {Object} The user data merged into an object
+   *
    */
   addUser(email, password, firstName, lastName) {
     const userId = generateRandomUUID();
@@ -163,10 +200,12 @@ class SandboxDatabase {
 
   /**
    * Updates user
+   *
    * @param {String} id - The user id to lookup
    * @param {String} firstName - The firstName to update
    * @param {String} lastName - The lastName to update
    * @return {Object} The user data merged into an object
+   *
    */
   updateUser(id, firstName, lastName) {
     let user = this._users.find(user => user.id === id)
@@ -182,7 +221,10 @@ class SandboxDatabase {
 
   /**
    * Updates token
+   *
    * @param {String} refreshToken - The refreshToken to use
+   * @return {Object} The found `access_token` and `refresh_token`
+   *
    */
   updateToken(refreshToken) {
     let token = this._tokens.find(token => token.refresh_token === refreshToken);

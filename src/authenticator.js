@@ -11,9 +11,12 @@ class Authenticator {
 
   /**
    * Initializes Authenticator
+   *
    * @constructor
    * @param {Store} store - The Store instance to use
    * @param {User} user - The User instance to use
+   * @return {Authenticator}
+   *
    */
   constructor(user, consumer) {
     assert(user instanceof User, '`user` should be instance of User');
@@ -24,8 +27,10 @@ class Authenticator {
 
   /**
    * Asks for a password reset
+   *
    * @param {String} email - The email to reset the password for
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   requestPasswordReset(email) {
     assert(email, 'Missing `email`');
@@ -34,9 +39,11 @@ class Authenticator {
 
   /**
    * Asks for a password reset
+   *
    * @param {String} token - The reset token provided via email
    * @param {String} password - The new password
-   * @returns {Promise}
+   * @return {Promise}
+   *
    */
   resetPassword(token, password) {
     assert(token, 'Missing `token`');
@@ -50,7 +57,9 @@ class Authenticator {
 
   /**
    * Registers User instance
-   * @returns {User}
+   *
+   * @return {User} The User for the current sessoin
+   *
    */
   get user() {
     return this._user;

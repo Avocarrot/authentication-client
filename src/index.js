@@ -18,7 +18,10 @@ const AuthenticationClient = (function() {
 
   /**
    * Environment ENUM
+   *
    * @enum
+   * return {Object}
+   *
    */
   const ENV = Object.freeze({
     Production: Symbol.for('Production'),
@@ -27,20 +30,29 @@ const AuthenticationClient = (function() {
 
   /**
    * Store instance
+   *
    * @private
+   * @return {Store}
+   *
    */
   const store = new Store(config.store.namespace);
 
   /**
    * Cached instances
+   *
    * @private
+   * @return {Map}
+   *
    */
   const instances = new Map();
 
   /**
    * Generates an AuthenticationClient instance
+   *
    * @private
    * @param {ENV} environment - The environment to set - Defaults to `Production`
+   * @return {Array} - The target API parameters to use (Sandbox / Production)
+   *
    */
   function getContextFor(environment) {
     if (environment === 'Production'){
@@ -53,11 +65,13 @@ const AuthenticationClient = (function() {
 
   /**
    * Generates an AuthenticationClient instance
+   *
    * @private
    * @param {String} client_id - The client_id to set
    * @param {String} client_secret - The client_secret
    * @param {ENV} environment - The environment to set
    * @return {Authenticator}
+   *
    */
   function generateInstance(client_id, client_secret, environment = ENV.Production){
     const env = Symbol.keyFor(environment);
@@ -73,17 +87,23 @@ const AuthenticationClient = (function() {
 
     /**
      * Environment enum
+     *
+     * @enum
      * @memberof AuthenticationClient
+     *
      */
     Environment: ENV,
 
     /**
      * Creates an Authenticator instance for a client_id, client_secret combination
+     *
      * @function getInstanceFor
      * @memberof AuthenticationClient
      * @param {String} client_id - The Client id
      * @param {String} client_secret - The Client secret
      * @param {ENV} environment - The environment to set
+     * @return {Authenticator}
+     *
      */
     getInstanceFor(client_id, client_secret, environment ) {
       const key = `${client_id}-${client_secret}`;
@@ -98,8 +118,10 @@ const AuthenticationClient = (function() {
 
     /**
      * Flushes cached instances
+     *
      * @function reset
      * @memberof AuthenticationClient
+     *
      */
     reset( ) {
       instances.clear();
