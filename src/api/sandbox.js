@@ -72,13 +72,15 @@ class SandboxAPI {
             const user = database.getUserWithData(username, password);
             return response(200, database.getTokenFor(user.id));
           }
+          /* istanbul ignore if */
           if (grant_type === 'refresh_token') {
             if (!database.hasTokenWithRefresh(refresh_token)){
               return response(400, {'error': 'invalid_token'});
             }
             const refreshedToken = database.updateToken(refresh_token);
-            return response(200, refreshedToken)
+            return response(200, refreshedToken);
           }
+          return response(404, {'error': 'unexpected_error'});
         }
       },
       /**

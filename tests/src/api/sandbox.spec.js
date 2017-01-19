@@ -307,6 +307,27 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
     sandbox.restore();
   });
 
+  t.test('on wrong resource', (assert) => {
+    assert.plan(2);
+    let instances = getSandboxInstances();
+    instances.API.invoke('token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      },
+      body: {
+        refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+        client_id: 'client_id',
+        client_secret: 'client_secret'
+      }
+    }).then(res => {
+      assert.equals(res.status, 404);
+      assert.deepEquals(res.body, {'error': 'unexpected_error'});
+    })
+    sandbox.restore();
+  });
+
+
 });
 
 /**
