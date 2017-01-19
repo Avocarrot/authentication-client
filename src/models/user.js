@@ -127,9 +127,9 @@ class User {
    * Creates a new User
    *
    * @param {String} email - The email to set
+   * @param {String} password - The password to set
    * @param {String} firstName - The first name to set
    * @param {String} lastName - The last name to set
-   * @param {String} password - The password to set
    * @return {Promise}
    *
    */

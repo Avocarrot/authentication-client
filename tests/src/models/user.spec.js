@@ -210,10 +210,10 @@ test('User.authenticate(username, password) should store user and token on succe
 });
 
 /**
- * User.create(email, firstName, lastName, password)
+ * User.create(email, password, firstName, lastName)
  */
 
-test('User.create(email, firstName, lastName, password) should throw an error', (t) => {
+test('User.create(email, password, firstName, lastName) should throw an error', (t) => {
 
   let instances = getUserInstances();
 
@@ -236,7 +236,7 @@ test('User.create(email, firstName, lastName, password) should throw an error', 
   });
 });
 
-test('User.create(email, firstName, lastName, password) should reject invalid password', (assert) => {
+test('User.create(email, password, firstName, lastName) should reject invalid password', (assert) => {
   assert.plan(1);
   let instances = getUserInstances();
   instances.user.create('john.doe@mail.com', 'password').catch(err => {
@@ -244,7 +244,7 @@ test('User.create(email, firstName, lastName, password) should reject invalid pa
   })
 });
 
-test('User.create(email, firstName, lastName, password) should set User data on success', (assert) => {
+test('User.create(email, password, firstName, lastName) should set User data on success', (assert) => {
   assert.plan(5);
   const response = Object.assign(UserMocks.User, {});
   let instances = getUserInstances();
