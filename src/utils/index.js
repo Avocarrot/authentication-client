@@ -61,7 +61,7 @@ const extractErrorMessage = (errorCode) => {
   case 'invalid_email':
     return 'Could not find an account for this email';
   case 'invalid_credentials':
-    return 'You have entered an invalid email password combination';
+    return 'Invalid email or password';
   case 'invalid_password':
     return 'You have entered an invalid password';
   case 'invalid_client':

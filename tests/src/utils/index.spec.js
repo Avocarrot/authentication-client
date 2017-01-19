@@ -57,7 +57,7 @@ test('extractErrorMessage(errorCode) should extract the correct messages', (asse
   assert.equals(extractErrorMessage('user_exists'), 'User already exists');
   assert.equals(extractErrorMessage('user_not_found'), 'User not found');
   assert.equals(extractErrorMessage('invalid_email'), 'Could not find an account for this email');
-  assert.equals(extractErrorMessage('invalid_credentials'), 'You have entered an invalid email password combination');
+  assert.equals(extractErrorMessage('invalid_credentials'), 'Invalid email or password');
   assert.equals(extractErrorMessage('invalid_password'), 'You have entered an invalid password');
   assert.equals(extractErrorMessage('invalid_client'), 'Client authentication failed');
   assert.equals(extractErrorMessage('invalid_grant'), 'The provided authorization token is invalid');
