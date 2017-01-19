@@ -2,7 +2,6 @@
 const assert = require('assert');
 const Consumer = require('../services/consumer');
 const Store = require('../services/store');
-const Promise = require('es6-promise').Promise;
 const validatePassword = require('../utils').validatePassword;
 
 /**

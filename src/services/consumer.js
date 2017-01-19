@@ -1,7 +1,6 @@
 'use strict';
 const assert = require('assert');
 const Client = require('../models/client');
-const Promise = require('es6-promise').Promise;
 const ProductionAPI = require('../api').Production;
 const SandboxAPI = require('../api').Sandbox;
 const extractErrorMessage = require('../utils').extractErrorMessage;

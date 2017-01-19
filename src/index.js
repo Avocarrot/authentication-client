@@ -12,6 +12,11 @@ const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
 
 /**
+ * Polyfill global namespace for {Promise}
+ */
+require('es6-promise').polyfill();
+
+/**
  * @namespace AuthenticationClient
  */
 const AuthenticationClient = (function() {

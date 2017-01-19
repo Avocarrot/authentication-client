@@ -7,7 +7,6 @@ const User = require('../../src/models/user');
 const Client = require('../../src/models/client');
 const Consumer = require('../../src/services/consumer');
 const API = require('../../src/api').Sandbox;
-const Promise = require('es6-promise').Promise;
 
 var sandbox = sinon.sandbox.create();
 
