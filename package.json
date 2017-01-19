@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://gitlab.glispa.com/avocarrot/authentication-client",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client"
