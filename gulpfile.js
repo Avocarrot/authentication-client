@@ -8,12 +8,10 @@ var babelify = require('babelify');
 var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
 var _ = require('lodash');
-var browserSync = require('browser-sync');
 var jsdoc = require('gulp-jsdoc3');
 var tapSpec = require('tap-spec');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
-var reload = browserSync.reload;
 
 var config = {
   entryFile: './src/index.js',
@@ -40,7 +38,6 @@ function bundle() {
     .pipe(buffer())
     .pipe(uglify())
     .pipe(gulp.dest(config.outputDir))
-    .pipe(reload({ stream: true }));
 }
 
 gulp.task('clean', function(cb){
@@ -63,21 +60,8 @@ gulp.task('build', ['build-persistent'], function() {
 });
 
 gulp.task('watch', ['build-persistent'], function() {
-  browserSync({
-    server: {
-      baseDir: './'
-    }
-  });
   getBundler().on('update', function() {
     gulp.start('build-persistent');
-  });
-});
-
-gulp.task('serve', function () {
-  browserSync({
-    server: {
-      baseDir: './'
-    }
   });
 });
 

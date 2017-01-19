@@ -34,17 +34,18 @@ make yarn
 make npm
 ```
 
-You can run the project with livereload on your machine using
+To build the library for **Production** use
+
+```
+npm run build
+```
+
+To run a live-reload build task for **Development** run
 
 ```
 npm start
 ```
 
-To build the library use
-
-```
-npm run build
-```
 
 ---
 
