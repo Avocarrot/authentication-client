@@ -1,6 +1,6 @@
 'use strict';
 const config = require('../config/default');
-const NodeFetch = require('node-fetch');
+const fetch = require('whatwg-fetch');
 const Authenticator = require('./authenticator');
 const Store = require('./services/store');
 const User = require('./models/user');
@@ -12,7 +12,7 @@ const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
 
 /**
- * Polyfill global namespace for {Promise}
+ * Global polyfill for {Promise}
  */
 require('es6-promise').polyfill();
 
@@ -62,7 +62,7 @@ const AuthenticationClient = (function() {
    */
   function getAPIFor(environment) {
     if (environment === ENV.Production){
-      return new API.Production(config.api.host, NodeFetch);
+      return new API.Production(config.api.host, fetch);
     }
     if (environment === ENV.Sandbox){
       return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
