@@ -1,4 +1,3 @@
-'use strict';
 const config = require('../config/default');
 const fetch = require('whatwg-fetch');
 const Authenticator = require('./authenticator');
@@ -19,8 +18,7 @@ require('es6-promise').polyfill();
 /**
  * @namespace AuthenticationClient
  */
-const AuthenticationClient = (function() {
-
+const AuthenticationClient = (function immediate() {
   /**
    * Environment ENUM
    *
@@ -61,10 +59,10 @@ const AuthenticationClient = (function() {
    *
    */
   function getAPIFor(environment) {
-    if (environment === ENV.Production){
+    if (environment === ENV.Production) {
       return new API.Production(config.api.host, fetch);
     }
-    if (environment === ENV.Sandbox){
+    if (environment === ENV.Sandbox) {
       return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
     }
     throw new Error('Invalid `environment` passed');
@@ -74,15 +72,15 @@ const AuthenticationClient = (function() {
    * Generates an AuthenticationClient instance
    *
    * @private
-   * @param {String} client_id - The client_id to set
-   * @param {String} client_secret - The client_secret
+   * @param {String} clientId - The client id to set
+   * @param {String} clientSecret - The client secret
    * @param {ENV} environment - The environment to set
    * @return {Authenticator}
    *
    */
-  function generateInstance(client_id, client_secret, environment = ENV.Production){
+  function generateInstance(clientId, clientSecret, environment = ENV.Production) {
     const api = getAPIFor(environment);
-    const client = new Client(client_id, client_secret);
+    const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);
     return new Authenticator(user, consumer);
@@ -100,23 +98,23 @@ const AuthenticationClient = (function() {
     Environment: ENV,
 
     /**
-     * Creates an Authenticator instance for a client_id, client_secret combination
+     * Creates an Authenticator instance for a clientId, clientSecret combination
      *
      * @function getInstanceFor
      * @memberof AuthenticationClient
-     * @param {String} client_id - The Client id
-     * @param {String} client_secret - The Client secret
+     * @param {String} clientId - The Client id
+     * @param {String} clientSecret - The Client secret
      * @param {ENV} environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor(client_id, client_secret, environment ) {
-      const key = `${client_id}-${client_secret}`;
-      if (instances.has(key)){
+    getInstanceFor(clientId, clientSecret, environment) {
+      const key = `${clientId}-${clientSecret}`;
+      if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      let instance = generateInstance(client_id, client_secret, environment);
+      const instance = generateInstance(clientId, clientSecret, environment);
       instances.set(key, instance);
       return instance;
     },
@@ -128,17 +126,16 @@ const AuthenticationClient = (function() {
      * @memberof AuthenticationClient
      *
      */
-    reset( ) {
+    reset() {
       instances.clear();
-    }
+    },
 
-  }
-
+  };
 })();
 
 /* istanbul ignore next */
 
-if (global.window){
+if (global.window) {
   global.window.AuthenticationClient = AuthenticationClient;
 }
 

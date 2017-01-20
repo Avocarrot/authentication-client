@@ -122,10 +122,10 @@ var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<
 
 ```javascript
 // Authenticate a User (login)
-authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch(err => {})
+authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch((err) => {})
 
 // Create a new User (register)
-authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch(err => {})
+authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch((err) => {})
 
 // Retrieve User details
 authenticationClient.user.firstName;
@@ -136,7 +136,7 @@ authenticationClient.user.email;
 authenticationClient.user.firstName = "John";
 authenticationClient.user.lastName = "Doe";
 authenticationClient.user.email = "mock@email.com";
-authenticationClient.user.save().then(() => {}).catch(err => { })
+authenticationClient.user.save().then(() => {}).catch((err) => { })
 ```
 
 ### Password operations
@@ -148,10 +148,10 @@ The following rules apply for password acceptance
 
 ```javascript
 // Request a password reset for an email
-authenticationClient.requestPasswordReset('<email>').then(() => {}).catch(err => { })
+authenticationClient.requestPasswordReset('<email>').then(() => {}).catch((err) => { })
 
 // Reset password
-authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch(err => { })
+authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch((err) => { })
 
 ```
 

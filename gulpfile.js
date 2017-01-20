@@ -1,4 +1,4 @@
-/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+/* eslint-disable */
 'use strict';
 var gulp = require('gulp');
 var tape = require('gulp-tape');

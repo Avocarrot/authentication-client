@@ -1,4 +1,3 @@
-'use strict';
 const assert = require('assert');
 const Consumer = require('../services/consumer');
 const Store = require('../services/store');
@@ -55,7 +54,7 @@ class User {
     return this._email;
   }
   set email(newEmail) {
-    if (newEmail){
+    if (newEmail) {
       this._email = newEmail;
     }
   }
@@ -70,7 +69,7 @@ class User {
     return this._firstName;
   }
   set firstName(newFirstName) {
-    if (newFirstName){
+    if (newFirstName) {
       this._firstName = newFirstName;
     }
   }
@@ -85,7 +84,7 @@ class User {
     return this._lastName;
   }
   set lastName(newLastName) {
-    if (newLastName){
+    if (newLastName) {
       this._lastName = newLastName;
     }
   }
@@ -97,7 +96,7 @@ class User {
    *
    */
   get bearer() {
-    return this._store.get('access_token')
+    return this._store.get('access_token');
   }
   set bearer(accessToken) {
     if (accessToken) {
@@ -112,13 +111,13 @@ class User {
    *
    */
   save() {
-    if (!this.id){
+    if (!this.id) {
       return Promise.reject(new Error('Cannot save a non-existent User'));
     }
     return this._consumer.updateUser(this.id, this.bearer, {
       email: this._email,
       firstName: this._firstName,
-      lastName: this._lastName
+      lastName: this._lastName,
     });
   }
 
@@ -143,8 +142,8 @@ class User {
       email,
       password,
       firstName,
-      lastName
-    }).then(data => {
+      lastName,
+    }).then((data) => {
       this._id = data.id;
       this._publisherId = data.publisher_id;
       this._firstName = data.first_name;
@@ -164,21 +163,20 @@ class User {
   authenticate(username, password) {
     assert(username, 'Missing `username`');
     assert(password, 'Missing `password`');
-    return this._consumer.retrieveToken(username, password).then(res => {
+    return this._consumer.retrieveToken(username, password).then((res) => {
       const { access_token, refresh_token } = res;
       // Store tokens
       this._store.set('access_token', access_token);
       this._store.set('refresh_token', refresh_token);
       // Retrieve user data
       return this._consumer.retrieveUser(access_token);
-    }).then(data => {
-      const { id, publisher_id, email, first_name, last_name } = data;
-      this._id = id;
-      this._publisherId = publisher_id;
-      this._email = email;
-      this._firstName = first_name;
-      this._lastName = last_name;
-    })
+    }).then((data) => {
+      this._id = data.id;
+      this._publisherId = data.publisher_id;
+      this._email = data.email;
+      this._firstName = data.first_name;
+      this._lastName = data.last_name;
+    });
   }
 }
 

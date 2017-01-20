@@ -24,7 +24,11 @@
   "devDependencies": {
     "babelify": "~5.0.3",
     "browserify": "^6.3.3",
-    "eslint": "^3.13.0",
+    "eslint": "^3.13.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
     "gulp": "~3.8.10",
     "gulp-jsdoc3": "^1.0.1",
     "gulp-tape": "0.0.9",

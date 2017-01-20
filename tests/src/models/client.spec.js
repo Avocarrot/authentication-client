@@ -6,25 +6,22 @@ const Client = require('../../../src/models/client');
  */
 
 test('Client.constructor(options) should throw an error for', (t) => {
-
   t.test('missing `id`', (assert) => {
     assert.plan(1);
     try {
-      new Client(null, 'secret')
+      new Client(null, 'secret');
     } catch (err) {
       assert.equals(err.message, 'Missing `id`');
     }
   });
-
   t.test('missing `secret`', (assert) => {
     assert.plan(1);
     try {
-      new Client('id', null)
+      new Client('id', null);
     } catch (err) {
       assert.equals(err.message, 'Missing `secret`');
     }
   });
-
 });
 
 /**
@@ -33,7 +30,7 @@ test('Client.constructor(options) should throw an error for', (t) => {
 
 test('Client.id should return correct `id` and `secret` values', (assert) => {
   assert.plan(2);
-  var client = new Client('id', 'secret');
+  const client = new Client('id', 'secret');
   assert.equals(client.id, 'id');
   assert.equals(client.secret, 'secret');
 });

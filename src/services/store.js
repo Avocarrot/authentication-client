@@ -1,4 +1,3 @@
-'use strict';
 const assert = require('assert');
 
 /**
@@ -35,8 +34,8 @@ class Store {
    * @return {String} The normalized key
    *
    */
-  _normalizeKey(key){
-    return this._namespace + '_' + key;
+  _normalizeKey(key) {
+    return `${this._namespace}_${key}`;
   }
 
   /**
@@ -47,7 +46,7 @@ class Store {
    *
    */
   set(key, value) {
-    LocalStorage.set(this._normalizeKey(key), value)
+    LocalStorage.set(this._normalizeKey(key), value);
   }
 
   /**
@@ -58,7 +57,7 @@ class Store {
    *
    */
   get(key) {
-    return LocalStorage.get(this._normalizeKey(key))
+    return LocalStorage.get(this._normalizeKey(key));
   }
 
   /**
@@ -68,7 +67,7 @@ class Store {
    *
    */
   remove(key) {
-    LocalStorage.remove(this._normalizeKey(key))
+    LocalStorage.remove(this._normalizeKey(key));
   }
 
 }

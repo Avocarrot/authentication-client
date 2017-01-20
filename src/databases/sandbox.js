@@ -1,6 +1,7 @@
-'use strict';
-const generateRandomString = require('../utils').generateRandomString;
-const generateRandomUUID = require('../utils').generateRandomUUID;
+const Utils = require('../utils');
+
+const generateRandomString = Utils.generateRandomString;
+const generateRandomUUID = Utils.generateRandomUUID;
 
 /**
  * @class SandboxDatabase
@@ -50,12 +51,12 @@ class SandboxDatabase {
   */
   _extractUser(data) {
     return {
-      'id': data.id,
-      'publisher_id': data.publisher_id,
-      'first_name': data.first_name,
-      'last_name': data.last_name,
-      'email': data.email,
-    }
+      id: data.id,
+      publisher_id: data.publisher_id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+    };
   }
 
   /**
@@ -67,9 +68,9 @@ class SandboxDatabase {
   */
   _extractToken(data) {
     return {
-      'access_token': data.access_token,
-      'refresh_token': data.refresh_token,
-    }
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+    };
   }
 
   /**
@@ -137,7 +138,7 @@ class SandboxDatabase {
    *
    */
   getUserWithData(email, password) {
-    return this._extractUser(this._users.find(user => user.email === email && user.password === password));
+    return this._extractUser(this._users.find(user => (user.email === email && user.password === password)));
   }
 
   /**
@@ -159,7 +160,7 @@ class SandboxDatabase {
    *
    */
   getUserWithToken(accessToken) {
-    let userId = this._tokens.find(token => token.access_token === accessToken).user_id;
+    const userId = this._tokens.find(token => token.access_token === accessToken).user_id;
     return this.getUserWithId(userId);
   }
 
@@ -179,18 +180,18 @@ class SandboxDatabase {
     const accessToken = generateRandomString();
     const refreshToken = generateRandomString();
     const newToken = {
-      'user_id': userId,
-      'access_token': accessToken,
-      'refresh_token': refreshToken,
-    }
+      user_id: userId,
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
     const newUser = {
-      'id': userId,
-      'publisher_id': publisherId,
-      'email': email,
-      'password': password,
-      'first_name': firstName,
-      'last_name': lastName,
-    }
+      id: userId,
+      publisher_id: publisherId,
+      email,
+      password,
+      first_name: firstName,
+      last_name: lastName,
+    };
     // Store new records
     this._tokens.push(newToken);
     this._users.push(newUser);
@@ -208,7 +209,7 @@ class SandboxDatabase {
    *
    */
   updateUser(id, firstName, lastName) {
-    let user = this._users.find(user => user.id === id)
+    const user = this._users.find(record => record.id === id);
     if (typeof firstName !== 'undefined') {
       user.first_name = firstName;
     }
@@ -227,7 +228,7 @@ class SandboxDatabase {
    *
    */
   updateToken(refreshToken) {
-    let token = this._tokens.find(token => token.refresh_token === refreshToken);
+    const token = this._tokens.find(record => record.refresh_token === refreshToken);
     token.access_token = generateRandomString();
     token.refresh_token = generateRandomString();
     // Return public user data

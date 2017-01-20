@@ -1,5 +1,5 @@
-'use strict';
 const Utils = require('../utils');
+
 const stripBearer = Utils.stripBearer;
 
 /**
@@ -9,12 +9,10 @@ const stripBearer = Utils.stripBearer;
  * @return {Object}
  *
  */
-const response = (status = 200, body = {}) => {
-  return Promise.resolve({
-    status,
-    body
-  });
-}
+const response = (status = 200, body = {}) => (Promise.resolve({
+  status,
+  body,
+}));
 
 /**
  * @class Sandbox API
@@ -35,15 +33,15 @@ class SandboxAPI {
       users: {
         GET: (database, id, body, headers) => {
           const token = stripBearer(headers.Authorization);
-          if (!database.hasUserWithToken(token)){
-            return response(404, {'error': 'user_not_found'});
+          if (!database.hasUserWithToken(token)) {
+            return response(404, { error: 'user_not_found' });
           }
           return response(200, database.getUserWithToken(token));
         },
         POST: (database, id, body) => {
           const { email, password, first_name, last_name } = body;
-          if (database.hasUserWithData(email, password)){
-            return response(400, {'error': 'user_exists'});
+          if (database.hasUserWithData(email, password)) {
+            return response(400, { error: 'user_exists' });
           }
           const newUser = database.addUser(email, password, first_name, last_name);
           return response(201, newUser);
@@ -52,11 +50,11 @@ class SandboxAPI {
           const token = stripBearer(headers.Authorization);
           const { first_name, last_name } = body;
           if (database.getUserWithToken(token) !== database.getUserWithId(id)) {
-            return response(400, {'error': 'invalid_grant'});
+            return response(400, { error: 'invalid_grant' });
           }
           const patchedUser = database.updateUser(id, first_name, last_name);
           return response(200, patchedUser);
-        }
+        },
       },
       /**
        * Maps `/token` resource
@@ -66,22 +64,22 @@ class SandboxAPI {
         POST: (database, id, body) => {
           const { grant_type, username, password, refresh_token } = body;
           if (grant_type === 'password') {
-            if (!database.hasUserWithData(username, password)){
-              return response(400, {'error': 'invalid_credentials'});
+            if (!database.hasUserWithData(username, password)) {
+              return response(400, { error: 'invalid_credentials' });
             }
             const user = database.getUserWithData(username, password);
             return response(200, database.getTokenFor(user.id));
           }
           /* istanbul ignore if */
           if (grant_type === 'refresh_token') {
-            if (!database.hasTokenWithRefresh(refresh_token)){
-              return response(400, {'error': 'invalid_token'});
+            if (!database.hasTokenWithRefresh(refresh_token)) {
+              return response(400, { error: 'invalid_token' });
             }
             const refreshedToken = database.updateToken(refresh_token);
             return response(200, refreshedToken);
           }
-          return response(404, {'error': 'unexpected_error'});
-        }
+          return response(404, { error: 'unexpected_error' });
+        },
       },
       /**
        * Maps `/passwords` resource
@@ -90,15 +88,13 @@ class SandboxAPI {
         POST: (database, id, body) => {
           const { email } = body;
           if (!database.hasUserWithEmail(email)) {
-            return response(400, {'error': 'invalid_email'});
+            return response(400, { error: 'invalid_email' });
           }
           return response();
         },
-        PUT: () => {
-          return response();
-        }
-      }
-    }
+        PUT: () => (response()),
+      },
+    };
   }
 
   /**
@@ -109,7 +105,7 @@ class SandboxAPI {
    * @return {SandboxAPI}
    *
    */
-  constructor (database) {
+  constructor(database) {
     this._database = database;
   }
 
@@ -122,7 +118,7 @@ class SandboxAPI {
    * @return {Promise}
    */
   invoke(resource, payload) {
-    const [ route, id ] = resource.split('/');
+    const [route, id] = resource.split('/');
     const { method, body, headers } = payload;
     return SandboxAPI.resources[route][method](this._database, id, body, headers);
   }

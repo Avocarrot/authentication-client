@@ -1,4 +1,3 @@
-'use strict';
 const test = require('tape');
 const sinon = require('sinon');
 const User = require('../../../src/models/user');
@@ -7,25 +6,25 @@ const Store = require('../../../src/services/store');
 const Consumer = require('../../../src/services/consumer');
 const API = require('../../../src/api').Sandbox;
 
-var sandbox = sinon.sandbox.create();
+const sandbox = sinon.sandbox.create();
 
 /**
  * Instances
  */
 
 function getUserInstances() {
-  let client = new Client('id', 'secret');
-  let api = new API();
-  let store = new Store('namespace');
-  let consumer = new Consumer(client, api);
-  let user = new User(store, consumer);
+  const client = new Client('id', 'secret');
+  const api = new API();
+  const store = new Store('namespace');
+  const consumer = new Consumer(client, api);
+  const user = new User(store, consumer);
   return {
     client,
     api,
     user,
     store,
-    consumer
-  }
+    consumer,
+  };
 }
 
 /**
@@ -38,13 +37,11 @@ const UserMocks = require('../../mocks/user');
  */
 
 test('User.constructor(options) should throw an error for', (t) => {
-
-  let instances = getUserInstances();
-
   t.test('missing `store`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
-      new User(Object(), instances.consumer)
+      new User(Object(), instances.consumer);
     } catch (err) {
       assert.equals(err.message, '`store` should be instance of Store');
     }
@@ -52,14 +49,14 @@ test('User.constructor(options) should throw an error for', (t) => {
 
   t.test('missing `consumer`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
-      new User(instances.store, Object())
+      new User(instances.store, Object());
     } catch (err) {
       assert.equals(err.message, '`consumer` should be instance of Consumer');
     }
   });
-
-})
+});
 
 /**
  * User.id
@@ -67,13 +64,10 @@ test('User.constructor(options) should throw an error for', (t) => {
 
 test('User.id should be read-only', (assert) => {
   assert.plan(2);
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   assert.equals(instances.user.id, undefined);
-  try {
-    instances.user.id = 'id';
-  } catch (err) {
-    assert.equals(err.message, 'Cannot set property id of #<User> which has only a getter');
-  }
+  instances.user.id = 'id';
+  assert.equals(instances.user.id, undefined);
 });
 
 /**
@@ -82,13 +76,10 @@ test('User.id should be read-only', (assert) => {
 
 test('User.publisherId should be read-only', (assert) => {
   assert.plan(2);
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   assert.equals(instances.user.publisherId, undefined);
-  try {
-    instances.user.publisherId = 'publisherId';
-  } catch (err) {
-    assert.equals(err.message, 'Cannot set property publisherId of #<User> which has only a getter');
-  }
+  instances.user.publisherId = 'publisherId';
+  assert.equals(instances.user.publisherId, undefined);
 });
 
 /**
@@ -97,7 +88,7 @@ test('User.publisherId should be read-only', (assert) => {
 
 test('User.email should be read-write', (assert) => {
   assert.plan(2);
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   instances.user.email = 'john.doe@mail.com';
   assert.equals(instances.user.email, 'john.doe@mail.com');
   instances.user.email = null;
@@ -110,7 +101,7 @@ test('User.email should be read-write', (assert) => {
 
 test('User.firstName should be read-write', (assert) => {
   assert.plan(2);
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   instances.user.firstName = 'Doe';
   assert.equals(instances.user.firstName, 'Doe');
   instances.user.firstName = null;
@@ -123,7 +114,7 @@ test('User.firstName should be read-write', (assert) => {
 
 test('User.lastName should be read-write', (assert) => {
   assert.plan(2);
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   instances.user.lastName = 'Doe';
   assert.equals(instances.user.lastName, 'Doe');
   instances.user.lastName = null;
@@ -136,8 +127,8 @@ test('User.lastName should be read-write', (assert) => {
 
 test('User.bearer should be read-write', (assert) => {
   assert.plan(3);
-  let instances = getUserInstances();
-  let storeSetStub = sandbox.stub(instances.store, 'set', () => {});
+  const instances = getUserInstances();
+  const storeSetStub = sandbox.stub(instances.store, 'set', () => {});
   sandbox.stub(instances.store, 'get', () => 'mock_access_token');
   // Assert Store.get()
   assert.equals(instances.user.bearer, 'mock_access_token');
@@ -155,11 +146,9 @@ test('User.bearer should be read-write', (assert) => {
  */
 
 test('User.authenticate(username, password) should throw an error for', (t) => {
-
-  let instances = getUserInstances();
-
   t.test('missing `username`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
       instances.user.authenticate(null, 'password');
     } catch (err) {
@@ -169,6 +158,7 @@ test('User.authenticate(username, password) should throw an error for', (t) => {
 
   t.test('missing `password`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
       instances.user.authenticate('username', null);
     } catch (err) {
@@ -179,10 +169,10 @@ test('User.authenticate(username, password) should throw an error for', (t) => {
 
 test('User.authenticate(username, password) should store user and token on success', (assert) => {
   assert.plan(7);
-  let instances = getUserInstances();
-  let storeSetSpy = sandbox.spy();
-  let retrieveUserStub = sandbox.stub();
-  let retrieveTokenStub = sandbox.stub();
+  const instances = getUserInstances();
+  const storeSetSpy = sandbox.spy();
+  const retrieveUserStub = sandbox.stub();
+  const retrieveTokenStub = sandbox.stub();
   retrieveUserStub.returns({
     id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
@@ -191,9 +181,9 @@ test('User.authenticate(username, password) should store user and token on succe
     email: 'john.doe@mail.com',
   });
   retrieveTokenStub.returns(Promise.resolve({
-    'refresh_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-    'access_token': 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'
-  }))
+    refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+    access_token: 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
+  }));
   instances.store.set = storeSetSpy;
   instances.consumer.retrieveUser = retrieveUserStub;
   instances.consumer.retrieveToken = retrieveTokenStub;
@@ -214,11 +204,9 @@ test('User.authenticate(username, password) should store user and token on succe
  */
 
 test('User.create(email, password, firstName, lastName) should throw an error', (t) => {
-
-  let instances = getUserInstances();
-
   t.test('for missing `email`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
       instances.user.create(null, 'password', 'firstName', 'lastName');
     } catch (err) {
@@ -228,6 +216,7 @@ test('User.create(email, password, firstName, lastName) should throw an error', 
 
   t.test('for missing `password`', (assert) => {
     assert.plan(1);
+    const instances = getUserInstances();
     try {
       instances.user.create('john.doe@mail.com', null, 'firstName', 'lastName');
     } catch (err) {
@@ -238,16 +227,16 @@ test('User.create(email, password, firstName, lastName) should throw an error', 
 
 test('User.create(email, password, firstName, lastName) should reject invalid password', (assert) => {
   assert.plan(1);
-  let instances = getUserInstances();
-  instances.user.create('john.doe@mail.com', 'password').catch(err => {
+  const instances = getUserInstances();
+  instances.user.create('john.doe@mail.com', 'password').catch((err) => {
     assert.equals(err.message, 'Password must contain both numbers and characters');
-  })
+  });
 });
 
 test('User.create(email, password, firstName, lastName) should set User data on success', (assert) => {
   assert.plan(5);
   const response = Object.assign(UserMocks.User, {});
-  let instances = getUserInstances();
+  const instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
   instances.user.create('john.doe@mail.com', 'password123456', 'firstName', 'lastName').then(() => {
     assert.equals(instances.user.id, response.id);
@@ -255,7 +244,7 @@ test('User.create(email, password, firstName, lastName) should set User data on 
     assert.equals(instances.user.firstName, response.first_name);
     assert.equals(instances.user.lastName, response.last_name);
     assert.equals(instances.user.email, response.email);
-  })
+  });
   sandbox.restore();
 });
 
@@ -266,26 +255,26 @@ test('User.create(email, password, firstName, lastName) should set User data on 
 
 test('User.save() should not allow saving an unauthenticated User', (assert) => {
   assert.plan(1);
-  let instances = getUserInstances();
-  instances.user.email = "john.doe@mail.com";
-  instances.user.save().catch(err => {
+  const instances = getUserInstances();
+  instances.user.email = 'john.doe@mail.com';
+  instances.user.save().catch((err) => {
     assert.equals(err.message, 'Cannot save a non-existent User');
   });
 });
 
 test('User.save() should update User with new data', (assert) => {
   assert.plan(1);
-  let instances = getUserInstances();
-  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User,{})));
+  const instances = getUserInstances();
+  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User, {})));
   instances.user.create('john.doe@mail.com', 'password123456').then(() => {
-    instances.user.email = "john.doe@mail.com";
-    instances.user.lastName = "John";
-    instances.user.firstName = "Doe";
+    instances.user.email = 'john.doe@mail.com';
+    instances.user.lastName = 'John';
+    instances.user.firstName = 'Doe';
     sandbox.stub(instances.store, 'get', () => 'bearer');
-    let updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+    const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
     instances.user.save().then(() => {
-      assert.deepEquals(updateUserStub.getCall(0).args, [ '44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'john.doe@mail.com', firstName: 'Doe', lastName: 'John' } ]);
+      assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'john.doe@mail.com', firstName: 'Doe', lastName: 'John' }]);
     });
-  })
+  });
   sandbox.restore();
 });

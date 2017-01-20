@@ -1,6 +1,6 @@
-'use strict';
 const test = require('tape');
 const Utils = require('../../../src/utils');
+
 const generateRandomString = Utils.generateRandomString;
 const generateRandomUUID = Utils.generateRandomUUID;
 const stripBearer = Utils.stripBearer;
@@ -21,22 +21,19 @@ test('generateRandomString(radix) should generate distinct strings', (assert) =>
  */
 
 test('generateRandomUUID() should generate', (t) => {
-
   t.test('a UUID with hyphens in the correct positions', (assert) => {
     assert.plan(5);
-    let uuid = generateRandomUUID();
+    const uuid = generateRandomUUID();
     assert.equals(uuid.length, 36);
     assert.equals(uuid.charAt(8), '-');
     assert.equals(uuid.charAt(13), '-');
     assert.equals(uuid.charAt(18), '-');
     assert.equals(uuid.charAt(23), '-');
   });
-
   t.test('distict UUIDs', (assert) => {
     assert.plan(1);
     assert.notEquals(generateRandomUUID(), generateRandomUUID());
   });
-
 });
 
 /**
@@ -70,7 +67,6 @@ test('extractErrorMessage(errorCode) should extract the correct messages', (asse
  */
 
 test('validatePassword(password, repeatPassword) should', (t) => {
-
   t.test('accept valid passwords', (assert) => {
     assert.plan(2);
     assert.deepEquals(validatePassword('abcde123456', 'abcde123456'), { isValid: true });
@@ -81,20 +77,19 @@ test('validatePassword(password, repeatPassword) should', (t) => {
     assert.plan(4);
     assert.deepEquals(validatePassword('abc123', 'abc123'), {
       isValid: false,
-      message: 'Password must be at least 8 characters long'
+      message: 'Password must be at least 8 characters long',
     });
     assert.deepEquals(validatePassword('abcde 12345', 'abcde 12345'), {
       isValid: false,
-      message: "Password cannot contain spaces"
+      message: 'Password cannot contain spaces',
     });
     assert.deepEquals(validatePassword('abcdefghij', 'abcdefghij'), {
       isValid: false,
-      message: "Password must contain both numbers and characters"
+      message: 'Password must contain both numbers and characters',
     });
     assert.deepEquals(validatePassword('12345678', '12345678'), {
       isValid: false,
-      message: "Password must contain both numbers and characters"
+      message: 'Password must contain both numbers and characters',
     });
   });
-
 });
