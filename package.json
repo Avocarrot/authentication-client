@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client"
   },
+  "private": true,
   "scripts": {
     "build": "gulp build",
     "start": "gulp watch",
