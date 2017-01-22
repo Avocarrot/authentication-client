@@ -1,7 +1,12 @@
 # authentication-client
 
-[![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master) [<img width="110" alt="test-coverage-threshold" src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-99%2B.svg">](
-https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
+[![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master) 
+
+
+
+
+[![coverage report](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/coverage.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master)
+
 
 ---
 
