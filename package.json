@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://gitlab.glispa.com/avocarrot/authentication-client",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client"
@@ -16,7 +16,8 @@
     "test": "gulp test",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
     "cov:thresdhold": "istanbul check-coverage",
-    "docs": "gulp docs"
+    "docs": "gulp docs",
+    "postinstall" : "gulp build"
   },
   "bugs": {
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client/issues"
