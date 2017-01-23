@@ -9,11 +9,13 @@
     "url": "https://gitlab.glispa.com/avocarrot/authentication-client"
   },
   "scripts": {
-    "build": "./node_modules/.bin/gulp build",
-    "start": "./node_modules/.bin/gulp watch",
-    "postinstall" : "./node_modules/.bin/gulp build",
-    "docs": "./node_modules/.bin/gulp docs",
-    "test": "./node_modules/.bin/gulp test",
+    "build": "gulp build",
+    "start": "gulp watch",
+    "preinstall" : "gulp build",
+    "preinstall" : "npm install -g gulp",
+    "postinstall" : "gulp build",
+    "docs": "gulp docs",
+    "test": "gulp test",
     "pretest": "eslint --ignore-path .gitignore .",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
     "cov:thresdhold": "istanbul check-coverage"
