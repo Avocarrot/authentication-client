@@ -1,0 +1,30 @@
+# https://docs.npmjs.com/misc/developers#keeping-files-out-of-your-package
+
+#tests
+test
+coverage
+
+#build tools
+gulpfile.js
+Makefile
+yarn.lock
+
+#markdons
+CHANGELOG.MD
+CONTRIBUTING.MD
+LICENSE
+
+#configs
+.gitignore
+.gitlab-ci.yml
+.istanbul.yml
+
+#linters
+jsdoc.json
+.jscsrc
+.jshintrc
+.eslintrc*
+
+#editor settings
+.idea
+.editorconfig
