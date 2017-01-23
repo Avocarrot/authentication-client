@@ -1,7 +1,7 @@
 npm:
-	npm install -g istanbul
+	npm install -g gulp istanbul
 	npm install
 
 yarn:
-	yarn global add istanbul
+	yarn global add gulp istanbul
 	yarn
