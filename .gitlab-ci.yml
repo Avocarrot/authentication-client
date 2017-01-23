@@ -7,7 +7,6 @@ before_script:
 stages:
   - test
   - documentation
-  - publish
 
 test_coverage:
   stage: test
@@ -25,10 +24,3 @@ api_reference:
   artifacts:
     paths:
     - docs/
-
-npm_publish:
-  stage: publish
-  script:
-    - npm publish
-  only:
-    - master
