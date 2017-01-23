@@ -1,5 +1,5 @@
 npm:
-	npm install -g gulp istanbul
+	npm install -g istanbul
 	npm install
 
 yarn:
