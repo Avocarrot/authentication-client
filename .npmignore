@@ -1,7 +1,7 @@
 # https://docs.npmjs.com/misc/developers#keeping-files-out-of-your-package
 
 #tests
-test
+tests
 coverage
 
 #build tools
@@ -9,9 +9,10 @@ gulpfile.js
 Makefile
 yarn.lock
 
-#markdons
-CHANGELOG.MD
-CONTRIBUTING.MD
+#markdowns
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
 LICENSE
 
 #configs

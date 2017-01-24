@@ -37,7 +37,7 @@ make npm
 To build the library for **Production** use
 
 ```
-npm run build
+npm run build:production
 ```
 
 To run a live-reload build task for **Development** run
