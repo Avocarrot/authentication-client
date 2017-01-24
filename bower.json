@@ -1,0 +1,11 @@
+{
+  "name": "authentication-client",
+  "description": "A thin Authentication API consumer",
+  "main": "dist/index.js",
+  "authors": [
+    "Glispa GmbH"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true
+}
