@@ -105,6 +105,16 @@ class User {
   }
 
   /**
+   * Determines if a User is authenticated
+   *
+   * @return {Boolean} [read]
+   *
+   */
+  get isAuthenticated() {
+    return typeof this._store.get('access_token') !== 'undefined';
+  }
+
+  /**
    * Updates User data
    *
    * @return {Promise}
