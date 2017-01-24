@@ -115,6 +115,16 @@ class User {
   }
 
   /**
+   * Invalidates User session
+   *
+   * @return {Promise}
+   *
+   */
+  invalidate() {
+    this._store.remove('access_token');
+  }
+
+  /**
    * Updates User data
    *
    * @return {Promise}

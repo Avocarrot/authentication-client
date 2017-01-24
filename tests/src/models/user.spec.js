@@ -164,6 +164,19 @@ test('User.isAuthenticated should return', (t) => {
 });
 
 /**
+ * User.invalidate()
+ */
+
+test('User.invalidate() invalidates user session', (assert) => {
+  assert.plan(1);
+  const instances = getUserInstances();
+  const storeRemoveSpy = sandbox.spy();
+  instances.store.remove = storeRemoveSpy;
+  instances.user.invalidate();
+  assert.deepEquals(storeRemoveSpy.getCall(0).args, ['access_token']);
+  sandbox.restore();
+});
+/**
  * User.authenticate(username, password)
  */
 
