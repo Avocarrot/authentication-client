@@ -2,6 +2,7 @@ const assert = require('assert');
 const User = require('./models/user');
 const Consumer = require('./services/consumer');
 const validatePassword = require('./utils').validatePassword;
+const URLRedirect = require('./utils').URLRedirect;
 
 /**
  * @class Authenticator
@@ -12,16 +13,21 @@ class Authenticator {
    * Initializes Authenticator
    *
    * @constructor
+   * @param {String} loginHost - The login host URL
    * @param {Store} store - The Store instance to use
    * @param {User} user - The User instance to use
+   * @param {function} redirectFn - The function to use upon redirects
    * @return {Authenticator}
    *
    */
-  constructor(user, consumer) {
+  constructor(user, consumer, loginHost, redirectFn = URLRedirect) {
     assert(user instanceof User, '`user` should be instance of User');
     assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
+    assert(loginHost, '`loginHost` not defined');
+    this._loginHost = loginHost;
     this._consumer = consumer;
     this._user = user;
+    this._redirectFn = redirectFn;
   }
 
   /**
@@ -52,6 +58,21 @@ class Authenticator {
       return Promise.reject(new Error(message));
     }
     return this._consumer.resetPassword(token, password);
+  }
+
+
+  /**
+   * Redirects to a resource of the configured HOST
+   *
+   * @param {String} resouce - The resource to visit
+   * @param {String} successUrl - The URL to follow on success
+   * @return {Void}
+   *
+   */
+  redirect(resource, successUrl) {
+    assert(resource, 'Missing `resouce`');
+    assert(successUrl, 'Missing `successUrl`');
+    this._redirectFn(`${this._loginHost}/${resource}?redirectUrl=${encodeURIComponent(successUrl)}`);
   }
 
   /**
