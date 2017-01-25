@@ -87,20 +87,34 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 }
 ```
 
+### Setup
+
+The library can be instantiated with the following arguments
+
+| Tables        | Description                        | Default  |
+| ------------- |:-----------------------------------|:-------------------------------------------:|
+| `clientId`    | The app's registered client id     | N/A                                         |
+| `clientSecret`| The app's registered client secret | N/A                                         |
+| `loginHost`   | The login app host                 | http://login.avocarrot.com                  |
+| `environment` | The environment to use             | AuthenticationClient.Environment.Production |
+
 ### Environments
 
 You can setup the library to run in two Environments:
-- Production (Default if no Environment is setup)
+- Production
 - Sandbox
-
 
 #### Production
 All API calls are forwarded to the production Authentication API using the configuration file at [`config/default.js`](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/config/default.js).
 
+
 ```javascript
 import AuthenticationClient from 'authentication-client';
 
-var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.Production);
+var authenticationClient = AuthenticationClient.getInstanceFor({
+  clientId: '1234>',
+  clientSecret: '5678'
+})
 
 ```
 #### Sandbox
@@ -114,7 +128,12 @@ All calls to Authentication API are mocked and a temporary session is provided. 
 ```javascript
 import AuthenticationClient from 'authentication-client';
 
-var authenticationClient = AuthenticationClient.getInstanceFor('<client_id>', '<client_secret>', AuthenticationClient.Environment.Sandbox);
+var authenticationClient = AuthenticationClient.getInstanceFor({
+  clientId: '1234>',
+  clientSecret: '5678',
+  loginHost: 'http://localhost:9000',
+  environment: AuthenticationClient.Environment.Sandbox
+})
 ```
 
 

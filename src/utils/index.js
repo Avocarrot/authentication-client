@@ -113,3 +113,19 @@ const validatePassword = (password) => {
 };
 
 module.exports.validatePassword = validatePassword;
+
+/* istanbul ignore next */
+
+/**
+ * Wrapper around window.replace()
+ *
+ * @memberof Utils
+ * @param {String} url - The url to redirect to
+ * @return {Void}
+ *
+ */
+const URLRedirect = (url) => {
+  window.location.replace(url);
+};
+
+module.exports.URLRedirect = URLRedirect;

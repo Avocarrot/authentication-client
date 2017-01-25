@@ -58,9 +58,9 @@ const AuthenticationClient = (function immediate() {
    * @return {SandboxAPI|ProductionAPI}
    *
    */
-  function getAPIFor(environment) {
+  function getAPIFor(environment, host = config.api.host) {
     if (environment === ENV.Production) {
-      return new API.Production(config.api.host, fetch);
+      return new API.Production(host, fetch);
     }
     if (environment === ENV.Sandbox) {
       return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
@@ -75,15 +75,16 @@ const AuthenticationClient = (function immediate() {
    * @param {String} clientId - The client id to set
    * @param {String} clientSecret - The client secret
    * @param {ENV} environment - The environment to set
+   * @param {String} loginHost - The login host URL
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production) {
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host) {
     const api = getAPIFor(environment);
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);
-    return new Authenticator(user, consumer);
+    return new Authenticator(user, consumer, loginHost);
   }
 
   return {
@@ -102,19 +103,26 @@ const AuthenticationClient = (function immediate() {
      *
      * @function getInstanceFor
      * @memberof AuthenticationClient
-     * @param {String} clientId - The Client id
-     * @param {String} clientSecret - The Client secret
-     * @param {ENV} environment - The environment to set
+     * @param {Object} params
+     * @param {String} params.clientId - The Client id
+     * @param {String} params.clientSecret - The Client secret
+     * @param {String} params.loginHost - The login host URL
+     * @param {ENV} params.environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor(clientId, clientSecret, environment) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost }) {
       const key = `${clientId}-${clientSecret}`;
       if (instances.has(key)) {
         return instances.get(key);
       }
+
+      /* eslint no-console: ["error", { allow: ["warn", "log", "error"] }] */
+      console.log('clientId, clientSecret, environment, loginHost');
+      console.log(clientId, clientSecret, environment, loginHost);
+
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost);
       instances.set(key, instance);
       return instance;
     },
