@@ -91,7 +91,7 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 
 The library can be instantiated with the following arguments
 
-| Tables        | Description                        | Default  |
+| Tables        | Description                        | Default                                     |
 | ------------- |:-----------------------------------|:-------------------------------------------:|
 | `clientId`    | The app's registered client id     | N/A                                         |
 | `clientSecret`| The app's registered client secret | N/A                                         |
