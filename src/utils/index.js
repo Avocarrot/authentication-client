@@ -117,15 +117,28 @@ module.exports.validatePassword = validatePassword;
 /* istanbul ignore next */
 
 /**
- * Wrapper around window.replace()
+ * Wrapper around window.location.replace()
  *
  * @memberof Utils
  * @param {String} url - The url to redirect to
  * @return {Void}
  *
  */
-const URLRedirect = (url) => {
+const redirectToURL = (url) => {
   window.location.replace(url);
 };
 
-module.exports.URLRedirect = URLRedirect;
+module.exports.redirectToURL = redirectToURL;
+
+/* istanbul ignore next */
+
+/**
+ * Wrapper around window.location.href()
+ *
+ * @memberof Utils
+ * @return {String}
+ *
+ */
+const extractURL = () => window.location.href;
+
+module.exports.extractURL = extractURL;

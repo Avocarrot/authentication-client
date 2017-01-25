@@ -1,9 +1,10 @@
 const config = require('../config/default');
 const fetch = require('whatwg-fetch');
-const Authenticator = require('./authenticator');
 const Store = require('./services/store');
 const User = require('./models/user');
 const Client = require('./models/client');
+const Session = require('./models/session');
+const Authenticator = require('./models/authenticator');
 const Consumer = require('./services/consumer');
 const API = require('./api');
 const SandboxDatabase = require('./databases/sandbox');
@@ -84,7 +85,13 @@ const AuthenticationClient = (function immediate() {
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);
-    return new Authenticator(user, consumer, loginHost);
+    const session = new Session(store, user, loginHost);
+    const authenticator = new Authenticator(consumer);
+    return {
+      user,
+      session,
+      authenticator,
+    };
   }
 
   return {
@@ -116,11 +123,6 @@ const AuthenticationClient = (function immediate() {
       if (instances.has(key)) {
         return instances.get(key);
       }
-
-      /* eslint no-console: ["error", { allow: ["warn", "log", "error"] }] */
-      console.log('clientId, clientSecret, environment, loginHost');
-      console.log(clientId, clientSecret, environment, loginHost);
-
       // Generate & cache new instance
       const instance = generateInstance(clientId, clientSecret, environment, loginHost);
       instances.set(key, instance);

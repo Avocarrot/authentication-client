@@ -124,11 +124,10 @@ All calls to Authentication API are mocked and a temporary session is provided. 
 - Update an existing User
 
 
-
 ```javascript
 import AuthenticationClient from 'authentication-client';
 
-var authenticationClient = AuthenticationClient.getInstanceFor({
+var authClient = AuthenticationClient.getInstanceFor({
   clientId: '1234>',
   clientSecret: '5678',
   loginHost: 'http://localhost:9000',
@@ -136,26 +135,29 @@ var authenticationClient = AuthenticationClient.getInstanceFor({
 })
 ```
 
+### Session operations
+
+```javascript
+// Determines if session is valid (user is authenticated)
+authClient.session.isValid;
+
+// Invalidate session (logout and redirect to `loginHost`)
+authClient.session.invalidate();
+
+// Validate session (invalidate and redirect to `loginHost` with a return URL to the current page)
+authClient.session.validate();
+```
 
 ### User operations
 
 ```javascript
 // Authenticate a User (login)
-authenticationClient.user.authenticate('<username>', '<password>').then(() => {}).catch((err) => {})
-
-// Create a new User (register)
-authenticationClient.user.create('<email>', '<password>', 'firstName', 'lastName').then(() => {}).catch((err) => {})
-
-// Retrieve User details
-authenticationClient.user.firstName;
-authenticationClient.user.lastName;
-authenticationClient.user.email;
 
 // Update User details
-authenticationClient.user.firstName = "John";
-authenticationClient.user.lastName = "Doe";
-authenticationClient.user.email = "mock@email.com";
-authenticationClient.user.save().then(() => {}).catch((err) => { })
+authClient.user.firstName = "John";
+authClient.user.lastName = "Doe";
+authClient.user.email = "mock@email.com";
+authClient.user.save().then(() => {}).catch((err) => { })
 ```
 
 ### Password operations
@@ -167,10 +169,11 @@ The following rules apply for password acceptance
 
 ```javascript
 // Request a password reset for an email
-authenticationClient.requestPasswordReset('<email>').then(() => {}).catch((err) => { })
+authClient.authenticator.requestPasswordReset('<email>').then(() => {}).catch((err) => { })
 
 // Reset password
-authenticationClient.resetPassword('<token>', '<password>').then(() => {}).catch((err) => { })
+authClient.authenticator.resetPassword('<token>', '<password>').then(() => {}).catch((err) => { })
+
 
 ```
 

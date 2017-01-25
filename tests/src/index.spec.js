@@ -35,25 +35,14 @@ test('AuthenticationClient.getInstanceFor(client_id, client_secret, environment)
     AuthenticationClient.reset();
   });
 
-  t.test('accepts loginHost configuration', (assert) => {
-    assert.plan(1);
-    const instance = AuthenticationClient.getInstanceFor({
-      clientId: '1234',
-      clientSecret: '5678',
-      loginHost: 'http://login.mock.com',
-    });
-    assert.equals(instance._loginHost, 'http://login.mock.com');
-    AuthenticationClient.reset();
-  });
-
-  t.test('accepts Sandbox configuration', (assert) => {
+  t.test('accepts Sandbox environment setup', (assert) => {
     assert.plan(1);
     const instance = AuthenticationClient.getInstanceFor({
       clientId: '1234',
       clientSecret: '5678',
       environment: AuthenticationClient.Environment.Sandbox,
     });
-    assert.equals(instance._consumer._api instanceof SandboxAPI, true);
+    assert.equals(instance.authenticator._consumer._api instanceof SandboxAPI, true);
     AuthenticationClient.reset();
   });
 

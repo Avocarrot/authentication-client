@@ -105,26 +105,6 @@ class User {
   }
 
   /**
-   * Determines if a User is authenticated
-   *
-   * @return {Boolean} [read]
-   *
-   */
-  get isAuthenticated() {
-    return typeof this._store.get('access_token') !== 'undefined';
-  }
-
-  /**
-   * Invalidates User session
-   *
-   * @return {Promise}
-   *
-   */
-  invalidate() {
-    this._store.remove('access_token');
-  }
-
-  /**
    * Updates User data
    *
    * @return {Promise}

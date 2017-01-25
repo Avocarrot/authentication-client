@@ -141,41 +141,6 @@ test('User.bearer should be read-write', (assert) => {
   sandbox.restore();
 });
 
-
-/**
- * User.isAuthenticated
- */
-
-test('User.isAuthenticated should return', (t) => {
-  t.test('true for User with token', (assert) => {
-    assert.plan(1);
-    const instances = getUserInstances();
-    sandbox.stub(instances.store, 'get', () => 'access_token');
-    assert.equals(instances.user.isAuthenticated, true);
-    sandbox.restore();
-  });
-  t.test('false for User without token', (assert) => {
-    assert.plan(1);
-    const instances = getUserInstances();
-    sandbox.stub(instances.store, 'get', () => undefined);
-    assert.equals(instances.user.isAuthenticated, false);
-    sandbox.restore();
-  });
-});
-
-/**
- * User.invalidate()
- */
-
-test('User.invalidate() invalidates user session', (assert) => {
-  assert.plan(1);
-  const instances = getUserInstances();
-  const storeRemoveSpy = sandbox.spy();
-  instances.store.remove = storeRemoveSpy;
-  instances.user.invalidate();
-  assert.deepEquals(storeRemoveSpy.getCall(0).args, ['access_token']);
-  sandbox.restore();
-});
 /**
  * User.authenticate(username, password)
  */
