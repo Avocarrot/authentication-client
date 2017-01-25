@@ -1,10 +1,10 @@
 const assert = require('assert');
 
 /**
- * Local Storage wrapper based on `Store.js`
- * @see https://github.com/marcuswestin/store.js/
+ * `js-cookie`s.` wrapper
+ * @see https://github.com/js-cookie/js-cookie
  */
-const LocalStorage = require('store');
+const Cookies = require('js-cookie');
 
 /**
  * Wrapper arround LocalStorage
@@ -46,7 +46,7 @@ class Store {
    *
    */
   set(key, value) {
-    LocalStorage.set(this._normalizeKey(key), value);
+    Cookies.set(this._normalizeKey(key), value);
   }
 
   /**
@@ -57,7 +57,7 @@ class Store {
    *
    */
   get(key) {
-    return LocalStorage.get(this._normalizeKey(key));
+    return Cookies.get(this._normalizeKey(key));
   }
 
   /**
@@ -67,7 +67,7 @@ class Store {
    *
    */
   remove(key) {
-    LocalStorage.remove(this._normalizeKey(key));
+    Cookies.remove(this._normalizeKey(key));
   }
 
 }

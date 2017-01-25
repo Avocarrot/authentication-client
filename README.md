@@ -5,7 +5,7 @@
 
 ---
 
-A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer powered by [Browserify](https://github.com/substack/node-browserify)
+A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
 
 - For code coverage results check the  [`test_coverage` build artifact](
 https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
