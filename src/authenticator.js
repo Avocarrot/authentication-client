@@ -43,7 +43,7 @@ class Authenticator {
   }
 
   /**
-   * Asks for a password reset
+   * Sets a new password
    *
    * @param {String} token - The reset token provided via email
    * @param {String} password - The new password
