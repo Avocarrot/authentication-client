@@ -114,7 +114,7 @@ All API calls are forwarded to the production Authentication API using the confi
 import AuthenticationClient from 'authentication-client';
 
 var authenticationClient = AuthenticationClient.getInstanceFor({
-  clientId: '1234>',
+  clientId: '1234',
   clientSecret: '5678'
 })
 
@@ -126,7 +126,7 @@ All calls to Authentication API are mocked and a temporary session is provided.
 import AuthenticationClient from 'authentication-client';
 
 var authClient = AuthenticationClient.getInstanceFor({
-  clientId: '1234>',
+  clientId: '1234',
   clientSecret: '5678',
   loginHost: 'http://localhost:9000',
   environment: AuthenticationClient.Environment.Sandbox
