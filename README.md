@@ -1,17 +1,19 @@
+<img width="300" src="https://cloud.githubusercontent.com/assets/1907604/7618436/f8c371de-f9a9-11e4-8846-772f67f53513.jpg"/>
+
 # authentication-client
 
-[![build status](https://github.com/Avocarrot/authentication-client/badges/master/build.svg)](https://github.com/Avocarrot/authentication-client/commits/master)  [![coverage report](https://github.com/Avocarrot/authentication-client/badges/master/coverage.svg)](https://github.com/Avocarrot/authentication-client/commits/master)
-
+[![CircleCI](https://circleci.com/gh/Avocarrot/landing/tree/master.svg?style=shield&circle-token=91bb3bc13ebd83082560ba5c72b527b6c3c61c5e)](https://circleci.com/gh/Avocarrot/landing/tree/master)  [<img src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-99%2B.svg"/>](
+https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
 
 ---
 
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
 
-- For code coverage results check the  [`test_coverage` build artifact](
-https://github.com/Avocarrot/authentication-client/pipelines)
+- For code coverage results check the [`coverage` build artifact](
+https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
 
-- For the API Reference documentation check the  [`api_reference` build artifact](
-https://github.com/Avocarrot/authentication-client/pipelines)
+- For the API Reference documentation check the  [`docs` build artifact](
+https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/docs/index.html)
 
 
 ---
@@ -51,8 +53,6 @@ npm start
 
 ## Tests
 
-> The test coverage threshold for continuous-integration is set to **99%**.
-
 To run the tests use
 
 ```
@@ -79,11 +79,18 @@ You can access the generated docs by running `open docs/index.html`
 
 ## Usage
 
+- [Installation](https://github.com/Avocarrot/authentication-client/blob/master/README.md#installation)
+- [Setup](https://github.com/Avocarrot/authentication-client/blob/master/README.md#setup)
+- [Environments](https://github.com/Avocarrot/authentication-client/blob/master/README.md#environments)
+- [Session operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#session-operations)
+- [User operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#user-operations)
+- [Password operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#password-operations)
+
 ### Installation
 Add the following line in your `package.json` file and replace the `<TAG>` with your target version, ie `v0.10.0`
 ```
 "dependencies": {
-  "authentication-client": "git+ssh://git@gitlab.glispa.com/avocarrot/authentication-client#v1.0.0"
+  "authentication-client": "git@github.com:Avocarrot/authentication-client.git#v1.1.0"
 }
 ```
 
@@ -95,7 +102,7 @@ The library can be instantiated with the following arguments
 | ------------- |:-----------------------------------|:-------------------------------------------:|
 | `clientId`    | The app's registered client id     | N/A                                         |
 | `clientSecret`| The app's registered client secret | N/A                                         |
-| `loginHost`   | The login app host                 | 'http://login.avocarrot.com'                |
+| `loginHost`   | The login app host                 | "http://login.avocarrot.com"                |
 | `environment` | The environment to use             | AuthenticationClient.Environment.Production |
 
 ### Environments
@@ -118,11 +125,7 @@ var authenticationClient = AuthenticationClient.getInstanceFor({
 
 ```
 #### Sandbox
-All calls to Authentication API are mocked and a temporary session is provided. This means that for each session you will be able to:
-- Authenticate using the default Sandbox User found in [`/fixtures/users.json`](https://github.com/Avocarrot/authentication-client/blob/master/fixtures/users.json)
-- Create a new user
-- Update an existing User
-
+All calls to Authentication API are mocked and a temporary session is provided.
 
 ```javascript
 import AuthenticationClient from 'authentication-client';
@@ -138,42 +141,86 @@ var authClient = AuthenticationClient.getInstanceFor({
 ### Session operations
 
 ```javascript
-// Determines if session is valid (user is authenticated)
+/**
+ * Determines if session is valid (user is authenticated)
+ *
+ * @return {Boolean}
+ *
+ */
 authClient.session.isValid;
 
-// Invalidate session (logout and redirect to `loginHost`)
-authClient.session.invalidate();
-
-// Validate session (invalidate and redirect to `loginHost` with a return URL to the current page)
+/**
+ * Validates session
+ * - redirects to `loginHost`
+ *
+ * @return {Void}
+ *
+ */
 authClient.session.validate();
+
+/**
+ * Invalidates session
+ * - flushes stored tokens
+ * - redirects to `loginHost`
+ *
+ * @return {Void}
+ *
+ */
+authClient.session.invalidate();
 ```
 
 ### User operations
 
+While in Sandbox mode you can authenticate using the default Sandbox User found in [`/fixtures/users.json`](https://github.com/Avocarrot/authentication-client/blob/master/fixtures/users.json)
+
+**Default Sandbox User**
+
+| Property      | Value               |                                 
+|:--------------|:-------------------:|
+| `email`       | john.doe@mail.com   |
+| `password`    | 123456789           |
+
+
 ```javascript
-// Authenticate a User (login)
-authClient.user.authenticate(username, password).then((res) => {
-  // res.message
-}).catch((err) => {
-  // err.message
-})
 
-// Create a User (register)
-authClient.user.create(email, password, firstName, lastName) {
-  // res.message
-}).catch((err) => {
-  // err.message
-})
+/**
+ * Authenticate a User (login)
+ *
+ * @return {Promise} - res.message, err.message
+ * @param {String} email - The user's email
+ * @param {String} password - The user's password
+ *
+ */
+authClient.user.authenticate(email, password)
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
 
-// Update User details
+/**
+ * Create a User (register)
+ *
+ * @param {String} email - The user's email
+ * @param {String} password - The user's password
+ * @param {String} firstName - The user's first name
+ * @param {String} lastName - The user's last name
+ * @return {Promise} - res.message, err.message
+ *
+ */
+authClient.user.create(email, password, firstName, lastName)
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
+
+/**
+ * Update User
+ *
+ * @return {Promise} - res.message, err.message
+ *
+ */
 authClient.user.firstName = "John";
 authClient.user.lastName = "Doe";
 authClient.user.email = "mock@email.com";
-authClient.user.save().then((res) => {
-  // res.message
-}).catch((err) => {
-  // err.message
-})
+authClient.user.save()
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
 ```
 
 ### Password operations
@@ -184,21 +231,29 @@ The following rules apply for password acceptance
 - Password cannot contain spaces
 
 ```javascript
-// Request a password reset for an email
-authClient.authenticator.requestPasswordReset('<email>').then((res) => {
-  // res.message
-}).catch((err) => {
-  // err.message
-})
 
-// Reset password
-authClient.authenticator.resetPassword('<token>', '<password>').then((res) => {
-  // res.message
-}).catch((err) => {
-  // err.message
-})
+/**
+ * Request a password reset for an email
+ *
+ * @param {String} email - The email where the reset link will be sent
+ * @return {Promise} - res.message, err.message
+ *
+ */
+authClient.authenticator.requestPasswordReset(email)
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
 
-
+/**
+ * Reset password
+ *
+ * @param {String} token - The password reset token (provided via the reset link)
+ * @param {String} password - The password to set
+ * @return {Promise} - res.message, err.message
+ *
+ */
+authClient.authenticator.resetPassword(token, password)
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
 ```
 
 ---

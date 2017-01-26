@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1 (Jan 26, 2017)
+- Adds Session model
+  - `models/session.js`
+
 ## Version 1.0 (Jan 18, 2017)
 - Adds new Sandbox environment
   - `api/sandbox.js`
