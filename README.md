@@ -1,6 +1,6 @@
 # authentication-client
 
-[![build status](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/build.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master)  [![coverage report](https://gitlab.glispa.com/avocarrot/authentication-client/badges/master/coverage.svg)](https://gitlab.glispa.com/avocarrot/authentication-client/commits/master)
+[![build status](https://github.com/Avocarrot/authentication-client/badges/master/build.svg)](https://github.com/Avocarrot/authentication-client/commits/master)  [![coverage report](https://github.com/Avocarrot/authentication-client/badges/master/coverage.svg)](https://github.com/Avocarrot/authentication-client/commits/master)
 
 
 ---
@@ -8,10 +8,10 @@
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
 
 - For code coverage results check the  [`test_coverage` build artifact](
-https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
+https://github.com/Avocarrot/authentication-client/pipelines)
 
 - For the API Reference documentation check the  [`api_reference` build artifact](
-https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
+https://github.com/Avocarrot/authentication-client/pipelines)
 
 
 ---
@@ -22,7 +22,7 @@ https://gitlab.glispa.com/avocarrot/authentication-client/pipelines)
 
 ## Development
 
-Please see the **[CONTRIBUTING instructions](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/CONTRIBUTING.md)** before contributing to this repository
+Please see the **[CONTRIBUTING instructions](https://github.com/Avocarrot/authentication-client/blob/master/CONTRIBUTING.md)** before contributing to this repository
 
 ---
 
@@ -105,7 +105,7 @@ You can setup the library to run in two Environments:
 - Sandbox
 
 #### Production
-All API calls are forwarded to the production Authentication API using the configuration file at [`config/default.js`](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/config/default.js).
+All API calls are forwarded to the production Authentication API using the configuration file at [`config/default.js`](https://github.com/Avocarrot/authentication-client/blob/master/config/default.js).
 
 
 ```javascript
@@ -119,7 +119,7 @@ var authenticationClient = AuthenticationClient.getInstanceFor({
 ```
 #### Sandbox
 All calls to Authentication API are mocked and a temporary session is provided. This means that for each session you will be able to:
-- Authenticate using the default Sandbox User found in [`/fixtures/users.json`](https://gitlab.glispa.com/avocarrot/authentication-client/blob/master/fixtures/users.json)
+- Authenticate using the default Sandbox User found in [`/fixtures/users.json`](https://github.com/Avocarrot/authentication-client/blob/master/fixtures/users.json)
 - Create a new user
 - Update an existing User
 
@@ -214,4 +214,4 @@ authClient.authenticator.resetPassword('<token>', '<password>').then((res) => {
 
 ## Versioning
 
-For the versions available, see the [releases for this repository](https://gitlab.glispa.com/avocarrot/authentication-client/tags).
+For the versions available, see the [releases for this repository](https://github.com/Avocarrot/authentication-client/tags).

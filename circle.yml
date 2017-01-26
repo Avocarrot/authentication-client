@@ -1,0 +1,22 @@
+machine:
+  node:
+    version: :6.9.0
+
+dependencies:
+  pre:
+    - npm install -g yarn
+    - make yarn
+
+test:
+  pre:
+    - npm run pretest
+  override:
+    - npm run cov
+    - npm run cov:thresdhold
+  post:
+    - npm run docs
+
+general:
+  artifacts:
+    - ./coverage
+    - ./docs
