@@ -71,7 +71,7 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
     sandbox.stub(instances.consumer, 'requestPasswordReset', () => Promise.resolve());
     instances.authenticator.requestPasswordReset('john.doe@mail.com').then((res) => {
       assert.ok('requestPasswordReset() resolved');
-      assert.equals(res.message, 'A password reset link has been sent to your email');
+      assert.equals(res.message, 'A reset link has been sent to your email');
     });
     sandbox.restore();
   });
