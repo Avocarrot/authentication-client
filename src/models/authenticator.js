@@ -29,7 +29,7 @@ class Authenticator {
    */
   requestPasswordReset(email) {
     assert(email, 'Missing `email`');
-    return this._consumer.requestPasswordReset(email);
+    return this._consumer.requestPasswordReset(email).then(() => Promise.resolve({ message: 'A password reset link has been sent to your email' }));
   }
 
   /**
@@ -47,7 +47,7 @@ class Authenticator {
     if (!isValid) {
       return Promise.reject(new Error(message));
     }
-    return this._consumer.resetPassword(token, password);
+    return this._consumer.resetPassword(token, password).then(() => Promise.resolve({ message: 'Your password has been reset' }));
   }
 
 }

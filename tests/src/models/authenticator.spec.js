@@ -66,11 +66,12 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
   });
 
   t.test('resolve on success', (assert) => {
-    assert.plan(1);
+    assert.plan(2);
     const instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'requestPasswordReset', () => Promise.resolve());
-    instances.authenticator.requestPasswordReset('john.doe@mail.com').then(() => {
+    instances.authenticator.requestPasswordReset('john.doe@mail.com').then((res) => {
       assert.ok('requestPasswordReset() resolved');
+      assert.equals(res.message, 'A password reset link has been sent to your email');
     });
     sandbox.restore();
   });
@@ -112,11 +113,12 @@ test('Authenticator.resetPassword(token, password) should', (t) => {
   });
 
   t.test('resolve on success', (assert) => {
-    assert.plan(1);
+    assert.plan(2);
     const instances = getAuthenticatorInstances();
     sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
-    instances.authenticator.resetPassword('token', 'password123456').then(() => {
+    instances.authenticator.resetPassword('token', 'password123456').then((res) => {
       assert.ok('resetPassword() resolved');
+      assert.equals(res.message, 'Your password has been reset');
     });
     sandbox.restore();
   });

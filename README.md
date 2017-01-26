@@ -83,7 +83,7 @@ You can access the generated docs by running `open docs/index.html`
 Add the following line in your `package.json` file and replace the `<TAG>` with your target version, ie `v0.10.0`
 ```
 "dependencies": {
-  "authentication-client": "??????"
+  "authentication-client": "git+ssh://git@gitlab.glispa.com/avocarrot/authentication-client#v1.0.0"
 }
 ```
 
@@ -91,7 +91,7 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 
 The library can be instantiated with the following arguments
 
-| Tables        | Description                        | Default                                     |
+| Argument      | Description                        | Default                                     |
 | ------------- |:-----------------------------------|:-------------------------------------------:|
 | `clientId`    | The app's registered client id     | N/A                                         |
 | `clientSecret`| The app's registered client secret | N/A                                         |
@@ -152,12 +152,28 @@ authClient.session.validate();
 
 ```javascript
 // Authenticate a User (login)
+authClient.user.authenticate(username, password).then((res) => {
+  // res.message
+}).catch((err) => {
+  // err.message
+})
+
+// Create a User (register)
+authClient.user.create(email, password, firstName, lastName) {
+  // res.message
+}).catch((err) => {
+  // err.message
+})
 
 // Update User details
 authClient.user.firstName = "John";
 authClient.user.lastName = "Doe";
 authClient.user.email = "mock@email.com";
-authClient.user.save().then(() => {}).catch((err) => { })
+authClient.user.save().then((res) => {
+  // res.message
+}).catch((err) => {
+  // err.message
+})
 ```
 
 ### Password operations
@@ -169,10 +185,18 @@ The following rules apply for password acceptance
 
 ```javascript
 // Request a password reset for an email
-authClient.authenticator.requestPasswordReset('<email>').then(() => {}).catch((err) => { })
+authClient.authenticator.requestPasswordReset('<email>').then((res) => {
+  // res.message
+}).catch((err) => {
+  // err.message
+})
 
 // Reset password
-authClient.authenticator.resetPassword('<token>', '<password>').then(() => {}).catch((err) => { })
+authClient.authenticator.resetPassword('<token>', '<password>').then((res) => {
+  // res.message
+}).catch((err) => {
+  // err.message
+})
 
 
 ```

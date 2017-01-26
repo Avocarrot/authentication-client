@@ -118,7 +118,7 @@ class User {
       email: this._email,
       firstName: this._firstName,
       lastName: this._lastName,
-    });
+    }).then(() => Promise.resolve({ message: 'Updated User model' }));
   }
 
   /**
@@ -149,6 +149,7 @@ class User {
       this._firstName = data.first_name;
       this._lastName = data.last_name;
       this._email = data.email;
+      return Promise.resolve({ message: 'Created User' });
     });
   }
 
@@ -176,6 +177,7 @@ class User {
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      return Promise.resolve({ message: 'Authenticated User' });
     });
   }
 }
