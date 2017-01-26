@@ -7,14 +7,6 @@ https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artif
 
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
 
-- For code coverage results check the [`coverage` build artifact](
-https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
-
-- For the API Reference documentation check the  [`docs` build artifact](
-https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/docs/index.html)
-
-
-
 <a href="https://github.com/gulpjs/gulp" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15748124/467bdc4c-28e6-11e6-87a1-13683a6e8a1e.png" width ="80"/></a> <a href="https://github.com/substack/node-browserify" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15990702/b75d94b2-30a4-11e6-97d1-4f4b623f27ec.jpg" width ="100"/></a> <a href="http://es6-features.org" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/21814827/47164abc-d763-11e6-929b-078a374a2abc.jpg" width ="100"/></a>
 
 ---
@@ -62,6 +54,9 @@ npm run cov
 ```
 You can access the report by running `open coverage/lcov-report/index.html`.
 
+For code coverage results for the latest build check the [`coverage` build artifact](
+https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
+
 ---
 
 ## API Reference
@@ -71,6 +66,10 @@ To generate the [JSDoc](http://usejsdoc.org/) API Reference run
 npm run docs
 ```
 You can access the generated docs by running `open docs/index.html`
+
+For the API Reference documentation for the latest build check the  [`docs` build artifact](
+https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/docs/index.html)
+
 
 ---
 
