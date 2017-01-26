@@ -5,8 +5,6 @@
 [![CircleCI](https://circleci.com/gh/Avocarrot/landing/tree/master.svg?style=shield&circle-token=91bb3bc13ebd83082560ba5c72b527b6c3c61c5e)](https://circleci.com/gh/Avocarrot/landing/tree/master)  [<img src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-99%2B.svg"/>](
 https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
 
----
-
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
 
 - For code coverage results check the [`coverage` build artifact](
@@ -16,7 +14,6 @@ https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artif
 https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/docs/index.html)
 
 
----
 
 <a href="https://github.com/gulpjs/gulp" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15748124/467bdc4c-28e6-11e6-87a1-13683a6e8a1e.png" width ="80"/></a> <a href="https://github.com/substack/node-browserify" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/15990702/b75d94b2-30a4-11e6-97d1-4f4b623f27ec.jpg" width ="100"/></a> <a href="http://es6-features.org" target="_blank"><img src="https://cloud.githubusercontent.com/assets/1907604/21814827/47164abc-d763-11e6-929b-078a374a2abc.jpg" width ="100"/></a>
 
