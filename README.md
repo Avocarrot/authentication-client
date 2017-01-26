@@ -82,7 +82,7 @@ https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artif
 - [Password operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#password-operations)
 
 ### Installation
-Add the following line in your `package.json` file and replace the `<TAG>` with your target version, ie `v0.10.0`
+Add the following line in your `package.json` file and replace the `<TAG>` with your target version, ie `v1.1.0`
 ```
 "dependencies": {
   "authentication-client": "git@github.com:Avocarrot/authentication-client.git#v1.1.0"
