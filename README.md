@@ -186,9 +186,9 @@ While in Sandbox mode you can authenticate using the default Sandbox User found 
 /**
  * Authenticate a User (login)
  *
- * @return {Promise} - res.message, err.message
  * @param {String} email - The user's email
  * @param {String} password - The user's password
+ * @return {Promise} - res.message, err.message
  *
  */
 authClient.user.authenticate(email, password)
