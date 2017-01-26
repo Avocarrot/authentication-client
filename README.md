@@ -54,7 +54,7 @@ npm run cov
 ```
 You can access the report by running `open coverage/lcov-report/index.html`.
 
-For code coverage results for the latest build check the [`coverage` build artifact](
+:arrow_forward: [Code coverage results for the latest build](
 https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
 
 ---
@@ -67,9 +67,8 @@ npm run docs
 ```
 You can access the generated docs by running `open docs/index.html`
 
-For the API Reference documentation for the latest build check the  [`docs` build artifact](
+:arrow_forward: [API Reference for the latest build](
 https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/docs/index.html)
-
 
 ---
 
