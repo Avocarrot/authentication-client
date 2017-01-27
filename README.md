@@ -2,7 +2,7 @@
 
 # authentication-client
 
-[![CircleCI](https://circleci.com/gh/Avocarrot/landing/tree/master.svg?style=shield&circle-token=91bb3bc13ebd83082560ba5c72b527b6c3c61c5e)](https://circleci.com/gh/Avocarrot/landing/tree/master)  [<img src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-99%2B.svg"/>](
+[![CircleCI](https://circleci.com/gh/Avocarrot/authentication-client/tree/master.svg?style=shield&circle-token=91bb3bc13ebd83082560ba5c72b527b6c3c61c5e)](https://circleci.com/gh/Avocarrot/authentication-client/tree/master)  [<img src="https://s3.amazonaws.com/avocarrot_various/git-shields/coverage-99%2B.svg"/>](
 https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artifacts/0//home/ubuntu/authentication-client/coverage/lcov-report/index.html)
 
 A thin <a href="https://gitlab.glispa.com/avocarrot/authentication-api" target="_blank"> Authentication API</a> consumer (43KB) powered by [Browserify](https://github.com/substack/node-browserify)
