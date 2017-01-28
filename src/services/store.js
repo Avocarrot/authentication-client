@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 /**
- * `js-cookie`s.` wrapper
+ * Wrapper around `js-cookie`
  * @see https://github.com/js-cookie/js-cookie
  */
 const Cookies = require('js-cookie');

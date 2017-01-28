@@ -29,6 +29,9 @@ class SandboxAPI {
     return {
       /**
        * Maps `/users` resource
+       *
+       * @private
+       *
        */
       users: {
         GET: (database, id, body, headers) => {
@@ -58,7 +61,10 @@ class SandboxAPI {
       },
       /**
        * Maps `/token` resource
+       *
        * @see https://tools.ietf.org/html/rfc6749
+       * @private
+       *
        */
       token: {
         POST: (database, id, body) => {
@@ -83,6 +89,9 @@ class SandboxAPI {
       },
       /**
        * Maps `/passwords` resource
+       *
+       * @private
+       *
        */
       passwords: {
         POST: (database, id, body) => {
