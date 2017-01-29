@@ -4,15 +4,15 @@
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "dist/index.js",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/Avocarrot/authentication-client"
   },
   "scripts": {
-    "build:production": "gulp build",
+    "build": "gulp build",
     "start": "gulp watch",
     "docs": "gulp docs",
-    "prepublish": "npm run build:production",
     "test": "gulp test",
     "pretest": "eslint --ignore-path .gitignore .",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
