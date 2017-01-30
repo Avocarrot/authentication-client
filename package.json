@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "dist/index.js",

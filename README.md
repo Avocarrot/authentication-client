@@ -98,6 +98,7 @@ The library can be instantiated with the following arguments
 | `clientId`    | The app's registered client id     | N/A                                         |
 | `clientSecret`| The app's registered client secret | N/A                                         |
 | `loginHost`   | The login app host                 | "http://login.avocarrot.com"                |
+| `namespace`   | The Store namespace prefix         | "avocarrot"                                 |
 | `environment` | The environment to use             | AuthenticationClient.Environment.Production |
 
 ### Environments

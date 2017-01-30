@@ -39,7 +39,7 @@ const AuthenticationClient = (function immediate() {
    * @return {Store}
    *
    */
-  const store = new Store(config.store.namespace);
+  let store;
 
   /**
    * Cached instances
@@ -80,7 +80,12 @@ const AuthenticationClient = (function immediate() {
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host) {
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, namespace = config.store.namespace) {
+    // Setup store instance once
+    if (!(store instanceof Store)) {
+      store = new Store(namespace);
+    }
+    // Configure and return models
     const api = getAPIFor(environment);
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
@@ -114,17 +119,19 @@ const AuthenticationClient = (function immediate() {
      * @param {String} params.clientId - The Client id
      * @param {String} params.clientSecret - The Client secret
      * @param {String} params.loginHost - The login host URL
+     * @param {String} params.namespace - The Store namespace prefix to use
      * @param {ENV} params.environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor({ clientId, clientSecret, environment, loginHost }) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost, namespace }) {
       const key = `${clientId}-${clientSecret}`;
+      // Return cached instance
       if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment, loginHost);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost, namespace);
       instances.set(key, instance);
       return instance;
     },
