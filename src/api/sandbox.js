@@ -71,7 +71,7 @@ class SandboxAPI {
           const { grant_type, username, password, refresh_token } = body;
           if (grant_type === 'password') {
             if (!database.hasUserWithData(username, password)) {
-              return response(400, { error: 'not_found' });
+              return response(404, { error: 'not_found' });
             }
             const user = database.getUserWithData(username, password);
             return response(200, database.getTokenFor(user.id));
@@ -97,11 +97,16 @@ class SandboxAPI {
         POST: (database, id, body) => {
           const { email } = body;
           if (!database.hasUserWithEmail(email)) {
-            return response(400, { error: 'not_found' });
+            return response(404, { error: 'not_found' });
           }
           return response();
         },
-        PUT: () => (response()),
+        PUT: (database, id) => {
+          if (!database.hasPasswordResetToken(id)) {
+            return response(404, { error: 'not_found' });
+          }
+          return response();
+        },
       },
     };
   }

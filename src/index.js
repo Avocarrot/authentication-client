@@ -9,6 +9,8 @@ const API = require('./api');
 const SandboxDatabase = require('./databases/sandbox');
 const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
+const PasswordFixtures = require('../fixtures/passwords.json');
+
 
 /**
  * Global polyfill for {Promise}
@@ -69,7 +71,7 @@ const AuthenticationClient = (function immediate() {
       return new API.Production(host);
     }
     if (environment === ENV.Sandbox) {
-      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
+      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures));
     }
     throw new Error('Invalid `environment` passed');
   }

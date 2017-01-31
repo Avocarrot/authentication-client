@@ -18,7 +18,11 @@ function getSandboxDatabaseInstance(options = {}) {
     refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
     access_token: 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
   }];
-  return new SandboxDatabase(users, tokens);
+  const passwords = options.passwords || [{
+    user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    token: 'yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC',
+  }];
+  return new SandboxDatabase(users, tokens, passwords);
 }
 
 /**
@@ -35,6 +39,19 @@ test('SandboxDatabase.hasTokenWithRefresh(refreshToken) should return correct va
   assert.equals(sandboxDatabase.hasTokenWithRefresh('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'), true);
   assert.equals(sandboxDatabase.hasTokenWithRefresh('I1NiIsInR5cCI6IkpXVCJ9eyJhbGciOiJIUz'), false);
 });
+
+
+/**
+ * SandboxDatabase.hasPasswordResetToken(token)
+ */
+
+test('SandboxDatabase.hasPasswordResetToken(token) should return correct values', (assert) => {
+  const sandboxDatabase = getSandboxDatabaseInstance();
+  assert.plan(2);
+  assert.equals(sandboxDatabase.hasPasswordResetToken('yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC'), true);
+  assert.equals(sandboxDatabase.hasPasswordResetToken('12345'), false);
+});
+
 
 /**
  * SandboxDatabase.hasUserWithData(email, password)

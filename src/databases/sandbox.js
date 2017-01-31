@@ -14,12 +14,14 @@ class SandboxDatabase {
    * @constructor
    * @param {JSON} users - The initial user fixtures
    * @param {JSON} tokens - The initial token fixtures
+   * @param {JSON} passwords - The initial passwords fixtures
    * @return SandboxDatabase
    *
    */
-  constructor(users, tokens) {
+  constructor(users, tokens, passwords) {
     this._users = [...users];
     this._tokens = [...tokens];
+    this._passwords = [...passwords];
   }
 
   /**
@@ -127,6 +129,17 @@ class SandboxDatabase {
    */
   hasUserWithEmail(email) {
     return !!~this._users.findIndex(user => user.email === email);
+  }
+
+  /**
+   * Determines if database has a specific password reset token
+   *
+   * @param {String} token - The token to lookup
+   * @return {Boolean}
+   *
+   */
+  hasPasswordResetToken(token) {
+    return !!~this._passwords.findIndex(record => record.token === token);
   }
 
   /**
