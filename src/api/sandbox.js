@@ -1,4 +1,3 @@
-/* eslint-disable */
 const Utils = require('../utils');
 
 const stripBearer = Utils.stripBearer;
