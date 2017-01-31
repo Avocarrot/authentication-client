@@ -37,14 +37,14 @@ class SandboxAPI {
         GET: (database, id, body, headers) => {
           const token = stripBearer(headers.Authorization);
           if (!database.hasUserWithToken(token)) {
-            return response(404, { error: 'user_not_found' });
+            return response(404, { error: 'not_found' });
           }
           return response(200, database.getUserWithToken(token));
         },
         POST: (database, id, body) => {
           const { email, password, first_name, last_name } = body;
           if (database.hasUserWithData(email, password)) {
-            return response(400, { error: 'user_exists' });
+            return response(400, { error: 'validation_failed' });
           }
           const newUser = database.addUser(email, password, first_name, last_name);
           return response(201, newUser);
@@ -71,7 +71,7 @@ class SandboxAPI {
           const { grant_type, username, password, refresh_token } = body;
           if (grant_type === 'password') {
             if (!database.hasUserWithData(username, password)) {
-              return response(400, { error: 'invalid_credentials' });
+              return response(400, { error: 'not_found' });
             }
             const user = database.getUserWithData(username, password);
             return response(200, database.getTokenFor(user.id));
@@ -97,7 +97,7 @@ class SandboxAPI {
         POST: (database, id, body) => {
           const { email } = body;
           if (!database.hasUserWithEmail(email)) {
-            return response(400, { error: 'invalid_email' });
+            return response(400, { error: 'not_found' });
           }
           return response();
         },

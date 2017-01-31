@@ -12,13 +12,13 @@ const sandbox = sinon.sandbox.create();
 /**
  * Instances
  */
-function getSessionInstances(redirectURLFn, extractURLFn) {
+function getSessionInstances(redirectFn, pageURL) {
   const store = new Store('namespace');
   const api = new API('http://auth.mock.com');
   const client = new Client('id', 'secret');
   const consumer = new Consumer(client, api);
   const user = new User(store, consumer);
-  const session = new Session(store, user, 'http://login.mock.com', redirectURLFn, extractURLFn);
+  const session = new Session(store, user, 'http://login.mock.com', redirectFn, pageURL);
   return {
     store,
     api,
@@ -92,20 +92,17 @@ test('Session.isValid() should return', (t) => {
  * Session.invalidate()
  */
 
-test('Session.validate() should flush store data and redirect to login host with a return URL', (assert) => {
-  assert.plan(6);
-  const redirectURLSpy = sandbox.spy();
-  const extractURLStub = sandbox.stub();
-  extractURLStub.returns('http://subdomain.mock.com');
-  const instances = getSessionInstances(redirectURLSpy, extractURLStub);
+test('Session.invalidate() should flush store data and redirect to login host', (assert) => {
+  assert.plan(5);
+  const redirectFnSpy = sandbox.spy();
+  const instances = getSessionInstances(redirectFnSpy);
   const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => {});
   instances.session.invalidate();
   assert.equals(storeRemoveStub.callCount, 2);
   assert.equals(storeRemoveStub.getCall(0).args[0], 'access_token');
   assert.equals(storeRemoveStub.getCall(1).args[0], 'refresh_token');
-  assert.equals(extractURLStub.callCount, 1);
-  assert.equals(redirectURLSpy.callCount, 1);
-  assert.equals(redirectURLSpy.getCall(0).args[0], 'http://login.mock.com/login?redirectUrl=http%3A%2F%2Fsubdomain.mock.com');
+  assert.equals(redirectFnSpy.callCount, 1);
+  assert.equals(redirectFnSpy.getCall(0).args[0], 'http://login.mock.com/login');
   sandbox.restore();
 });
 
@@ -115,13 +112,13 @@ test('Session.validate() should flush store data and redirect to login host with
 
 test('Session.validate() should redirect to login host with a return URL', (assert) => {
   assert.plan(3);
-  const redirectURLSpy = sandbox.spy();
-  const extractURLStub = sandbox.stub();
-  extractURLStub.returns('http://subdomain.mock.com');
-  const instances = getSessionInstances(redirectURLSpy, extractURLStub);
+  const redirectFnSpy = sandbox.spy();
+  const pageURLStub = sandbox.stub();
+  pageURLStub.returns('http://subdomain.mock.com');
+  const instances = getSessionInstances(redirectFnSpy, pageURLStub);
   instances.session.validate();
-  assert.equals(extractURLStub.callCount, 1);
-  assert.equals(redirectURLSpy.callCount, 1);
-  assert.equals(redirectURLSpy.getCall(0).args[0], 'http://login.mock.com/login?redirectUrl=http%3A%2F%2Fsubdomain.mock.com');
+  assert.equals(pageURLStub.callCount, 1);
+  assert.equals(redirectFnSpy.callCount, 1);
+  assert.equals(redirectFnSpy.getCall(0).args[0], 'http://login.mock.com/login?redirectUrl=http%3A%2F%2Fsubdomain.mock.com');
   sandbox.restore();
 });

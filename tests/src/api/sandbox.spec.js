@@ -74,7 +74,7 @@ test('APISandbox.invoke() should mock /users GET', (t) => {
       },
     }).then((res) => {
       assert.deepEquals(res.body, {
-        error: 'user_not_found',
+        error: 'not_found',
       });
       assert.equals(res.status, 404);
     });
@@ -132,7 +132,7 @@ test('APISandbox.invoke() should mock /users POST', (t) => {
       },
     }).then((res) => {
       assert.deepEquals(res.body, {
-        error: 'user_exists',
+        error: 'validation_failed',
       });
       assert.equals(res.status, 400);
     });
@@ -243,7 +243,7 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
       },
     }).then((res) => {
       assert.deepEquals(res.body, {
-        error: 'invalid_credentials',
+        error: 'not_found',
       });
       assert.equals(res.status, 400);
     });
@@ -364,7 +364,7 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
         email: 'john.doe@mail.com',
       },
     }).then((res) => {
-      assert.deepEquals(res.body, { error: 'invalid_email' });
+      assert.deepEquals(res.body, { error: 'not_found' });
       assert.equals(res.status, 400);
     });
     sandbox.restore();

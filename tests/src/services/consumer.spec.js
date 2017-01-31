@@ -95,7 +95,7 @@ test('Consumer.retrieveToken(username, password) should return `access_token` an
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'password', password: 'password', username: 'username' });
+    assert.equals(apiStub.getCall(0).args[1].body, 'username=username&password=password&grant_type=password&client_id=id&client_secret=secret');
   });
   sandbox.restore();
 });
@@ -115,7 +115,7 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, { client_id: 'id', client_secret: 'secret', grant_type: 'refresh_token', refresh_token: 'refresh_token' });
+    assert.equals(apiStub.getCall(0).args[1].body, 'refresh_token=refresh_token&grant_type=refresh_token&client_id=id&client_secret=secret');
   });
   sandbox.restore();
 });
@@ -132,16 +132,11 @@ test('Consumer.createUser(email, firstName, lastName, password) should return de
     status: 201,
     body: Object.assign(UserMocks.User, {}),
   }));
-  instances.consumer.createUser('john.doe@mail.com', 'John', 'Doe', 'password').then((res) => {
+  instances.consumer.createUser('john.doe@mail.com', 'password', 'John', 'Doe').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, {
-      email: 'john.doe@mail.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: 'password',
-    });
+    assert.equals(apiStub.getCall(0).args[1].body, '{"email":"john.doe@mail.com","password":"password","first_name":"John","last_name":"Doe"}');
   });
   sandbox.restore();
 });
@@ -167,10 +162,7 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users/44d2c8e0-762b-4fa5-8571-097c81c3130d');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PATCH');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, {
-      first_name: 'John',
-      last_name: 'Doe',
-    });
+    assert.equals(apiStub.getCall(0).args[1].body, '{"first_name":"John","last_name":"Doe"}');
   });
   sandbox.restore();
 });
@@ -189,9 +181,7 @@ test('Consumer.requestPasswordReset(email) should send a password reset request'
   instances.consumer.requestPasswordReset('john.doe@mail.com').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, {
-      email: 'john.doe@mail.com',
-    });
+    assert.equals(apiStub.getCall(0).args[1].body, '{"email":"john.doe@mail.com"}');
   });
   sandbox.restore();
 });
@@ -211,9 +201,7 @@ test('Consumer.resetPassword(token, password) should reset password', (assert) =
   instances.consumer.resetPassword('f734c7f2-0452-414d-867b-84e4166325a', 'password').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords/f734c7f2-0452-414d-867b-84e4166325a');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PUT');
-    assert.deepEquals(apiStub.getCall(0).args[1].body, {
-      password: 'password',
-    });
+    assert.equals(apiStub.getCall(0).args[1].body, '{"password":"password"}');
   });
   sandbox.restore();
 });

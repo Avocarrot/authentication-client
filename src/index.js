@@ -1,5 +1,4 @@
 const config = require('../config/default');
-const fetch = require('whatwg-fetch');
 const Store = require('./services/store');
 const User = require('./models/user');
 const Client = require('./models/client');
@@ -15,6 +14,12 @@ const TokenFixtures = require('../fixtures/tokens.json');
  * Global polyfill for {Promise}
  */
 require('es6-promise').polyfill();
+
+/**
+ * Global polyfill for {fetch}
+ */
+require('whatwg-fetch');
+
 
 /**
  * @namespace AuthenticationClient
@@ -61,7 +66,7 @@ const AuthenticationClient = (function immediate() {
    */
   function getAPIFor(environment, host = config.api.host) {
     if (environment === ENV.Production) {
-      return new API.Production(host, fetch);
+      return new API.Production(host);
     }
     if (environment === ENV.Sandbox) {
       return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures));
@@ -77,16 +82,18 @@ const AuthenticationClient = (function immediate() {
    * @param {String} clientSecret - The client secret
    * @param {ENV} environment - The environment to set
    * @param {String} loginHost - The login host URL
+   * @param {String} apiHost - The API host
+   * @param {String} namespace - The Store namespace prefix to use
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, namespace = config.store.namespace) {
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, namespace = config.store.namespace) {
     // Setup store instance once
     if (!(store instanceof Store)) {
       store = new Store(namespace);
     }
     // Configure and return models
-    const api = getAPIFor(environment);
+    const api = getAPIFor(environment, apiHost);
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);
@@ -119,19 +126,20 @@ const AuthenticationClient = (function immediate() {
      * @param {String} params.clientId - The Client id
      * @param {String} params.clientSecret - The Client secret
      * @param {String} params.loginHost - The login host URL
+     * @param {String} params.apiHost - The API host
      * @param {String} params.namespace - The Store namespace prefix to use
      * @param {ENV} params.environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor({ clientId, clientSecret, environment, loginHost, namespace }) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, namespace }) {
       const key = `${clientId}-${clientSecret}`;
       // Return cached instance
       if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment, loginHost, namespace);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, namespace);
       instances.set(key, instance);
       return instance;
     },

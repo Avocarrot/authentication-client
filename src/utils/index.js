@@ -51,22 +51,31 @@ module.exports.stripBearer = stripBearer;
  * @return {String}
  *
  */
+
 const extractErrorMessage = (errorCode) => {
   switch (errorCode) {
-    case 'user_exists':
-      return 'User already exists';
-    case 'user_not_found':
-      return 'User not found';
-    case 'invalid_email':
-      return 'Could not find an account for this email';
-    case 'invalid_credentials':
-      return 'Invalid email or password';
-    case 'invalid_password':
-      return 'You have entered an invalid password';
+    case 'validation_failed':
+      return 'Validation failed';
+    case 'not_found':
+      return 'Not found';
+    case 'forbidden_resource':
+      return 'Forbidden resource';
+    case 'access_denied':
+      return 'The resource owner or authorization server denied the request';
+    case 'unsupported_grant_type':
+      return 'The authorization grant type is not supported';
+    case 'invalid_grant':
+      return 'Invalid credentials';
+    case 'unauthorized_request':
+      return 'Unauthorized request';
+    case 'unauthorized_client':
+      return 'The authenticated client is not authorized';
+    case 'invalid_token':
+      return 'The access token provided is expired, revoked, malformed, or invalid';
+    case 'invalid_scope':
+      return 'The requested scope is invalid, unknown, or malformed';
     case 'invalid_client':
       return 'Client authentication failed';
-    case 'invalid_grant':
-      return 'The provided authorization token is invalid';
     case 'invalid_request':
       return 'The request is missing a required parameter';
     default:
@@ -109,7 +118,9 @@ const validatePassword = (password) => {
       isValid: false,
     };
   }
-  return { isValid: true };
+  return {
+    isValid: true,
+  };
 };
 
 module.exports.validatePassword = validatePassword;
@@ -133,12 +144,12 @@ module.exports.redirectToURL = redirectToURL;
 /* istanbul ignore next */
 
 /**
- * Wrapper around window.location.href()
+ * Wrapper around window.location.href
  *
  * @memberof Utils
  * @return {String}
  *
  */
-const extractURL = () => window.location.href;
+const retrieveURL = () => window.location.href;
 
-module.exports.extractURL = extractURL;
+module.exports.retrieveURL = retrieveURL;

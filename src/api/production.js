@@ -8,24 +8,31 @@ class ProductionAPI {
    *
    * @constructor
    * @param {String} endpoint - The host endpoint
-   * @param {Object} fetcher - The function to use for fetching the data
+   * @param {Object} fetchFn - The function to use for fetching the data - Defaults to window.fetch
    * @return {ProductionAPI}
    */
-  constructor(endpoint, fetcher) {
+  constructor(endpoint, fetchFn = (...args) => window.fetch(...args)) {
     this._endpoint = endpoint;
-    this._fetcher = fetcher;
+    this._fetchFn = fetchFn;
   }
 
   /**
    *
-   * Propagates invoke call to API _fetcher
+   * Propagates invoke call to _fetchFn
    * @param {String} resource - The resource to fetch from
    * @param {Object} payload - The payload to pass
    * @return {Promise}
    *
    */
   invoke(resource, payload) {
-    return this._fetcher(`${this._endpoint}/${resource}`, payload);
+    let status = 0;
+    return this._fetchFn(`${this._endpoint}/${resource}`, payload).then((res) => {
+      status = res.status;
+      if (status !== 204) {
+        return res.json();
+      }
+      return Promise.resolve({});
+    }).then(body => ({ body, status }));
   }
 }
 

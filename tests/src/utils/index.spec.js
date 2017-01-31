@@ -50,14 +50,18 @@ test('stripBearer(header) should strip Bearer token from Authorization header', 
  */
 
 test('extractErrorMessage(errorCode) should extract the correct messages', (assert) => {
-  assert.plan(9);
-  assert.equals(extractErrorMessage('user_exists'), 'User already exists');
-  assert.equals(extractErrorMessage('user_not_found'), 'User not found');
-  assert.equals(extractErrorMessage('invalid_email'), 'Could not find an account for this email');
-  assert.equals(extractErrorMessage('invalid_credentials'), 'Invalid email or password');
-  assert.equals(extractErrorMessage('invalid_password'), 'You have entered an invalid password');
+  assert.plan(13);
+  assert.equals(extractErrorMessage('validation_failed'), 'Validation failed');
+  assert.equals(extractErrorMessage('not_found'), 'Not found');
+  assert.equals(extractErrorMessage('forbidden_resource'), 'Forbidden resource');
+  assert.equals(extractErrorMessage('access_denied'), 'The resource owner or authorization server denied the request');
+  assert.equals(extractErrorMessage('unsupported_grant_type'), 'The authorization grant type is not supported');
+  assert.equals(extractErrorMessage('invalid_grant'), 'Invalid credentials');
+  assert.equals(extractErrorMessage('unauthorized_request'), 'Unauthorized request');
+  assert.equals(extractErrorMessage('unauthorized_client'), 'The authenticated client is not authorized');
+  assert.equals(extractErrorMessage('invalid_token'), 'The access token provided is expired, revoked, malformed, or invalid');
+  assert.equals(extractErrorMessage('invalid_scope'), 'The requested scope is invalid, unknown, or malformed');
   assert.equals(extractErrorMessage('invalid_client'), 'Client authentication failed');
-  assert.equals(extractErrorMessage('invalid_grant'), 'The provided authorization token is invalid');
   assert.equals(extractErrorMessage('invalid_request'), 'The request is missing a required parameter');
   assert.equals(extractErrorMessage('error'), 'Unexpected error');
 });

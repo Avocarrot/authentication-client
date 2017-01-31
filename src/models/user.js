@@ -138,12 +138,7 @@ class User {
     if (!isValid) {
       return Promise.reject(new Error(message));
     }
-    return this._consumer.createUser({
-      email,
-      password,
-      firstName,
-      lastName,
-    }).then((data) => {
+    return this._consumer.createUser(email, password, firstName, lastName).then((data) => {
       this._id = data.id;
       this._publisherId = data.publisher_id;
       this._firstName = data.first_name;

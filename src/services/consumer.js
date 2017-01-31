@@ -56,15 +56,9 @@ class Consumer {
     return this._request('token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: {
-        username,
-        password,
-        grant_type: 'password',
-        client_id: this._client.id,
-        client_secret: this._client.secret,
-      },
+      body: `username=${username}&password=${password}&grant_type=password&client_id=${this._client.id}&client_secret=${this._client.secret}`,
     });
   }
 
@@ -79,14 +73,9 @@ class Consumer {
     return this._request('token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: {
-        refresh_token: refreshToken,
-        grant_type: 'refresh_token',
-        client_id: this._client.id,
-        client_secret: this._client.secret,
-      },
+      body: `refresh_token=${refreshToken}&grant_type=refresh_token&client_id=${this._client.id}&client_secret=${this._client.secret}`,
     });
   }
 
@@ -94,24 +83,24 @@ class Consumer {
    * Creates a new User
    *
    * @param {String} email - The email to use
+   * @param {String} password - The password to use
    * @param {String} firstName - The first name to use
    * @param {String} lastName - The last name to use
-   * @param {String} password - The password to use
    * @return {Promise}
    *
    */
-  createUser(email, firstName, lastName, password) {
+  createUser(email, password, firstName, lastName) {
     return this._request('users', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         email,
         password,
         first_name: firstName,
         last_name: lastName,
-      },
+      }),
     });
   }
 
@@ -124,11 +113,11 @@ class Consumer {
    */
   retrieveUser(token) {
     return this._request('users/me', {
-      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
       },
+      method: 'GET',
     });
   }
 
@@ -148,12 +137,12 @@ class Consumer {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         first_name: options.firstName,
         last_name: options.lastName,
-      },
+      }),
     });
   }
 
@@ -168,11 +157,11 @@ class Consumer {
     return this._request('passwords', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         email,
-      },
+      }),
     });
   }
 
@@ -188,11 +177,11 @@ class Consumer {
     return this._request(`passwords/${token}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         password,
-      },
+      }),
     });
   }
 
