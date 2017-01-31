@@ -249,7 +249,7 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
       assert.deepEquals(res.body, {
         error: 'not_found',
       });
-      assert.equals(res.status, 400);
+      assert.equals(res.status, 404);
     });
     sandbox.restore();
   });
@@ -369,7 +369,7 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
       },
     }).then((res) => {
       assert.deepEquals(res.body, { error: 'not_found' });
-      assert.equals(res.status, 400);
+      assert.equals(res.status, 404);
     });
     sandbox.restore();
   });
@@ -408,7 +408,7 @@ test('APISandbox.invoke() should mock /passwords PUT', (t) => {
       },
     }).then((res) => {
       assert.deepEquals(res.body, { error: 'not_found' });
-      assert.equals(res.status, 400);
+      assert.equals(res.status, 404);
     });
     sandbox.restore();
   });
