@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Utils = require('../utils');
 
 const stripBearer = Utils.stripBearer;
@@ -101,7 +102,12 @@ class SandboxAPI {
           }
           return response();
         },
-        PUT: () => (response()),
+        PUT: (database, id) => {
+          if (!database.hasPasswordResetToken(id)) {
+            return response(400, { error: 'not_found' });
+          }
+          return response();
+        },
       },
     };
   }

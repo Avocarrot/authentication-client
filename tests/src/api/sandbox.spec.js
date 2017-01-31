@@ -28,7 +28,11 @@ function getSandboxInstances() {
     refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
     access_token: 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
   }];
-  const sandboxDatabase = new SandboxDatabase(UserFixtures, TokenFixtures);
+  const PasswordFixtures = [{
+    user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    token: 'yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC',
+  }];
+  const sandboxDatabase = new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures);
   const sandboxAPI = new SandboxAPI(sandboxDatabase);
   return {
     database: sandboxDatabase,
@@ -375,19 +379,37 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
  * APISandbox - PUT /password
  */
 
-test('APISandbox.invoke() should mock /passwords PUT', (assert) => {
-  assert.plan(2);
-  getSandboxInstances().API.invoke('passwords/d4149324285e46bfb8065b6c816a12b2', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-    body: {
-      password: '123456789',
-    },
-  }).then((res) => {
-    assert.deepEquals(res.body, {});
-    assert.equals(res.status, 200);
+test('APISandbox.invoke() should mock /passwords PUT', (t) => {
+  t.test('on success', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('passwords/yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: {
+        password: '123456789',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, {});
+      assert.equals(res.status, 200);
+    });
+    sandbox.restore();
   });
-  sandbox.restore();
+  t.test('on failure', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('passwords/123456', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: {
+        password: '123456789',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, { error: 'not_found' });
+      assert.equals(res.status, 400);
+    });
+    sandbox.restore();
+  });
 });
