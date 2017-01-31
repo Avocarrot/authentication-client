@@ -1,9 +1,9 @@
 module.exports = {
   api: {
-    host: 'http://auth.avocarrot.com',
+    host: 'https://auth.avocarrot.com',
   },
   login: {
-    host: 'http://login.avocarrot.com',
+    host: 'https://login.avocarrot.com',
   },
   store: {
     namespace: 'avocarrot',
