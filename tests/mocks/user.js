@@ -11,7 +11,7 @@ const UserMocks = {
     email: 'john.doe@mail.com',
     _links: {
       self: {
-        href: 'http://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d',
+        href: 'https://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d',
         type: 'application/json',
       },
       publisher: {
