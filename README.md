@@ -175,7 +175,7 @@ While in Sandbox mode you can authenticate using the default Sandbox User found 
 | Property      | Value               |                                 
 |:--------------|:-------------------:|
 | `email`       | john.doe@mail.com   |
-| `password`    | 123456789           |
+| `password`    | qwerty123           |
 
 
 ```javascript
