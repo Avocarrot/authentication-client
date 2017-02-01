@@ -175,6 +175,29 @@ class User {
       return Promise.resolve({ message: 'Authenticated User' });
     });
   }
+
+  /**
+   * Retrieves user for an access token
+   *
+   * @param {String} accessToken - The access token to use
+   * @return {Promise}
+   *
+   */
+  authenticateWithToken(accessToken) {
+    assert(accessToken, 'Missing `accessToken`');
+    // Store token
+    this._store.set('access_token', accessToken);
+    // Retrieve user data
+    return this._consumer.retrieveUser(accessToken).then((data) => {
+      this._id = data.id;
+      this._publisherId = data.publisher_id;
+      this._email = data.email;
+      this._firstName = data.first_name;
+      this._lastName = data.last_name;
+      return Promise.resolve({ message: 'Authenticated User' });
+    });
+  }
+
 }
 
 module.exports = User;
