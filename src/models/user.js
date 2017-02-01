@@ -177,18 +177,37 @@ class User {
   }
 
   /**
-   * Retrieves user for an access token
+   * Retrieves user for an access token.
+   * Fallbacks to token refresh if refreshToken is defined
    *
    * @param {String} accessToken - The access token to use
+   * @param {String} refreshToken - The refresh token to use (Optional)
    * @return {Promise}
    *
    */
-  authenticateWithToken(accessToken) {
+  authenticateWithToken(accessToken, refreshToken) {
     assert(accessToken, 'Missing `accessToken`');
-    // Store token
+    // Store access token
     this._store.set('access_token', accessToken);
-    // Retrieve user data
-    return this._consumer.retrieveUser(accessToken).then((data) => {
+    // Store refresh token (or clear if undefined)
+    if (refreshToken) {
+      this._store.set('refresh_token', refreshToken);
+    } else {
+      this._store.remove('refresh_token');
+    }
+    return this._consumer.retrieveUser(accessToken).catch((err) => {
+      if (!refreshToken || err.name !== 'invalid_token') {
+        return Promise.reject(err);
+      }
+      // Try to refresh the tokens if the error is of `invalid_token`
+      return this._consumer.refreshToken(refreshToken).then((newTokens) => {
+        // Store new tokens
+        this._store.set('access_token', newTokens.access_token);
+        this._store.set('refresh_token', newTokens.refresh_token);
+        // Retrieve user with new token
+        return this._consumer.retrieveUser(newTokens.access_token);
+      });
+    }).then((data) => {
       this._id = data.id;
       this._publisherId = data.publisher_id;
       this._email = data.email;
