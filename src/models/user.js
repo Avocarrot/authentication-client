@@ -195,18 +195,18 @@ class User {
     } else {
       this._store.remove('refresh_token');
     }
-    return this._consumer.retrieveUser(accessToken).catch(err => {
+    return this._consumer.retrieveUser(accessToken).catch((err) => {
       if (!refreshToken || err.name !== 'invalid_token') {
         return Promise.reject(err);
       }
       // Try to refresh the tokens if the error is of `invalid_token`
-      return this._consumer.refreshToken(refreshToken).then((newTokens)=>{
+      return this._consumer.refreshToken(refreshToken).then((newTokens) => {
         // Store new tokens
         this._store.set('access_token', newTokens.access_token);
         this._store.set('refresh_token', newTokens.refresh_token);
         // Retrieve user with new token
         return this._consumer.retrieveUser(newTokens.access_token);
-      })
+      });
     }).then((data) => {
       this._id = data.id;
       this._publisherId = data.publisher_id;

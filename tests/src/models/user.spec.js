@@ -11,8 +11,8 @@ const sandbox = sinon.sandbox.create();
 /**
  * Helpers
  */
-function generateError({name, message}) {
-  let error = new Error(message)
+function generateError({ name, message }) {
+  const error = new Error(message);
   error.name = name;
   return error;
 }
