@@ -201,6 +201,48 @@ test('User.authenticate(username, password) should store user and token on succe
 });
 
 /**
+ * User.authenticateWithToken(accessToken)
+ */
+
+test('User.authenticateWithToken(accessToken) should', (t) => {
+  t.test('throw an error for missing `token`', (assert) => {
+    assert.plan(1);
+    const instances = getUserInstances();
+    try {
+      instances.user.authenticateWithToken();
+    } catch (err) {
+      assert.equals(err.message, 'Missing `accessToken`');
+    }
+  });
+
+  t.test('store user and token on success', (assert) => {
+    assert.plan(7);
+    const instances = getUserInstances();
+    const storeSetSpy = sandbox.spy();
+    const retrieveUserStub = sandbox.stub();
+    retrieveUserStub.returns(Promise.resolve({
+      id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+      publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john.doe@mail.com',
+    }));
+    instances.store.set = storeSetSpy;
+    instances.consumer.retrieveUser = retrieveUserStub;
+    instances.user.authenticateWithToken('rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7').then((res) => {
+      assert.deepEquals(storeSetSpy.getCall(0).args, ['access_token', 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7']);
+      assert.equals(instances.user.id, '44d2c8e0-762b-4fa5-8571-097c81c3130d');
+      assert.equals(instances.user.publisherId, '55f5c8e0-762b-4fa5-8571-197c8183130a');
+      assert.equals(instances.user.email, 'john.doe@mail.com');
+      assert.equals(instances.user.firstName, 'John');
+      assert.equals(instances.user.lastName, 'Doe');
+      assert.equals(res.message, 'Authenticated User');
+    });
+    sandbox.restore();
+  });
+});
+
+/**
  * User.create(email, password, firstName, lastName)
  */
 

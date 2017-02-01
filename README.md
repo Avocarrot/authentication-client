@@ -218,6 +218,17 @@ authClient.user.email = "mock@email.com";
 authClient.user.save()
   .then((res)  => {/* ... */})
   .catch((err) => {/* ... */});
+
+/**
+ * Authenticate user using a login token (Staff login)
+ *
+ * @return {Promise} - res.message, err.message
+ *
+ */
+authClient.user.authenticateWithToken(accessToken)
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
+
 ```
 
 ### Password operations
