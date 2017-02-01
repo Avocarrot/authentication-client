@@ -27,7 +27,7 @@ test('Store.set(key, value) should call Cookies.set(key, value) with normalized 
   assert.plan(1);
   const setSpy = sandbox.spy(Cookies, 'set');
   store.set('key', 'value');
-  assert.deepEquals(setSpy.getCall(0).args, ['namespace_key', 'value']);
+  assert.deepEquals(setSpy.getCall(0).args, ['namespace_key', 'value', { domain: 'namespace.com' }]);
   sandbox.restore();
 });
 
