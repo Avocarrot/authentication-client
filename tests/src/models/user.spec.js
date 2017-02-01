@@ -9,9 +9,17 @@ const API = require('../../../src/api').Sandbox;
 const sandbox = sinon.sandbox.create();
 
 /**
+ * Helpers
+ */
+function generateError({ name, message }) {
+  const error = new Error(message);
+  error.name = name;
+  return error;
+}
+
+/**
  * Instances
  */
-
 function getUserInstances() {
   const client = new Client('id', 'secret');
   const api = new API();
@@ -31,6 +39,7 @@ function getUserInstances() {
  * Mocks
  */
 const UserMocks = require('../../mocks/user');
+const TokenMocks = require('../../mocks/token');
 
 /**
  * User.constructor(options)
@@ -201,10 +210,10 @@ test('User.authenticate(username, password) should store user and token on succe
 });
 
 /**
- * User.authenticateWithToken(accessToken)
+ * User.authenticateWithToken(accessToken, refreshToken)
  */
 
-test('User.authenticateWithToken(accessToken) should', (t) => {
+test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
   t.test('throw an error for missing `token`', (assert) => {
     assert.plan(1);
     const instances = getUserInstances();
@@ -237,6 +246,75 @@ test('User.authenticateWithToken(accessToken) should', (t) => {
       assert.equals(instances.user.firstName, 'John');
       assert.equals(instances.user.lastName, 'Doe');
       assert.equals(res.message, 'Authenticated User');
+    });
+    sandbox.restore();
+  });
+
+  t.test('successfully refresh tokens on `invalid_grant` failure', (assert) => {
+    assert.plan(13);
+    const instances = getUserInstances();
+    const storeSetSpy = sandbox.spy();
+    const storeRemoveSpy = sandbox.spy();
+    const retrieveUserStub = sandbox.stub();
+    const refreshTokenStub = sandbox.stub();
+    refreshTokenStub.onCall(0).returns(Promise.resolve(TokenMocks.RefreshGrant));
+    retrieveUserStub.onCall(0).returns(Promise.reject(generateError({
+      name: 'invalid_token',
+      message: 'The access token provided is expired, revoked, malformed, or invalid',
+    })));
+    retrieveUserStub.onCall(1).returns(Promise.resolve({
+      id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+      publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john.doe@mail.com',
+    }));
+    instances.store.set = storeSetSpy;
+    instances.store.remove = storeRemoveSpy;
+    instances.consumer.retrieveUser = retrieveUserStub;
+    instances.consumer.refreshToken = refreshTokenStub;
+    instances.user.authenticateWithToken('IK4NarkdkJHVBdCjLIIjslauxPP8uo5hY8tTN7', 'sInR5ceyJhbGciOiJIUzI1NiICI6IkpXVCJ9').then((res) => {
+      assert.equals(storeSetSpy.callCount, 4);
+      assert.equals(storeRemoveSpy.callCount, 0);
+      assert.equals(refreshTokenStub.callCount, 1);
+      assert.deepEquals(storeSetSpy.getCall(0).args, ['access_token', 'IK4NarkdkJHVBdCjLIIjslauxPP8uo5hY8tTN7']);
+      assert.deepEquals(storeSetSpy.getCall(1).args, ['refresh_token', 'sInR5ceyJhbGciOiJIUzI1NiICI6IkpXVCJ9']);
+      assert.deepEquals(storeSetSpy.getCall(2).args, ['access_token', TokenMocks.RefreshGrant.access_token]);
+      assert.deepEquals(storeSetSpy.getCall(3).args, ['refresh_token', TokenMocks.RefreshGrant.refresh_token]);
+      assert.deepEquals(refreshTokenStub.getCall(0).args, ['sInR5ceyJhbGciOiJIUzI1NiICI6IkpXVCJ9']);
+      assert.equals(instances.user.publisherId, '55f5c8e0-762b-4fa5-8571-197c8183130a');
+      assert.equals(instances.user.email, 'john.doe@mail.com');
+      assert.equals(instances.user.firstName, 'John');
+      assert.equals(instances.user.lastName, 'Doe');
+      assert.equals(res.message, 'Authenticated User');
+    });
+    sandbox.restore();
+  });
+
+  t.test('gracefully skip token refresh if `refreshToken` is not defined', (assert) => {
+    assert.plan(7);
+    const instances = getUserInstances();
+    const storeSetSpy = sandbox.spy();
+    const storeRemoveSpy = sandbox.spy();
+    const retrieveUserStub = sandbox.stub();
+    const refreshTokenStub = sandbox.stub();
+    refreshTokenStub.onCall(0).returns(Promise.resolve(TokenMocks.RefreshGrant));
+    retrieveUserStub.onCall(0).returns(Promise.reject(generateError({
+      name: 'unauthorized_client',
+      message: 'The authenticated client is not authorized',
+    })));
+    instances.store.set = storeSetSpy;
+    instances.store.remove = storeRemoveSpy;
+    instances.consumer.retrieveUser = retrieveUserStub;
+    instances.consumer.refreshToken = refreshTokenStub;
+    instances.user.authenticateWithToken('IK4NarkdkJHVBdCjLIIjslauxPP8uo5hY8tTN7').catch((err) => {
+      assert.equals(storeSetSpy.callCount, 1);
+      assert.equals(storeRemoveSpy.callCount, 1);
+      assert.equals(refreshTokenStub.callCount, 0);
+      assert.deepEquals(storeSetSpy.getCall(0).args, ['access_token', 'IK4NarkdkJHVBdCjLIIjslauxPP8uo5hY8tTN7']);
+      assert.deepEquals(storeRemoveSpy.getCall(0).args, ['refresh_token']);
+      assert.equals(err.message, 'The authenticated client is not authorized');
+      assert.equals(err.name, 'unauthorized_client');
     });
     sandbox.restore();
   });
