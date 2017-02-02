@@ -61,12 +61,15 @@ class Store {
   }
 
   /**
-   * Removes key value pair
+   * Removes key value pair if it exists
    *
    * @param {String} key - The key to use
    *
    */
   remove(key) {
+    if (typeof this.get(key) === 'undefined') {
+      return;
+    }
     LocalStorage.remove(this._normalizeKey(key));
   }
 
