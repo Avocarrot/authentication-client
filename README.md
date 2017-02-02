@@ -231,10 +231,12 @@ authClient.user.authenticateWithToken(accessToken)
 /**
  * Flushes stored tokens for User (logout)
  *
- * @return {Void}
+ * @return {Promise} - res.message, err.message
  *
  */
 authClient.user.flush()
+ .then((res)  => {/* ... */})
+ .catch((err) => {/* ... */});
 
 
 ```

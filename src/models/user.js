@@ -230,12 +230,15 @@ class User {
   /**
    * Flushes stored tokens for User (logout)
    *
-   * @return {Void}
+   * @return {Promise}
    *
    */
   flush() {
     this._store.remove('access_token');
     this._store.remove('refresh_token');
+    return Promise.resolve({
+      message: 'Flushed User',
+    });
   }
 
 }
