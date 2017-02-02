@@ -46,7 +46,7 @@ class Store {
    *
    */
   set(key, value) {
-    Cookies.set(this._normalizeKey(key), value, { domain: `.${this._namespace}.com` });
+    Cookies.set(this._normalizeKey(key), value, { domain: `${this._namespace}.com` });
   }
 
   /**
