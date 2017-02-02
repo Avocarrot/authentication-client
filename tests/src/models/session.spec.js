@@ -18,7 +18,7 @@ function getSessionInstances(redirectFn, pageURL) {
   const client = new Client('id', 'secret');
   const consumer = new Consumer(client, api);
   const user = new User(store, consumer);
-  const session = new Session(store, user, 'http://login.mock.com', redirectFn, pageURL);
+  const session = new Session(user, 'http://login.mock.com', redirectFn, pageURL);
   return {
     store,
     api,
@@ -35,21 +35,10 @@ function getSessionInstances(redirectFn, pageURL) {
  */
 
 test('Session.constructor(options) should throw an error for', (t) => {
-  t.test('missing `store`', (assert) => {
-    assert.plan(1);
-    const instances = getSessionInstances();
-    try {
-      new Session(Object(), instances.user, 'http://login.mock.com');
-    } catch (err) {
-      assert.equals(err.message, '`store` should be instance of Store');
-    }
-  });
-
   t.test('missing `user`', (assert) => {
     assert.plan(1);
-    const instances = getSessionInstances();
     try {
-      new Session(instances.store, Object(), 'http://login.mock.com');
+      new Session(Object(), 'http://login.mock.com');
     } catch (err) {
       assert.equals(err.message, '`user` should be instance of User');
     }
@@ -59,7 +48,7 @@ test('Session.constructor(options) should throw an error for', (t) => {
     assert.plan(1);
     const instances = getSessionInstances();
     try {
-      new Session(instances.store, instances.user);
+      new Session(instances.user);
     } catch (err) {
       assert.equals(err.message, '`loginHost` is not defined');
     }
@@ -92,15 +81,11 @@ test('Session.isValid() should return', (t) => {
  * Session.invalidate()
  */
 
-test('Session.invalidate() should flush store data and redirect to login host', (assert) => {
-  assert.plan(5);
+test('Session.invalidate() should redirect to login host', (assert) => {
+  assert.plan(2);
   const redirectFnSpy = sandbox.spy();
   const instances = getSessionInstances(redirectFnSpy);
-  const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => {});
   instances.session.invalidate();
-  assert.equals(storeRemoveStub.callCount, 2);
-  assert.equals(storeRemoveStub.getCall(0).args[0], 'access_token');
-  assert.equals(storeRemoveStub.getCall(1).args[0], 'refresh_token');
   assert.equals(redirectFnSpy.callCount, 1);
   assert.equals(redirectFnSpy.getCall(0).args[0], 'http://login.mock.com/login');
   sandbox.restore();
