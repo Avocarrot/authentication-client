@@ -4,7 +4,7 @@ const assert = require('assert');
  * Wrapper around `js-cookie`
  * @see https://github.com/js-cookie/js-cookie
  */
-const Cookies = require('js-cookie');
+const Cookie = require('js-cookie');
 
 /**
  * Wrapper arround LocalStorage
@@ -17,17 +17,17 @@ class Store {
    * Initializes Store
    *
    * @constructor
-   * @param {String} namespace - The namespace where all values will be attached
+   * @param {String} domain - The domain where all values will be attached
    * @return {Store}
    *
    */
-  constructor(namespace) {
-    assert(namespace, 'Missing `namespace`');
-    this._namespace = namespace;
+  constructor(domain) {
+    assert(domain, 'Missing `domain`');
+    this._domain = domain;
   }
 
   /**
-   * Normalizes key based on namespace
+   * Normalizes key based on domain
    *
    * @private
    * @param {String} key - The key to use
@@ -35,7 +35,7 @@ class Store {
    *
    */
   _normalizeKey(key) {
-    return `${this._namespace}_${key}`;
+    return `${this._domain}_${key}`;
   }
 
   /**
@@ -46,7 +46,7 @@ class Store {
    *
    */
   set(key, value) {
-    Cookies.set(this._normalizeKey(key), value, { domain: `${this._namespace}.com` });
+    Cookie.set(this._normalizeKey(key), value, { domain: `${this._domain}.com` });
   }
 
   /**
@@ -57,7 +57,7 @@ class Store {
    *
    */
   get(key) {
-    return Cookies.get(this._normalizeKey(key));
+    return Cookie.get(this._normalizeKey(key));
   }
 
   /**
@@ -67,7 +67,7 @@ class Store {
    *
    */
   remove(key) {
-    Cookies.remove(this._normalizeKey(key));
+    Cookie.remove(this._normalizeKey(key));
   }
 
 }

@@ -6,6 +6,6 @@ module.exports = {
     host: 'https://login.avocarrot.com',
   },
   store: {
-    namespace: 'avocarrot',
+    domain: 'avocarrot',
   },
 };

@@ -85,14 +85,14 @@ const AuthenticationClient = (function immediate() {
    * @param {ENV} environment - The environment to set
    * @param {String} loginHost - The login host URL
    * @param {String} apiHost - The API host
-   * @param {String} namespace - The Store namespace prefix to use
+   * @param {String} domain - The Store domain prefix to use
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, namespace = config.store.namespace) {
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, domain = config.store.domain) {
     // Setup store instance once
     if (!(store instanceof Store)) {
-      store = new Store(namespace);
+      store = new Store(domain);
     }
     // Configure and return models
     const api = getAPIFor(environment, apiHost);
@@ -129,19 +129,19 @@ const AuthenticationClient = (function immediate() {
      * @param {String} params.clientSecret - The Client secret
      * @param {String} params.loginHost - The login host URL
      * @param {String} params.apiHost - The API host
-     * @param {String} params.namespace - The Store namespace prefix to use
+     * @param {String} params.domain - The Store domain prefix to use
      * @param {ENV} params.environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, namespace }) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, domain }) {
       const key = `${clientId}-${clientSecret}`;
       // Return cached instance
       if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, namespace);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, domain);
       instances.set(key, instance);
       return instance;
     },

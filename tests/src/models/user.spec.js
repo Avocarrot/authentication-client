@@ -23,7 +23,7 @@ function generateError({ name, message }) {
 function getUserInstances() {
   const client = new Client('id', 'secret');
   const api = new API();
-  const store = new Store('namespace');
+  const store = new Store('domain');
   const consumer = new Consumer(client, api);
   const user = new User(store, consumer);
   return {

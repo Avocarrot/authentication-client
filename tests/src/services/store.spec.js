@@ -3,19 +3,19 @@ const sinon = require('sinon');
 const Cookies = require('js-cookie');
 const Store = require('../../../src/services/store');
 
-const store = new Store('namespace');
+const store = new Store('domain');
 const sandbox = sinon.sandbox.create();
 
 /**
  * Store.constructor(options)
  */
 
-test('Store.constructor(options) should throw an error for missing `namespace`', (assert) => {
+test('Store.constructor(options) should throw an error for missing `domain`', (assert) => {
   assert.plan(1);
   try {
     new Store();
   } catch (err) {
-    assert.equals(err.message, 'Missing `namespace`');
+    assert.equals(err.message, 'Missing `domain`');
   }
 });
 
@@ -27,7 +27,7 @@ test('Store.set(key, value) should call Cookies.set(key, value) with normalized 
   assert.plan(1);
   const setSpy = sandbox.spy(Cookies, 'set');
   store.set('key', 'value');
-  assert.deepEquals(setSpy.getCall(0).args, ['namespace_key', 'value', { domain: 'namespace.com' }]);
+  assert.deepEquals(setSpy.getCall(0).args, ['domain_key', 'value', { domain: 'domain.com' }]);
   sandbox.restore();
 });
 
@@ -39,7 +39,7 @@ test('Store.get(key) should call Cookies.get(key) with normalized key', (assert)
   assert.plan(1);
   const getSpy = sandbox.spy(Cookies, 'get');
   store.get('key');
-  assert.deepEquals(getSpy.getCall(0).args, ['namespace_key']);
+  assert.deepEquals(getSpy.getCall(0).args, ['domain_key']);
   sandbox.restore();
 });
 
@@ -51,6 +51,6 @@ test('Store.remove(key) should call Cookies.remove(key) with normalized key', (a
   assert.plan(1);
   const removeSpy = sandbox.spy(Cookies, 'remove');
   store.remove('key');
-  assert.deepEquals(removeSpy.getCall(0).args, ['namespace_key']);
+  assert.deepEquals(removeSpy.getCall(0).args, ['domain_key']);
   sandbox.restore();
 });

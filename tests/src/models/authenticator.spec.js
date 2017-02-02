@@ -12,7 +12,7 @@ const sandbox = sinon.sandbox.create();
  * Instances
  */
 function getAuthenticatorInstances() {
-  const store = new Store('namespace');
+  const store = new Store('domain');
   const api = new API('http://auth.mock.com');
   const client = new Client('id', 'secret');
   const consumer = new Consumer(client, api);
