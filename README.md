@@ -91,7 +91,7 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 
 ### Cross-domain Storage setup
 
-To setup the Hub for cross storage setup use
+To setup the Hub for cross domain storage use: 
 
 ```javascript
 AuthenticationClient.initStorage([
