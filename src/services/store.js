@@ -5,7 +5,6 @@ const assert = require('assert');
  * @see https://github.com/zendesk/cross-storage
  */
 const CrossStorageClient = require('cross-storage').CrossStorageClient;
-const CrossStorageHub = require('cross-storage').CrossStorageHub;
 
 /**
  * Wrapper arround LocalStorage
@@ -26,28 +25,12 @@ class Store {
    * @return {Store}
    *
    */
-  constructor(domain, iframeHub, StorageHub = CrossStorageHub, StorageClient = CrossStorageClient) {
+  constructor(domain, iframeHub, StorageClient = CrossStorageClient) {
     assert(domain, 'Missing `domain`');
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
     /**
-     * Register Hub
-     * - Read access for all subdomains
-     * - Read/Write access for login subdomain
-     * @see https://github.com/zendesk/cross-storage#crossstoragehubinitpermissions
-     */
-    StorageHub.init([
-      {
-        origin: new RegExp(`\.${domain}\.com`, 'g'),
-        allow: ['get'],
-      },
-      {
-        origin: new RegExp(`login\.${domain}\.com`, 'g'),
-        allow: ['get', 'set', 'del'],
-      },
-    ]);
-    /**
-     * Register client
+     * Register CrossStorageClient
      * @see https://github.com/zendesk/cross-storage#new-crossstorageclienturl-opts
      */
     this._storage = new StorageClient(iframeHub);

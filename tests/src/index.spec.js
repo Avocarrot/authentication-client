@@ -4,6 +4,7 @@ const AuthenticationClient = require('../../src/index');
 const Store = require('../../src/services/store');
 const SandboxAPI = require('../../src/api').Sandbox;
 const mockCrossStore = require('../mocks/store');
+const CrossStorageHub = require('cross-storage').CrossStorageHub;
 
 const sandbox = sinon.sandbox.create();
 
@@ -12,7 +13,7 @@ const sandbox = sinon.sandbox.create();
  */
 function generateStoreInstance(...rest) {
   const crossStoreInstances = mockCrossStore(...rest);
-  return new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Hub, crossStoreInstances.Client);
+  return new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Client);
 }
 
 /**
@@ -81,4 +82,23 @@ test('AuthenticationClient.getInstanceFor(client_id, client_secret, environment)
     AuthenticationClient.reset();
     sandbox.restore();
   });
+});
+
+/**
+ * AuthenticationClient.initStorage(options)
+ */
+
+test('AuthenticationClient.initStorage(options) should initialise CrossStorageHub', (assert) => {
+  assert.plan(2);
+  const initStorageStub = sandbox.stub(CrossStorageHub, 'init', () => {});
+  AuthenticationClient.initStorage([{
+    origin: /.*subdomain.domain.com\d$/,
+    allow: ['get', 'set', 'del'],
+  }]);
+  assert.equals(initStorageStub.callCount, 1);
+  assert.deepEquals(initStorageStub.getCall(0).args[0], [{
+    origin: /.*subdomain.domain.com\d$/,
+    allow: ['get', 'set', 'del'],
+  }]);
+  sandbox.restore();
 });

@@ -14,7 +14,7 @@ const sandbox = sinon.sandbox.create();
  */
 function getAuthenticatorInstances(...rest) {
   const crossStoreInstances = mockCrossStore(...rest);
-  const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Hub, crossStoreInstances.Client);
+  const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Client);
   const api = new API('http://auth.mock.com');
   const client = new Client('id', 'secret');
   const consumer = new Consumer(client, api);

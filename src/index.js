@@ -11,6 +11,11 @@ const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
 const PasswordFixtures = require('../fixtures/passwords.json');
 
+/**
+ * CrossStorageHub
+ * @see https://github.com/zendesk/cross-storage
+ */
+const CrossStorageHub = require('cross-storage').CrossStorageHub;
 
 /**
  * Global polyfill for {Promise}
@@ -104,6 +109,17 @@ const AuthenticationClient = (function immediate() {
      *
      */
     Environment: ENV,
+
+    /**
+     * Initializes CrossStorageHub
+     *
+     * @enum
+     * @memberof AuthenticationClient
+     *
+     */
+    initStorage(options) {
+      return CrossStorageHub.init(options);
+    },
 
     /**
      * Creates an Authenticator instance for a clientId, clientSecret combination

@@ -133,7 +133,22 @@ var authClient = AuthenticationClient.getInstanceFor({
   loginHost: 'http://localhost:9000',
   environment: AuthenticationClient.Environment.Sandbox
 })
+
+
 ```
+
+### Cross-domain Storage setup
+
+To setup the Hub for cross storage setup use
+
+```javascript
+AuthenticationClient.initStorage([
+  {origin: /.*subdomain.domain.com\d$/, allow: ['get', 'set', 'del']}
+]);
+
+```
+The corresponding Client is generated automatically
+For more information see https://github.com/zendesk/cross-storage
 
 ### Session operations
 

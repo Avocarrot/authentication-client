@@ -6,12 +6,7 @@ function mockCrossStore(sandbox) {
   const ClientGetStub = sandbox.stub();
   const ClientSetStub = sandbox.stub();
   const ClientDelStub = sandbox.stub();
-  const HubInitStub = sandbox.stub();
-  HubInitStub.returns(Promise.resolve());
   return {
-    Hub: {
-      init: HubInitStub,
-    },
     Client: function CrossStorageClient() {
       return {
         onConnect: () => Promise.resolve(),
@@ -20,7 +15,6 @@ function mockCrossStore(sandbox) {
         del: ClientDelStub,
       };
     },
-    HubInitStub,
     ClientSetStub,
     ClientGetStub,
     ClientDelStub,

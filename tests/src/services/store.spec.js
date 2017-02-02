@@ -26,14 +26,6 @@ test('Store.constructor(options) ', (t) => {
       assert.equals(err.message, 'Missing `iframeHub`');
     }
   });
-  t.test('should initialize Cross Storage Hub', (assert) => {
-    assert.plan(2);
-    const instances = mockCrossStore(sandbox);
-    new Store('domain', 'https://login.domain.com/hub', instances.Hub, instances.Client);
-    assert.equals(instances.HubInitStub.callCount, 1);
-    assert.deepEquals(instances.HubInitStub.getCall(0).args, [[{ allow: ['get'], origin: /.domain.com/g }, { allow: ['get', 'set', 'del'], origin: /:\/\/(login.)?domain.com/g }]]);
-    sandbox.restore();
-  });
 });
 
 /**
@@ -43,7 +35,7 @@ test('Store.constructor(options) ', (t) => {
 test('Store.set(key, value) should call CrossStorage.set(key, value) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
-  const store = new Store('domain', 'https://login.domain.com/hub', instances.Hub, instances.Client);
+  const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
   store.set('key', 'value').then(() => {
     assert.equals(instances.ClientSetStub.callCount, 1);
     assert.deepEquals(instances.ClientSetStub.getCall(0).args, ['domain_key', 'value']);
@@ -58,7 +50,7 @@ test('Store.set(key, value) should call CrossStorage.set(key, value) with normal
 test('Store.get(key) should call CrossStorage.set(key) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
-  const store = new Store('domain', 'https://login.domain.com/hub', instances.Hub, instances.Client);
+  const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
   store.get('key').then(() => {
     assert.equals(instances.ClientGetStub.callCount, 1);
     assert.deepEquals(instances.ClientGetStub.getCall(0).args, ['domain_key']);
@@ -73,7 +65,7 @@ test('Store.get(key) should call CrossStorage.set(key) with normalized key', (as
 test('Store.remove(key) should call CrossStorage.del(key) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
-  const store = new Store('domain', 'https://login.domain.com/hub', instances.Hub, instances.Client);
+  const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
   store.remove('key').then(() => {
     assert.equals(instances.ClientDelStub.callCount, 1);
     assert.deepEquals(instances.ClientDelStub.getCall(0).args, ['domain_key']);

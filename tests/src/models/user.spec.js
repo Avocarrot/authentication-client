@@ -25,7 +25,7 @@ function getUserInstances() {
   const client = new Client('id', 'secret');
   const api = new API();
   const crossStoreInstances = mockCrossStore(sandbox);
-  const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Hub, crossStoreInstances.Client);
+  const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Client);
   const consumer = new Consumer(client, api);
   const user = new User(store, consumer);
   return {
