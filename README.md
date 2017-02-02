@@ -89,6 +89,19 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 }
 ```
 
+### Cross-domain Storage setup
+
+To setup the Hub for cross storage setup use
+
+```javascript
+AuthenticationClient.initStorage([
+  {origin: /.*subdomain.domain.com\d$/, allow: ['get', 'set', 'del']}
+]);
+
+```
+The corresponding Client is generated automatically. For more information see https://github.com/zendesk/cross-storage
+
+
 ### Setup
 
 The library can be instantiated with the following arguments
@@ -136,19 +149,6 @@ var authClient = AuthenticationClient.getInstanceFor({
 
 
 ```
-
-### Cross-domain Storage setup
-
-To setup the Hub for cross storage setup use
-
-```javascript
-AuthenticationClient.initStorage([
-  {origin: /.*subdomain.domain.com\d$/, allow: ['get', 'set', 'del']}
-]);
-
-```
-The corresponding Client is generated automatically. For more information see https://github.com/zendesk/cross-storage
-
 ### Session operations
 
 ```javascript
