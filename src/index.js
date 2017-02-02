@@ -99,7 +99,7 @@ const AuthenticationClient = (function immediate() {
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
     const user = new User(store, consumer);
-    const session = new Session(store, user, loginHost);
+    const session = new Session(user, loginHost);
     const authenticator = new Authenticator(consumer);
     return {
       user,

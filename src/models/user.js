@@ -227,6 +227,17 @@ class User {
     });
   }
 
+  /**
+   * Flushes stored tokens for User (logout)
+   *
+   * @return {Void}
+   *
+   */
+  flush() {
+    this._store.remove('access_token');
+    this._store.remove('refresh_token');
+  }
+
 }
 
 module.exports = User;

@@ -157,7 +157,6 @@ authClient.session.validate();
 
 /**
  * Invalidates session
- * - flushes stored tokens
  * - redirects to `loginHost`
  *
  * @return {Void}
@@ -228,6 +227,15 @@ authClient.user.save()
 authClient.user.authenticateWithToken(accessToken)
   .then((res)  => {/* ... */})
   .catch((err) => {/* ... */});
+
+/**
+ * Flushes stored tokens for User (logout)
+ *
+ * @return {Void}
+ *
+ */
+authClient.user.flush()
+
 
 ```
 

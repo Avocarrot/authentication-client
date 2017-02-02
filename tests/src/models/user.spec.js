@@ -428,3 +428,18 @@ test('User.save() should update User with new data', (assert) => {
   });
   sandbox.restore();
 });
+
+
+/**
+ * User.flush()
+ */
+
+test('User.flush() removes stored tokens for User', (assert) => {
+  assert.plan(3);
+  const instances = getUserInstances();
+  const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => {});
+  instances.user.flush();
+  assert.equals(storeRemoveStub.callCount, 2);
+  assert.equals(storeRemoveStub.getCall(0).args[0], 'access_token');
+  assert.equals(storeRemoveStub.getCall(1).args[0], 'refresh_token');
+});
