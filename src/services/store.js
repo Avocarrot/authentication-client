@@ -38,11 +38,11 @@ class Store {
      */
     StorageHub.init([
       {
-        origin: new RegExp(`.${domain}.com`, 'g'),
+        origin: new RegExp(`\.${domain}\.com`, 'g'),
         allow: ['get'],
       },
       {
-        origin: new RegExp(`://(login.)?${domain}.com`, 'g'),
+        origin: new RegExp(`login\.${domain}\.com`, 'g'),
         allow: ['get', 'set', 'del'],
       },
     ]);
