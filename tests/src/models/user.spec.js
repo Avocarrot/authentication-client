@@ -177,7 +177,7 @@ test('User.authenticate(username, password) should throw an error for', (t) => {
 });
 
 test('User.authenticate(username, password) should store user and token on success', (assert) => {
-  assert.plan(8);
+  assert.plan(9);
   const instances = getUserInstances();
   const storeSetSpy = sandbox.spy();
   const retrieveUserStub = sandbox.stub();
@@ -205,6 +205,13 @@ test('User.authenticate(username, password) should store user and token on succe
     assert.equals(instances.user.firstName, 'John');
     assert.equals(instances.user.lastName, 'Doe');
     assert.equals(res.message, 'Authenticated User');
+    assert.deepEquals(res.data, {
+      email: 'john.doe@mail.com',
+      first_name: 'John',
+      id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+      last_name: 'Doe',
+      publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+    });
   });
   sandbox.restore();
 });
@@ -225,7 +232,7 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
   });
 
   t.test('store user and token on success', (assert) => {
-    assert.plan(7);
+    assert.plan(8);
     const instances = getUserInstances();
     const storeSetSpy = sandbox.spy();
     const retrieveUserStub = sandbox.stub();
@@ -246,12 +253,19 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
       assert.equals(instances.user.firstName, 'John');
       assert.equals(instances.user.lastName, 'Doe');
       assert.equals(res.message, 'Authenticated User');
+      assert.deepEquals(res.data, {
+        email: 'john.doe@mail.com',
+        first_name: 'John',
+        id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+        last_name: 'Doe',
+        publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+      });
     });
     sandbox.restore();
   });
 
   t.test('successfully refresh tokens on `invalid_grant` failure', (assert) => {
-    assert.plan(13);
+    assert.plan(14);
     const instances = getUserInstances();
     const storeSetSpy = sandbox.spy();
     const storeRemoveSpy = sandbox.spy();
@@ -287,6 +301,13 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
       assert.equals(instances.user.firstName, 'John');
       assert.equals(instances.user.lastName, 'Doe');
       assert.equals(res.message, 'Authenticated User');
+      assert.deepEquals(res.data, {
+        email: 'john.doe@mail.com',
+        first_name: 'John',
+        id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+        last_name: 'Doe',
+        publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+      });
     });
     sandbox.restore();
   });
@@ -355,17 +376,22 @@ test('User.create(email, password, firstName, lastName) should reject invalid pa
 });
 
 test('User.create(email, password, firstName, lastName) should set User data on success', (assert) => {
-  assert.plan(6);
+  assert.plan(11);
   const response = Object.assign(UserMocks.User, {});
   const instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
   instances.user.create('john.doe@mail.com', 'password123456', 'firstName', 'lastName').then((res) => {
+    assert.equals(res.message, 'Created User');
     assert.equals(instances.user.id, response.id);
     assert.equals(instances.user.publisherId, response.publisher_id);
     assert.equals(instances.user.firstName, response.first_name);
     assert.equals(instances.user.lastName, response.last_name);
     assert.equals(instances.user.email, response.email);
-    assert.equals(res.message, 'Created User');
+    assert.equals(res.data.first_name, response.first_name);
+    assert.equals(res.data.last_name, response.last_name);
+    assert.equals(res.data.email, response.email);
+    assert.ok(res.data.id);
+    assert.ok(res.data.publisher_id);
   });
   sandbox.restore();
 });
@@ -389,13 +415,14 @@ test('User.save() should update User with new data', (assert) => {
   const instances = getUserInstances();
   sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User, {})));
   instances.user.create('john.doe@mail.com', 'password123456').then(() => {
-    instances.user.email = 'john.doe@mail.com';
-    instances.user.lastName = 'John';
-    instances.user.firstName = 'Doe';
+    // Update user details
+    instances.user.firstName = 'Foo';
+    instances.user.lastName = 'Bar';
+    // Stub token retrieval
     sandbox.stub(instances.store, 'get', () => 'bearer');
     const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
     instances.user.save().then((res) => {
-      assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { email: 'john.doe@mail.com', firstName: 'Doe', lastName: 'John' }]);
+      assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { firstName: 'Foo', lastName: 'Bar' }]);
       assert.equals(res.message, 'Updated User model');
     });
   });

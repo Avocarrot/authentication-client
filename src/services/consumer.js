@@ -128,7 +128,6 @@ class Consumer {
    *
    * @param {String} userId - The User id
    * @param {String} token - The `Bearer` token
-   * @param {String} options.email - The email to use
    * @param {String} options.firstName - The first ame to use
    * @param {String} options.lastName - The last name to use
    * @return {Promise}

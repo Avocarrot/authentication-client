@@ -115,10 +115,11 @@ class User {
       return Promise.reject(new Error('Cannot save a non-existent User'));
     }
     return this._consumer.updateUser(this.id, this.bearer, {
-      email: this._email,
       firstName: this._firstName,
       lastName: this._lastName,
-    }).then(() => Promise.resolve({ message: 'Updated User model' }));
+    }).then(() => Promise.resolve({
+      message: 'Updated User model',
+    }));
   }
 
   /**
@@ -144,7 +145,10 @@ class User {
       this._firstName = data.first_name;
       this._lastName = data.last_name;
       this._email = data.email;
-      return Promise.resolve({ message: 'Created User' });
+      return Promise.resolve({
+        data,
+        message: 'Created User',
+      });
     });
   }
 
@@ -172,7 +176,10 @@ class User {
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
-      return Promise.resolve({ message: 'Authenticated User' });
+      return Promise.resolve({
+        data,
+        message: 'Authenticated User',
+      });
     });
   }
 
@@ -213,7 +220,10 @@ class User {
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
-      return Promise.resolve({ message: 'Authenticated User' });
+      return Promise.resolve({
+        data,
+        message: 'Authenticated User',
+      });
     });
   }
 
