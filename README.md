@@ -147,8 +147,7 @@ AuthenticationClient.initStorage([
 ]);
 
 ```
-The corresponding Client is generated automatically
-For more information see https://github.com/zendesk/cross-storage
+The corresponding Client is generated automatically. For more information see https://github.com/zendesk/cross-storage
 
 ### Session operations
 
