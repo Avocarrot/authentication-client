@@ -166,10 +166,10 @@ class User {
     return this._consumer.retrieveToken(username, password).then((res) => {
       const { access_token, refresh_token } = res;
       // Store tokens
-      this._store.set('access_token', access_token);
-      this._store.set('refresh_token', refresh_token);
+      return this._store.set('access_token', access_token)
+        .then(() => this._store.set('refresh_token', refresh_token))
+        .then(() => this._consumer.retrieveUser(access_token));
       // Retrieve user data
-      return this._consumer.retrieveUser(access_token);
     }).then((data) => {
       this._id = data.id;
       this._publisherId = data.publisher_id;

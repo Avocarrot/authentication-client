@@ -1,11 +1,12 @@
 const test = require('tape');
+const sinon = require('sinon');
 const Session = require('../../../src/models/session');
 const User = require('../../../src/models/user');
 const Client = require('../../../src/models/client');
 const Store = require('../../../src/services/store');
 const API = require('../../../src/api').Sandbox;
 const Consumer = require('../../../src/services/consumer');
-const sinon = require('sinon');
+const mockCrossStore = require('../../mocks/store');
 
 const sandbox = sinon.sandbox.create();
 
@@ -13,7 +14,8 @@ const sandbox = sinon.sandbox.create();
  * Instances
  */
 function getSessionInstances(redirectFn, pageURL) {
-  const store = new Store('domain');
+  const crossStoreInstances = mockCrossStore(sandbox);
+  const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Hub, crossStoreInstances.Client);
   const api = new API('http://auth.mock.com');
   const client = new Client('id', 'secret');
   const consumer = new Consumer(client, api);
@@ -28,7 +30,6 @@ function getSessionInstances(redirectFn, pageURL) {
     session,
   };
 }
-
 
 /**
  * Session.constructor(options)

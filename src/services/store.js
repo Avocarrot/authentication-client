@@ -1,10 +1,11 @@
 const assert = require('assert');
 
 /**
- * Wrapper around `store`
- * @see https://github.com/marcuswestin/store.js
+ * Wrapper around `cross-storage`
+ * @see https://github.com/zendesk/cross-storage
  */
-const LocalStorage = require('store');
+const CrossStorageClient = require('cross-storage').CrossStorageClient;
+const CrossStorageHub = require('cross-storage').CrossStorageHub;
 
 /**
  * Wrapper arround LocalStorage
@@ -17,13 +18,39 @@ class Store {
    * Initializes Store
    *
    * @constructor
-   * @param {String} domain - The domain where all values will be attached
+   * @param {String} domain - The domain under which all values will be attached
+   * @param {String} iframeHub - The iframe URL where all the values will be attached
+   * @param {Object} iframeHub - The iframe URL where all the values will be attached
+   * @param {Object} StorageHub - The CrossStorageHub used for cross domain storage
+   * @param {Object} StorageClient - The CrossStorageClient used for cross domain storage
    * @return {Store}
    *
    */
-  constructor(domain) {
+  constructor(domain, iframeHub, StorageHub = CrossStorageHub, StorageClient = CrossStorageClient) {
     assert(domain, 'Missing `domain`');
+    assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
+    /**
+     * Register Hub
+     * - Read access for all subdomains
+     * - Read/Write access for login subdomain
+     * @see https://github.com/zendesk/cross-storage#crossstoragehubinitpermissions
+     */
+    StorageHub.init([
+      {
+        origin: new RegExp(`.${domain}.com`, 'g'),
+        allow: ['get'],
+      },
+      {
+        origin: new RegExp(`://(login.)?${domain}.com`, 'g'),
+        allow: ['get', 'set', 'del'],
+      },
+    ]);
+    /**
+     * Register client
+     * @see https://github.com/zendesk/cross-storage#new-crossstorageclienturl-opts
+     */
+    this._storage = new StorageClient(iframeHub);
   }
 
   /**
@@ -46,7 +73,7 @@ class Store {
    *
    */
   set(key, value) {
-    LocalStorage.set(this._normalizeKey(key), value);
+    return this._storage.onConnect().then(() => this._storage.set(this._normalizeKey(key), value));
   }
 
   /**
@@ -57,7 +84,7 @@ class Store {
    *
    */
   get(key) {
-    return LocalStorage.get(this._normalizeKey(key));
+    return this._storage.onConnect().then(() => this._storage.get(this._normalizeKey(key)));
   }
 
   /**
@@ -67,10 +94,7 @@ class Store {
    *
    */
   remove(key) {
-    if (typeof this.get(key) === 'undefined') {
-      return;
-    }
-    LocalStorage.remove(this._normalizeKey(key));
+    return this._storage.onConnect().then(() => this._storage.del(this._normalizeKey(key)));
   }
 
 }
