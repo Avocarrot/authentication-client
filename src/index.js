@@ -40,15 +40,6 @@ const AuthenticationClient = (function immediate() {
   });
 
   /**
-   * Store instance
-   *
-   * @private
-   * @return {Store}
-   *
-   */
-  let store;
-
-  /**
    * Cached instances
    *
    * @private
@@ -85,16 +76,11 @@ const AuthenticationClient = (function immediate() {
    * @param {ENV} environment - The environment to set
    * @param {String} loginHost - The login host URL
    * @param {String} apiHost - The API host
-   * @param {String} domain - The Store domain prefix to use
+   * @param {Store} store - The Store instance
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, domain = config.store.domain) {
-    // Setup store instance once
-    if (!(store instanceof Store)) {
-      store = new Store(domain);
-    }
-    // Configure and return models
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, store) {
     const api = getAPIFor(environment, apiHost);
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
@@ -129,19 +115,19 @@ const AuthenticationClient = (function immediate() {
      * @param {String} params.clientSecret - The Client secret
      * @param {String} params.loginHost - The login host URL
      * @param {String} params.apiHost - The API host
-     * @param {String} params.domain - The Store domain prefix to use
+     * @param {Store} params.store - The Store instance
      * @param {ENV} params.environment - The environment to set
      * @return {Authenticator}
      *
      */
-    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, domain }) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, store = new Store(config.store.domain, config.store.iframeHub) }) {
       const key = `${clientId}-${clientSecret}`;
       // Return cached instance
       if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, domain);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, store);
       instances.set(key, instance);
       return instance;
     },
