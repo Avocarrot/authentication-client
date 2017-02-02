@@ -1,10 +1,10 @@
 const assert = require('assert');
 
 /**
- * Wrapper around `js-cookie`
- * @see https://github.com/js-cookie/js-cookie
+ * Wrapper around `store`
+ * @see https://github.com/marcuswestin/store.js
  */
-const Cookie = require('js-cookie');
+const LocalStorage = require('store');
 
 /**
  * Wrapper arround LocalStorage
@@ -46,7 +46,7 @@ class Store {
    *
    */
   set(key, value) {
-    Cookie.set(this._normalizeKey(key), value, { domain: `${this._domain}.com` });
+    LocalStorage.set(this._normalizeKey(key), value);
   }
 
   /**
@@ -57,7 +57,7 @@ class Store {
    *
    */
   get(key) {
-    return Cookie.get(this._normalizeKey(key));
+    return LocalStorage.get(this._normalizeKey(key));
   }
 
   /**
@@ -67,7 +67,7 @@ class Store {
    *
    */
   remove(key) {
-    Cookie.remove(this._normalizeKey(key));
+    LocalStorage.remove(this._normalizeKey(key));
   }
 
 }
