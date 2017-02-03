@@ -96,6 +96,7 @@ class User {
    *
    */
   get bearer() {
+    window.console.log('user get bearer');
     return this._store.get('access_token');
   }
   set bearer(accessToken) {

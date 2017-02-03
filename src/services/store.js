@@ -23,6 +23,10 @@ class Store {
     this._domain = domain;
     this._iframeHub = iframeHub;
     this._storage = new StorageClientClass(iframeHub);
+    window.console.log('Store - StorageClientClass', StorageClientClass);
+    window.console.log('Store - iframeHub', iframeHub);
+    window.console.log('Store - domain', domain);
+    window.console.log('this._storage', this._storage);
   }
 
   /**

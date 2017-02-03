@@ -35,8 +35,12 @@ class StorageClient {
    * @private
    * @return {Promise}
    */
+  /* eslint-disable */
   onConnect() {
+    window.console.log('StorageClient .onConnect()');
     if (!this._instance) {
+      window.console.log('this._iframeHub', this._iframeHub);
+      window.console.log('this._CrossStorageClientClass', this._CrossStorageClientClass);
       this._instance = new this._CrossStorageClientClass(this._iframeHub);
     }
     return this._instance.onConnect();
@@ -49,6 +53,7 @@ class StorageClient {
    * @return {Promise}
    */
   get(...rest) {
+    window.console.log('StorageClient .get()', ...rest);
     return this.onConnect().then(() => this._instance.get(...rest));
   }
 
@@ -59,6 +64,7 @@ class StorageClient {
    * @return {Promise}
    */
   set(...rest) {
+    window.console.log('StorageClient .set()', ...rest);
     return this.onConnect().then(() => this._instance.set(...rest));
   }
 
@@ -69,6 +75,7 @@ class StorageClient {
    * @return {Promise}
    */
   del(...rest) {
+    window.console.log('StorageClient .del()', ...rest);
     return this.onConnect().then(() => this._instance.del(...rest));
   }
 
