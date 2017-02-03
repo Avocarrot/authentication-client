@@ -290,10 +290,7 @@ authClient.authenticator.resetPassword(token, password)
 ---
 
 ## :warning: Bower Setup
- Currently the `dist` directory is commited and exposes through the Bower config, to support [Avocarrot dashboard integration](https://github.com/avocarrot/avocarrot-dashboard).
-Once the dashboard is deprecated the `dist` directory can be added to the `.gitignore` list and the `bower.json` config can be removed.
-
-
+Currently the `dist` directory is commited and exposes through the Bower config, to support a deprecated app integration.
 ---
 
 ## Built With
