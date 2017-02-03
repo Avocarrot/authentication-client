@@ -1,6 +1,5 @@
 const assert = require('assert');
-const CrossStorageClient = require('cross-storage').CrossStorageClient;
-
+const StorageClient = require('./storage-client');
 
 /**
  * @class Store
@@ -14,16 +13,16 @@ class Store {
    * @param {String} domain - The domain under which all values will be attached
    * @param {String} iframeHub - The iframe URL where all the values will be attached
    * @param {Object} iframeHub - The iframe URL where all the values will be attached
-   * @param {Class} CrossStorageClientClass - The CrossStorageClient Class to be instantiated
+   * @param {Class} StorageClientClass - The CrossStorageClient Class to be instantiated
    * @return {Store}
    *
    */
-  constructor(domain, iframeHub, CrossStorageClientClass = CrossStorageClient) {
+  constructor(domain, iframeHub, StorageClientClass = StorageClient) {
     assert(domain, 'Missing `domain`');
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
     this._iframeHub = iframeHub;
-    this._storage = new CrossStorageClientClass(iframeHub);
+    this._storage = new StorageClientClass(iframeHub);
   }
 
   /**
