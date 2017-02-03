@@ -1,14 +1,8 @@
 const assert = require('assert');
-
-/**
- * Wrapper around `cross-storage`
- * @see https://github.com/zendesk/cross-storage
- */
 const CrossStorageClient = require('cross-storage').CrossStorageClient;
 
+
 /**
- * Wrapper arround LocalStorage
- *
  * @class Store
  */
 class Store {
@@ -20,20 +14,16 @@ class Store {
    * @param {String} domain - The domain under which all values will be attached
    * @param {String} iframeHub - The iframe URL where all the values will be attached
    * @param {Object} iframeHub - The iframe URL where all the values will be attached
-   * @param {Object} StorageHub - The CrossStorageHub used for cross domain storage
-   * @param {Object} StorageClient - The CrossStorageClient used for cross domain storage
+   * @param {Class} CrossStorageClientClass - The CrossStorageClient Class to be instantiated
    * @return {Store}
    *
    */
-  constructor(domain, iframeHub, StorageClient = CrossStorageClient) {
+  constructor(domain, iframeHub, CrossStorageClientClass = CrossStorageClient) {
     assert(domain, 'Missing `domain`');
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
-    /**
-     * Register CrossStorageClient
-     * @see https://github.com/zendesk/cross-storage#new-crossstorageclienturl-opts
-     */
-    this._storage = new StorageClient(iframeHub);
+    this._iframeHub = iframeHub;
+    this._storage = new CrossStorageClientClass(iframeHub);
   }
 
   /**
