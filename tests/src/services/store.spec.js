@@ -32,7 +32,7 @@ test('Store.constructor(options) ', (t) => {
  * Store.set(key, value)
  */
 
-test('Store.set(key, value) should call CrossStorage.set(key, value) with normalized key', (assert) => {
+test('Store.set(key, value) should call StorageClient.set(key, value) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
@@ -47,11 +47,11 @@ test('Store.set(key, value) should call CrossStorage.set(key, value) with normal
  * Store.get(key)
  */
 
-test('Store.get(key) should call CrossStorage.set(key) with normalized key', (assert) => {
+test('Store.get(key) should call StorageClient.set(key) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
-  store.get('key').then(() => {
+  store.get('key', 'value').then(() => {
     assert.equals(instances.ClientGetStub.callCount, 1);
     assert.deepEquals(instances.ClientGetStub.getCall(0).args, ['domain_key']);
   });
@@ -62,7 +62,7 @@ test('Store.get(key) should call CrossStorage.set(key) with normalized key', (as
  * Store.remove(key)
  */
 
-test('Store.remove(key) should call CrossStorage.del(key) with normalized key', (assert) => {
+test('Store.remove(key) should call StorageClient.del(key) with normalized key', (assert) => {
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);

@@ -45,7 +45,7 @@ class Store {
    *
    */
   set(key, value) {
-    return this._storage.onConnect().then(() => this._storage.set(this._normalizeKey(key), value));
+    return this._storage.set(this._normalizeKey(key), value);
   }
 
   /**
@@ -56,7 +56,7 @@ class Store {
    *
    */
   get(key) {
-    return this._storage.onConnect().then(() => this._storage.get(this._normalizeKey(key)));
+    return this._storage.get(this._normalizeKey(key));
   }
 
   /**
@@ -66,7 +66,7 @@ class Store {
    *
    */
   remove(key) {
-    return this._storage.onConnect().then(() => this._storage.del(this._normalizeKey(key)));
+    return this._storage.del(this._normalizeKey(key));
   }
 
 }
