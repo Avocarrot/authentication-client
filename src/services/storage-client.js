@@ -23,7 +23,7 @@ class StorageClient {
     assert(iframeHub, 'Missing `iframeHub`');
     this._iframeHub = iframeHub;
     this._CrossStorageClientClass = CrossStorageClientClass;
-    this._instance = null;
+    this._instance = undefined;
   }
 
   /**
@@ -34,8 +34,7 @@ class StorageClient {
    * @return {Promise}
    */
   onConnect() {
-    const clientIsInitialized = this._instance instanceof this._CrossStorageClientClass;
-    if (!clientIsInitialized) {
+    if (!this._instance) {
       this._instance = new this._CrossStorageClientClass(this._iframeHub);
     }
     return this._instance.onConnect();

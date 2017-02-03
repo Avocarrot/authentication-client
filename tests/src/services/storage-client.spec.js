@@ -22,11 +22,13 @@ test('StorageClient.constructor() should throw an error for missing `iframeHub`'
  * StorageClient.onConnect()
  */
 
-test('StorageClient.onConnect() should generate storage instance', (assert) => {
-  assert.plan(1);
+test('StorageClient.onConnect() should generate storage instance once', (assert) => {
+  assert.plan(3);
   const instances = mockCrossStore(sandbox);
   const storageClient = new StorageClient('https://login.domain.com/hub', instances.Client);
-  storageClient.onConnect().then(() => {
-    assert.equals(instances.ClientConncectStub.callCount, 1);
+  assert.equals(storageClient._instance, undefined);
+  storageClient.onConnect().then(() => storageClient.onConnect()).then(() => {
+    assert.notEquals(storageClient._instance, null);
+    assert.equals(instances.ClientConncectStub.callCount, 2);
   });
 });
