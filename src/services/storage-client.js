@@ -35,9 +35,9 @@ class StorageClient {
    * @private
    * @return {Promise}
    */
-  /* eslint-disable */
   onConnect() {
     if (!this._instance) {
+      this._instance = new this._CrossStorageClientClass(this._iframeHub);
     }
     return this._instance.onConnect();
   }
