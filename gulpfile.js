@@ -36,7 +36,7 @@ function bundle() {
     })
     .pipe(source(config.outputFile))
     .pipe(buffer())
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest(config.outputDir))
 }
 
