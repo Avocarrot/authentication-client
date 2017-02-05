@@ -24,7 +24,7 @@ class StorageClient {
     assert(iframeHub, 'Missing `iframeHub`');
     this._iframeHub = iframeHub;
     this._CrossStorageClientClass = CrossStorageClientClass;
-    this._instance = undefined;
+    this._instance = new CrossStorageClient(this._iframeHub);
   }
 
   /**
