@@ -25,6 +25,8 @@ class StorageClient {
     this._iframeHub = iframeHub;
     this._CrossStorageClientClass = CrossStorageClientClass;
     this._instance = new CrossStorageClient(this._iframeHub);
+    console.log('StorageClient: CrossStorageClientClass', CrossStorageClientClass);
+    console.log('StorageClient: this._instance', this._instance);
   }
 
   /**
@@ -36,9 +38,13 @@ class StorageClient {
    * @return {Promise}
    */
   onConnect() {
+    console.log('onConnect 1');
     if (!this._instance) {
       this._instance = new this._CrossStorageClientClass(this._iframeHub);
+      console.log('onConnect 2');
+      console.log(this._instance);
     }
+    console.log('onConnect 3');
     return this._instance.onConnect();
   }
 
