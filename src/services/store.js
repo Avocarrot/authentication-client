@@ -22,6 +22,7 @@ class Store {
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
     this._iframeHub = iframeHub;
+    console.log('Store:StorageClientClass', StorageClientClass);
     this._storage = new StorageClientClass(iframeHub);
   }
 
