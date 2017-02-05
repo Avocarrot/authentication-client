@@ -1,12 +1,12 @@
 module.exports = {
   api: {
-    host: 'https://auth.avocarrot.com',
+    host: '//auth.avocarrot.com',
   },
   login: {
-    host: 'https://login.avocarrot.com',
+    host: '//login.avocarrot.com',
   },
   store: {
     domain: 'avocarrot',
-    iframeHub: 'https://login.avocarrot.com/hub/index.html',
+    iframeHub: '//login.avocarrot.com/hub/index.html',
   },
 };
