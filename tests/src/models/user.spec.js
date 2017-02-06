@@ -97,13 +97,24 @@ test('User.publisherId should be read-only', (assert) => {
  * User.email
  */
 
-test('User.email should be read-write', (assert) => {
+test('User.email should be read-only', (assert) => {
   assert.plan(2);
   const instances = getUserInstances();
+  assert.equals(instances.user.email, undefined);
   instances.user.email = 'john.doe@mail.com';
-  assert.equals(instances.user.email, 'john.doe@mail.com');
-  instances.user.email = null;
-  assert.equals(instances.user.email, 'john.doe@mail.com');
+  assert.equals(instances.user.email, undefined);
+});
+
+/**
+ * User.bearer
+ */
+
+test('User.bearer should be read-only', (assert) => {
+  assert.plan(2);
+  const instances = getUserInstances();
+  assert.equals(instances.user.bearer, undefined);
+  instances.user.bearer = '123456789';
+  assert.equals(instances.user.bearer, undefined);
 });
 
 /**
@@ -130,26 +141,6 @@ test('User.lastName should be read-write', (assert) => {
   assert.equals(instances.user.lastName, 'Doe');
   instances.user.lastName = null;
   assert.equals(instances.user.lastName, 'Doe');
-});
-
-/**
- * User.bearer
- */
-
-test('User.bearer should be read-write', (assert) => {
-  assert.plan(3);
-  const instances = getUserInstances();
-  const storeSetStub = sandbox.stub(instances.store, 'set', () => {});
-  sandbox.stub(instances.store, 'get', () => 'mock_access_token');
-  // Assert Store.get()
-  assert.equals(instances.user.bearer, 'mock_access_token');
-  instances.user.bearer = 'new_access_token';
-  // Assert Store.set()
-  assert.deepEquals(storeSetStub.getCall(0).args, ['access_token', 'new_access_token']);
-  instances.user.bearer = null;
-  // Assert Store.set() with no value
-  assert.deepEquals(storeSetStub.callCount, 1);
-  sandbox.restore();
 });
 
 /**
@@ -218,6 +209,40 @@ test('User.authenticate(username, password) should store user and token on succe
   });
   sandbox.restore();
 });
+
+
+/**
+ * User.syncWithStore()
+ */
+
+test('User.syncWithStore() should synrchronize data with Store', (assert) => {
+  assert.plan(8);
+  const instances = getUserInstances();
+  const storeGetStub = sandbox.stub();
+  const retrieveUserStub = sandbox.stub();
+  storeGetStub.returns(Promise.resolve('rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'));
+  retrieveUserStub.returns(Promise.resolve({
+    id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'john.doe@mail.com',
+  }));
+  instances.store.get = storeGetStub;
+  instances.consumer.retrieveUser = retrieveUserStub;
+  instances.user.syncWithStore().then((res) => {
+    assert.equals(res.message, 'Synced User model with Store');
+    assert.equals(instances.user.bearer, 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
+    assert.equals(instances.user.id, '44d2c8e0-762b-4fa5-8571-097c81c3130d');
+    assert.equals(instances.user.publisherId, '55f5c8e0-762b-4fa5-8571-197c8183130a');
+    assert.equals(instances.user.email, 'john.doe@mail.com');
+    assert.equals(instances.user.firstName, 'John');
+    assert.equals(instances.user.lastName, 'Doe');
+    assert.equals(instances.user._isDirty, false);
+  });
+  sandbox.restore();
+});
+
 
 /**
  * User.authenticateWithToken(accessToken, refreshToken)
@@ -422,37 +447,73 @@ test('User.save() should not allow saving an unauthenticated User', (assert) => 
 });
 
 test('User.save() should update User with new data', (assert) => {
-  assert.plan(2);
+  assert.plan(4);
   const instances = getUserInstances();
-  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(Object.assign(UserMocks.User, {})));
-  instances.user.create('john.doe@mail.com', 'password123456').then(() => {
-    // Update user details
-    instances.user.firstName = 'Foo';
-    instances.user.lastName = 'Bar';
-    // Stub token retrieval
-    sandbox.stub(instances.store, 'get', () => 'bearer');
-    const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
-    instances.user.save().then((res) => {
-      assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'bearer', { firstName: 'Foo', lastName: 'Bar' }]);
-      assert.equals(res.message, 'Updated User model');
-    });
+  const userData = Object.assign(UserMocks.User, {});
+  instances.user._id = userData.id;
+  instances.user._publisherId = userData.publisher_id;
+  instances.user._firstName = userData.first_name;
+  instances.user._lastName = userData.last_name;
+  instances.user._email = userData.email;
+  instances.user._isDirty = true;
+  instances.user._bearer = TokenMocks.PaswordGrant.access_token;
+  // Stub consumer
+  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+  // Update data
+  instances.user.firstName = 'Foo';
+  instances.user.lastName = 'Bar';
+  instances.user.save().then((res) => {
+    assert.equals(instances.user._isDirty, false);
+    assert.equals(updateUserStub.callCount, 1);
+    assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7', { firstName: 'Foo', lastName: 'Bar' }]);
+    assert.equals(res.message, 'Updated User model');
   });
   sandbox.restore();
 });
 
+test('User.save() should skip update of synced User data', (assert) => {
+  assert.plan(3);
+  const instances = getUserInstances();
+  const userData = Object.assign(UserMocks.User, {});
+  instances.user._id = userData.id;
+  instances.user._publisherId = userData.publisher_id;
+  instances.user._firstName = userData.first_name;
+  instances.user._lastName = userData.last_name;
+  instances.user._email = userData.email;
+  instances.user._bearer = TokenMocks.PaswordGrant.access_token;
+  // Stub consumer
+  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+  // Update data
+  instances.user.firstName = 'Foo';
+  instances.user.lastName = 'Bar';
+  // Force isDirty flag
+  instances.user._isDirty = false;
+  instances.user.save().then((res) => {
+    assert.equals(instances.user._isDirty, false);
+    assert.equals(updateUserStub.callCount, 0);
+    assert.equals(res.message, 'No User model changes to sync');
+  });
+  sandbox.restore();
+});
 
 /**
  * User.flush()
  */
 
-test('User.flush() removes stored tokens for User', (assert) => {
-  assert.plan(4);
+test('User.flush() removes user data', (assert) => {
+  assert.plan(10);
   const instances = getUserInstances();
-  const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => {});
+  const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => Promise.resolve({}));
   instances.user.flush().then((res) => {
-    assert.equals(res.message, 'Flushed User');
-    assert.equals(storeRemoveStub.callCount, 2);
-    assert.equals(storeRemoveStub.getCall(0).args[0], 'access_token');
-    assert.equals(storeRemoveStub.getCall(1).args[0], 'refresh_token');
+    assert.equals(res.message, 'Flushed User data');
+    assert.equals(storeRemoveStub.callCount, 1);
+    assert.deepEquals(storeRemoveStub.getCall(0).args, ['access_token', 'refresh_token']);
+    assert.equals(instances.user.bearer, undefined);
+    assert.equals(instances.user.id, undefined);
+    assert.equals(instances.user.publisherId, undefined);
+    assert.equals(instances.user.firstName, undefined);
+    assert.equals(instances.user.lastName, undefined);
+    assert.equals(instances.user.email, undefined);
+    assert.equals(instances.user._isDirty, false);
   });
 });

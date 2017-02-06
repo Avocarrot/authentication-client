@@ -57,6 +57,21 @@ test('Session.constructor(options) should throw an error for', (t) => {
 });
 
 /**
+ * Session.initialize()
+ */
+
+test('Session.initialize() should initialize session', (assert) => {
+  assert.plan(1);
+  const instances = getSessionInstances();
+  const syncWithStoreStub = sandbox.stub();
+  syncWithStoreStub.returns(Promise.resolve());
+  instances.user.syncWithStore = syncWithStoreStub;
+  instances.session.initialize().then(() => {
+    assert.equals(syncWithStoreStub.callCount, 1);
+  });
+});
+
+/**
  * Session.isValid
  */
 
@@ -64,16 +79,16 @@ test('Session.isValid() should return', (t) => {
   t.test('true for authenticated User', (assert) => {
     assert.plan(1);
     const instances = getSessionInstances();
-    sandbox.stub(instances.store, 'get', () => undefined);
-    assert.equals(instances.session.isValid, false);
+    instances.user._bearer = 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7';
+    assert.equals(instances.session.isValid, true);
     sandbox.restore();
   });
 
   t.test('false for non authenticated User', (assert) => {
     assert.plan(1);
     const instances = getSessionInstances();
-    sandbox.stub(instances.store, 'get', () => 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
-    assert.equals(instances.session.isValid, true);
+    instances.user._bearer = undefined;
+    assert.equals(instances.session.isValid, false);
     sandbox.restore();
   });
 });

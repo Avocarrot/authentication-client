@@ -39,6 +39,18 @@ class Session {
   }
 
   /**
+   * Initializes session for user (if defined) in Store
+   * Note: This should be the FIRST call before attempting any other session operations
+   *
+   * @return {Promise}
+   *
+   */
+  initialize() {
+    return this._user.syncWithStore();
+  }
+
+
+  /**
    * Invalidates Session
    *
    * @return {Void}
