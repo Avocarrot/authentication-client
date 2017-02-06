@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "src/index.js",
@@ -31,6 +31,7 @@
     "eslint-plugin-react": "^6.9.0",
     "gulp": "~3.8.10",
     "gulp-jsdoc3": "^1.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-tape": "0.0.9",
     "gulp-uglify": "^2.0.0",
     "lodash": "^2.4.1",

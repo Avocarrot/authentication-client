@@ -12,12 +12,18 @@ var jsdoc = require('gulp-jsdoc3');
 var tapSpec = require('tap-spec');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
+var rename = require('gulp-rename');
 
 var config = {
   entryFile: './src/index.js',
   outputDir: './dist/',
-  outputFile: 'index.js'
+  outputFile: 'index.js',
+  outputFileCompressed: 'index.min.js'
 };
+
+/**
+ * Build bundle
+ */
 
 var bundler;
 function getBundler() {
@@ -36,14 +42,40 @@ function bundle() {
     })
     .pipe(source(config.outputFile))
     .pipe(buffer())
+    .pipe(gulp.dest(config.outputDir))
     .pipe(uglify())
+    .pipe(rename(config.outputFileCompressed))
     .pipe(gulp.dest(config.outputDir))
 }
 
+gulp.task('build-persistent', ['clean'], function() {
+  return bundle();
+});
+
+gulp.task('build', ['build-persistent'], function() {
+
+  process.exit(0);
+});
+
+/**
+ * Cleanup directory
+ */
 gulp.task('clean', function(cb){
   rimraf(config.outputDir, cb);
 });
 
+/**
+ * Watch changes
+ */
+gulp.task('watch', ['build-persistent'], function() {
+  getBundler().on('update', function() {
+    gulp.start('build-persistent');
+  });
+});
+
+/**
+ * Run tests
+ */
 gulp.task('test', function(){
   return gulp.src('tests/**/*.js')
     .pipe(tape({
@@ -51,20 +83,9 @@ gulp.task('test', function(){
     }));
 });
 
-gulp.task('build-persistent', ['clean'], function() {
-  return bundle();
-});
-
-gulp.task('build', ['build-persistent'], function() {
-  process.exit(0);
-});
-
-gulp.task('watch', ['build-persistent'], function() {
-  getBundler().on('update', function() {
-    gulp.start('build-persistent');
-  });
-});
-
+/**
+ * Build documentation
+ */
 gulp.task('docs', function (cb) {
   var jsdoc_config = require('./jsdoc.json');
   gulp.src(['README.md', './src/**/*.js'], { read: false })
