@@ -60,13 +60,14 @@ class Store {
   }
 
   /**
-   * Removes key value pair if it exists
+   * Removes one or multiple value pair if they exists
    *
-   * @param {String} key - The key to use
+   * @param {String|Array} keys - The key(s) to use
    *
    */
-  remove(key) {
-    return this._storage.del(this._normalizeKey(key));
+  remove(...keys) {
+    const normalizedKeys = keys.map(key => this._normalizeKey(key));
+    return this._storage.del(...normalizedKeys);
   }
 
 }

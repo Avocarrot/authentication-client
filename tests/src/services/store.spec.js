@@ -66,9 +66,9 @@ test('Store.remove(key) should call StorageClient.del(key) with normalized key',
   assert.plan(2);
   const instances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', instances.Client);
-  store.remove('key').then(() => {
+  store.remove('key1', 'key2').then(() => {
     assert.equals(instances.ClientDelStub.callCount, 1);
-    assert.deepEquals(instances.ClientDelStub.getCall(0).args, ['domain_key']);
+    assert.deepEquals(instances.ClientDelStub.getCall(0).args, ['domain_key1', 'domain_key2']);
   });
   sandbox.restore();
 });

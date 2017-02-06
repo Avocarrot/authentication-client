@@ -22,6 +22,13 @@ class User {
     assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
     this._store = store;
     this._consumer = consumer;
+    this._bearer = undefined;
+    this._id = undefined;
+    this._publisherId = undefined;
+    this._firstName = undefined;
+    this._lastName = undefined;
+    this._email = undefined;
+    this._isDirty = false;
   }
 
   /**
@@ -47,16 +54,21 @@ class User {
   /**
    * Returns User email
    *
-   * @return {String} [read-write] email
+   * @return {String} [read-only] email
    *
    */
   get email() {
     return this._email;
   }
-  set email(newEmail) {
-    if (newEmail) {
-      this._email = newEmail;
-    }
+
+  /**
+   * Returns User bearer token
+   *
+   * @return {String} [read-write] bearer token
+   *
+   */
+  get bearer() {
+    return this._bearer;
   }
 
   /**
@@ -70,6 +82,7 @@ class User {
   }
   set firstName(newFirstName) {
     if (newFirstName) {
+      this._isDirty = true;
       this._firstName = newFirstName;
     }
   }
@@ -85,23 +98,38 @@ class User {
   }
   set lastName(newLastName) {
     if (newLastName) {
+      this._isDirty = true;
       this._lastName = newLastName;
     }
   }
 
   /**
-   * Returns User bearer token
+   * Syncr User data from Store
+   * - Currently on bearer is synced to Store
+   * - Store priority proceeds dirty data
    *
-   * @return {String} [read-write] bearer token
+   * @return {Promise}
    *
    */
-  get bearer() {
-    return this._store.get('access_token');
-  }
-  set bearer(accessToken) {
-    if (accessToken) {
-      this._store.set('access_token', accessToken);
-    }
+  syncWithStore() {
+    let bearer;
+    return this._store.get('access_token').then((accessToken) => {
+      // Cache bearer
+      bearer = accessToken;
+      return this._consumer.retrieveUser(accessToken);
+    }).then((data) => {
+      this._id = data.id;
+      this._publisherId = data.publisher_id;
+      this._email = data.email;
+      this._firstName = data.first_name;
+      this._lastName = data.last_name;
+      this._bearer = bearer;
+      this._isDirty = false;
+      return Promise.resolve({
+        data,
+        message: 'Synced User model with Store',
+      });
+    });
   }
 
   /**
@@ -111,15 +139,23 @@ class User {
    *
    */
   save() {
-    if (!this.id) {
+    if (!this._id) {
       return Promise.reject(new Error('Cannot save a non-existent User'));
     }
-    return this._consumer.updateUser(this.id, this.bearer, {
+    if (!this._isDirty) {
+      return Promise.resolve({
+        message: 'No User model changes to sync',
+      });
+    }
+    return this._consumer.updateUser(this._id, this._bearer, {
       firstName: this._firstName,
       lastName: this._lastName,
-    }).then(() => Promise.resolve({
-      message: 'Updated User model',
-    }));
+    }).then(() => {
+      this._isDirty = false;
+      return Promise.resolve({
+        message: 'Updated User model',
+      });
+    });
   }
 
   /**
@@ -145,6 +181,7 @@ class User {
       this._firstName = data.first_name;
       this._lastName = data.last_name;
       this._email = data.email;
+      this._isDirty = false;
       return Promise.resolve({
         data,
         message: 'Created User',
@@ -163,19 +200,24 @@ class User {
   authenticate(username, password) {
     assert(username, 'Missing `username`');
     assert(password, 'Missing `password`');
+    let bearer;
     return this._consumer.retrieveToken(username, password).then((res) => {
       const { access_token, refresh_token } = res;
+      // Cache bearer
+      bearer = access_token;
       // Store tokens
       return this._store.set('access_token', access_token)
         .then(() => this._store.set('refresh_token', refresh_token))
         .then(() => this._consumer.retrieveUser(access_token));
       // Retrieve user data
     }).then((data) => {
+      this._bearer = bearer;
       this._id = data.id;
       this._publisherId = data.publisher_id;
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      this._isDirty = false;
       return Promise.resolve({
         data,
         message: 'Authenticated User',
@@ -215,11 +257,13 @@ class User {
         return this._consumer.retrieveUser(newTokens.access_token);
       });
     }).then((data) => {
+      this._bearer = accessToken;
       this._id = data.id;
       this._publisherId = data.publisher_id;
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      this._isDirty = false;
       return Promise.resolve({
         data,
         message: 'Authenticated User',
@@ -234,11 +278,16 @@ class User {
    *
    */
   flush() {
-    this._store.remove('access_token');
-    this._store.remove('refresh_token');
-    return Promise.resolve({
-      message: 'Flushed User',
-    });
+    this._bearer = undefined;
+    this._id = undefined;
+    this._publisherId = undefined;
+    this._firstName = undefined;
+    this._lastName = undefined;
+    this._email = undefined;
+    this._isDirty = false;
+    return this._store.remove('access_token', 'refresh_token').then(() => Promise.resolve({
+      message: 'Flushed User data',
+    }));
   }
 
 }

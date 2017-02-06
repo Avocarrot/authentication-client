@@ -1,3 +1,4 @@
+
 <img width="300" src="https://cloud.githubusercontent.com/assets/1907604/7618436/f8c371de-f9a9-11e4-8846-772f67f53513.jpg"/>
 
 # authentication-client
@@ -91,7 +92,7 @@ Add the following line in your `package.json` file and replace the `<TAG>` with 
 
 ### Cross-domain Storage setup
 
-To setup the Hub for cross domain storage use: 
+To setup the Hub for cross domain storage use:
 
 ```javascript
 AuthenticationClient.initStorage([
@@ -152,6 +153,17 @@ var authClient = AuthenticationClient.getInstanceFor({
 ### Session operations
 
 ```javascript
+/**
+ * Initializes session for user (if defined) in Store
+ * Note: This should be the FIRST call before attempting any other session operations
+ *
+ * @return {Promise}
+ *
+ */
+authClient.session.initialize()
+  .then((res)  => {/* ... */})
+  .catch((err) => {/* ... */});
+
 /**
  * Determines if session is valid (user is authenticated)
  *
@@ -220,6 +232,21 @@ authClient.user.create(email, password, firstName, lastName)
   .catch((err) => {/* ... */});
 
 /**
+ * Get User details
+ *
+ * @return {Object} - User
+ *
+ */
+ // Read-Write
+ authClient.user.firstName;
+ authClient.user.lastName;
+
+ // Read-only
+ authClient.user.email;
+ authClient.user.bearer;
+ authClient.user.publisherId;
+
+/**
  * Update User
  *
  * @return {Promise} - res.message, err.message
@@ -227,7 +254,6 @@ authClient.user.create(email, password, firstName, lastName)
  */
 authClient.user.firstName = "John";
 authClient.user.lastName = "Doe";
-authClient.user.email = "mock@email.com";
 authClient.user.save()
   .then((res)  => {/* ... */})
   .catch((err) => {/* ... */});
