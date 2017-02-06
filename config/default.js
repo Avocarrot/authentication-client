@@ -7,6 +7,6 @@ module.exports = {
   },
   store: {
     domain: 'avocarrot',
-    iframeHub: '//login.avocarrot.com/hub/index.html',
+    iframeHub: '//login.avocarrot.com/hub',
   },
 };
