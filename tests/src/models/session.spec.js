@@ -103,7 +103,7 @@ test('Session.invalidate() should redirect to login host', (assert) => {
   const instances = getSessionInstances(redirectFnSpy);
   instances.session.invalidate();
   assert.equals(redirectFnSpy.callCount, 1);
-  assert.equals(redirectFnSpy.getCall(0).args[0], 'http://login.mock.com/login');
+  assert.equals(redirectFnSpy.getCall(0).args[0], 'http://login.mock.com/logout');
   sandbox.restore();
 });
 

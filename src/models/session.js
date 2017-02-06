@@ -58,7 +58,7 @@ class Session {
    */
   invalidate() {
     // Redirect to login host with a return URL
-    return this._redirectFn(`${this._loginHost}/login`);
+    return this._redirectFn(`${this._loginHost}/logout`);
   }
 
   /**
