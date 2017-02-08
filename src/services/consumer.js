@@ -1,4 +1,5 @@
 const assert = require('assert');
+const qs = require('qs');
 const Client = require('../models/client');
 const ProductionAPI = require('../api').Production;
 const SandboxAPI = require('../api').Sandbox;
@@ -55,12 +56,19 @@ class Consumer {
    *
    */
   retrieveToken(username, password) {
+    const grant_type = 'password';
     return this._request('token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `username=${username}&password=${password}&grant_type=password&client_id=${this._client.id}&client_secret=${this._client.secret}`,
+      body: this._formEncode({
+        username,
+        password,
+        grant_type,
+        client_id: this._client.id,
+        client_secret: this._client.secret,
+      }),
     });
   }
 
@@ -72,13 +80,41 @@ class Consumer {
    *
    */
   refreshToken(refreshToken) {
+    const grant_type = 'refresh_token';
     return this._request('token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `refresh_token=${refreshToken}&grant_type=refresh_token&client_id=${this._client.id}&client_secret=${this._client.secret}`,
+      body: this._formEncode({
+        refresh_token: refreshToken,
+        grant_type,
+        client_id: this._client.id,
+        client_secret: this._client.secret,
+      }),
     });
+  }
+
+  /**
+   * Returns a url encoded string
+   *
+   * @param {Object} obj - Object to stringify
+   * @return {String}
+   *
+   */
+  _formEncode(obj) {
+    return qs.stringify(obj);
+  }
+
+  /**
+   * Returns a json encoded string
+   *
+   * @param {Object} obj - Object to stringify
+   * @return {String}
+   *
+   */
+  _jsonEncode(obj) {
+    return JSON.stringify(obj);
   }
 
   /**
@@ -97,7 +133,7 @@ class Consumer {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: this._jsonEncode({
         email,
         password,
         first_name: firstName,
@@ -140,7 +176,7 @@ class Consumer {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: this._jsonEncode({
         first_name: options.firstName,
         last_name: options.lastName,
       }),
@@ -160,7 +196,7 @@ class Consumer {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: this._jsonEncode({
         email,
       }),
     });
@@ -180,7 +216,7 @@ class Consumer {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: this._jsonEncode({
         password,
       }),
     });

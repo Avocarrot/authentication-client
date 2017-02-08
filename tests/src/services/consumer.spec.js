@@ -91,11 +91,11 @@ test('Consumer.retrieveToken(username, password) should return `access_token` an
     status: 200,
     body: TokenMocks.PaswordGrant,
   }));
-  instances.consumer.retrieveToken('username', 'password').then((res) => {
+  instances.consumer.retrieveToken('username+char@email.com', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
-    assert.equals(apiStub.getCall(0).args[1].body, 'username=username&password=password&grant_type=password&client_id=id&client_secret=secret');
+    assert.equals(apiStub.getCall(0).args[1].body, 'username=username%2Bchar%40email.com&password=password&grant_type=password&client_id=id&client_secret=secret');
   });
   sandbox.restore();
 });
