@@ -259,12 +259,14 @@ authClient.user.save()
   .catch((err) => {/* ... */});
 
 /**
- * Authenticate user using a login token (Staff login)
+ * Authenticate user using a login token
  *
+ * @param {String} accessToken - The access token to use (required)
+ * @param {String} refreshToken - The refresh token to use (optional)
  * @return {Promise} - res.message, err.message
  *
  */
-authClient.user.authenticateWithToken(accessToken)
+authClient.user.authenticateWithToken(accessToken, refreshToken)
   .then((res)  => {/* ... */})
   .catch((err) => {/* ... */});
 
