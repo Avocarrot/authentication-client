@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "src/index.js",
@@ -46,6 +46,7 @@
   "dependencies": {
     "cross-storage": "^1.0.0",
     "es6-promise": "4.0.5",
+    "qs": "^6.3.0",
     "whatwg-fetch": "2.0.2"
   }
 }
