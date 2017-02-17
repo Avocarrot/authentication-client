@@ -2,6 +2,7 @@ const test = require('tape');
 const SandboxAPI = require('../../../src/api').Sandbox;
 const SandboxDatabase = require('../../../src/databases/sandbox');
 const sinon = require('sinon');
+const qs = require('qs');
 
 const sandbox = sinon.sandbox.create();
 
@@ -274,12 +275,12 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       },
-      body: {
+      body: qs.stringify({
         refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
         grant_type: 'refresh_token',
         client_id: 'client_id',
         client_secret: 'client_secret',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, mockToken);
       assert.equals(res.status, 200);
@@ -296,12 +297,12 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       },
-      body: {
+      body: qs.stringify({
         refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
         grant_type: 'refresh_token',
         client_id: 'client_id',
         client_secret: 'client_secret',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, {
         error: 'invalid_token',
@@ -319,11 +320,11 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       },
-      body: {
+      body: qs.stringify({
         refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
         client_id: 'client_id',
         client_secret: 'client_secret',
-      },
+      }),
     }).then((res) => {
       assert.equals(res.status, 404);
       assert.deepEquals(res.body, {

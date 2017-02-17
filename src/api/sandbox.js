@@ -1,4 +1,5 @@
 const Utils = require('../utils');
+const qs = require('qs');
 
 const stripBearer = Utils.stripBearer;
 
@@ -68,7 +69,8 @@ class SandboxAPI {
        */
       token: {
         POST: (database, id, body) => {
-          const { grant_type, username, password, refresh_token } = body;
+          const decodedBody = qs.parse(body);
+          const { grant_type, username, password, refresh_token } = decodedBody;
           if (grant_type === 'password') {
             if (!database.hasUserWithData(username, password)) {
               return response(404, { error: 'not_found' });
