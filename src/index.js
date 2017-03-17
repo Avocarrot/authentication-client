@@ -85,7 +85,8 @@ const AuthenticationClient = (function immediate() {
    * @return {Authenticator}
    *
    */
-  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost, store) {
+  function generateInstance(clientId, clientSecret, environment = ENV.Production, loginHost = config.login.host, apiHost = config.api.host, storeDomain = config.store.domain) {
+    const store = new Store(storeDomain, `${loginHost}/hub`);
     const api = getAPIFor(environment, apiHost);
     const client = new Client(clientId, clientSecret);
     const consumer = new Consumer(client, api);
@@ -136,14 +137,14 @@ const AuthenticationClient = (function immediate() {
      * @return {Authenticator}
      *
      */
-    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost, store = new Store(config.store.domain, config.store.iframeHub) }) {
+    getInstanceFor({ clientId, clientSecret, environment, loginHost, apiHost }) {
       const key = `${clientId}-${clientSecret}`;
       // Return cached instance
       if (instances.has(key)) {
         return instances.get(key);
       }
       // Generate & cache new instance
-      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost, store);
+      const instance = generateInstance(clientId, clientSecret, environment, loginHost, apiHost);
       instances.set(key, instance);
       return instance;
     },
