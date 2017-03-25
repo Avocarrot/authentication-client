@@ -108,12 +108,12 @@ test('APISandbox.invoke() should mock /users POST', (t) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         email: 'foo.bar@mail.com',
         password: '123456789',
         first_name: 'Foo',
         last_name: 'Bar',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, newUser);
       assert.equals(res.status, 201);
@@ -129,12 +129,12 @@ test('APISandbox.invoke() should mock /users POST', (t) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         email: 'foo.bar@mail.com',
         password: '123456789',
         first_name: 'Foo',
         last_name: 'Bar',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, {
         error: 'validation_failed',
@@ -165,10 +165,10 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
         Authorization: 'Bearer d4149324285e46bfb8065b6c816a12b2',
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         first_name: 'Foo',
         last_name: 'Bar',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, updatedUser);
       assert.equals(res.status, 200);
@@ -186,10 +186,10 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
         Authorization: 'Bearer d4149324285e46bfb8065b6c816a12b2',
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         first_name: 'Foo',
         last_name: 'Bar',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, {
         error: 'invalid_grant',
@@ -215,13 +215,13 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       },
-      body: {
+      body: qs.stringify({
         username: 'john.doe@mail.com',
         password: '123456789',
         grant_type: 'password',
         client_id: 'client_id',
         client_secret: 'client_secret',
-      },
+      }),
     }).then((res) => {
       assert.ok(res.body.access_token);
       assert.ok(res.body.refresh_token);
@@ -239,13 +239,13 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       },
-      body: {
+      body: qs.stringify({
         username: 'john.doe@mail.com',
         password: '123456789',
         grant_type: 'password',
         client_id: 'client_id',
         client_secret: 'client_secret',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, {
         error: 'not_found',
@@ -347,9 +347,9 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         email: 'john.doe@mail.com',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, {});
       assert.equals(res.status, 200);
@@ -365,9 +365,9 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: {
+      body: JSON.stringify({
         email: 'john.doe@mail.com',
-      },
+      }),
     }).then((res) => {
       assert.deepEquals(res.body, { error: 'not_found' });
       assert.equals(res.status, 404);

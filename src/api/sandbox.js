@@ -43,7 +43,7 @@ class SandboxAPI {
           return response(200, database.getUserWithToken(token));
         },
         POST: (database, id, body) => {
-          const { email, password, first_name, last_name } = body;
+          const { email, password, first_name, last_name } = JSON.parse(body);
           if (database.hasUserWithData(email, password)) {
             return response(400, { error: 'validation_failed' });
           }
@@ -52,7 +52,7 @@ class SandboxAPI {
         },
         PATCH: (database, id, body, headers) => {
           const token = stripBearer(headers.Authorization);
-          const { first_name, last_name } = body;
+          const { first_name, last_name } = JSON.parse(body);
           if (database.getUserWithToken(token) !== database.getUserWithId(id)) {
             return response(400, { error: 'invalid_grant' });
           }
@@ -97,7 +97,7 @@ class SandboxAPI {
        */
       passwords: {
         POST: (database, id, body) => {
-          const { email } = body;
+          const { email } = JSON.parse(body);
           if (!database.hasUserWithEmail(email)) {
             return response(404, { error: 'not_found' });
           }
