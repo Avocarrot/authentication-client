@@ -47,15 +47,17 @@ module.exports.stripBearer = stripBearer;
  * Returns error message for `errorCode`
  *
  * @memberof Utils
- * @param {String} errorCode - The `errorCode` to map
+ * @param {String} body - The `body` response to parse
+ * @param {String} body.error - The error code to use for mapping
+ * @param {String} body.error_description - The optional error description to show
  * @return {String}
  *
  */
 
-const extractErrorMessage = (errorCode) => {
-  switch (errorCode) {
+const extractErrorMessage = (body) => {
+  switch (body.error) {
     case 'validation_failed':
-      return 'Validation failed';
+      return `Validation failed: ${body.error_description}`;
     case 'not_found':
       return 'Not found';
     case 'forbidden_resource':
