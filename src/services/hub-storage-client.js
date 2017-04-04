@@ -4,20 +4,19 @@ const CrossStorageClient = require('cross-storage').CrossStorageClient;
 /**
  * Wrapper around `CrossStorageClient`
  *
- * @class Store
+ * @class HubStorageClient
  * @see https://github.com/zendesk/cross-storage
  *
  */
-
-class StorageClient {
+class HubStorageClient {
 
   /**
-   * Initializes StorageClient
+   * Initializes HubStorageClient
    *
    * @constructor
    * @param {String} domain - The domain under which all values will be attached
    * @param {Class} CrossStorageClientClass - The CrossStorageClient class to be instantiated (Defaults to CrossStorageClient)
-   * @return {Store}
+   * @return {HubStorageClient}
    *
    */
   constructor(iframeHub, CrossStorageClientClass = CrossStorageClient) {
@@ -75,4 +74,4 @@ class StorageClient {
 
 }
 
-module.exports = StorageClient;
+module.exports = HubStorageClient;

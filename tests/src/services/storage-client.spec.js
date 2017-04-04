@@ -1,47 +1,47 @@
 const test = require('tape');
 const sinon = require('sinon');
-const StorageClient = require('../../../src/services/storage-client');
+const HubStorageClient = require('../../../src/services/hub-storage-client');
 const mockCrossStore = require('../../mocks/store');
 
 const sandbox = sinon.sandbox.create();
 
 /**
- * StorageClient.constructor()
+ * HubStorageClient.constructor()
  */
 
-test('StorageClient.constructor() should throw an error for missing `iframeHub`', (assert) => {
+test('HubStorageClient.constructor() should throw an error for missing `iframeHub`', (assert) => {
   assert.plan(1);
   try {
-    new StorageClient();
+    new HubStorageClient();
   } catch (err) {
     assert.equals(err.message, 'Missing `iframeHub`');
   }
 });
 
 /**
- * StorageClient.onConnect()
+ * HubStorageClient.onConnect()
  */
 
-test('StorageClient.onConnect() should generate storage instance once', (assert) => {
+test('HubStorageClient.onConnect() should generate storage instance once', (assert) => {
   assert.plan(3);
   const instances = mockCrossStore(sandbox);
-  const storageClient = new StorageClient('https://login.domain.com/hub', instances.Client);
-  assert.equals(storageClient._instance, undefined);
-  storageClient.onConnect().then(() => storageClient.onConnect()).then(() => {
-    assert.notEquals(storageClient._instance, null);
+  const hubStorageClient = new HubStorageClient('https://login.domain.com/hub', instances.Client);
+  assert.equals(hubStorageClient._instance, undefined);
+  hubStorageClient.onConnect().then(() => hubStorageClient.onConnect()).then(() => {
+    assert.notEquals(hubStorageClient._instance, null);
     assert.equals(instances.ClientConnectStub.callCount, 2);
   });
 });
 
 /**
- * StorageClient.get()
+ * HubStorageClient.get()
  */
 
-test('StorageClient.get() should proxy CrossStorageClient.get()', (assert) => {
+test('HubStorageClient.get() should proxy CrossStorageClient.get()', (assert) => {
   assert.plan(3);
   const instances = mockCrossStore(sandbox);
-  const storageClient = new StorageClient('https://login.domain.com/hub', instances.Client);
-  storageClient.get('key').then(() => {
+  const hubStorageClient = new HubStorageClient('https://login.domain.com/hub', instances.Client);
+  hubStorageClient.get('key').then(() => {
     assert.equals(instances.ClientConnectStub.callCount, 1);
     assert.equals(instances.ClientGetStub.callCount, 1);
     assert.deepEquals(instances.ClientGetStub.getCall(0).args, ['key']);
@@ -49,14 +49,14 @@ test('StorageClient.get() should proxy CrossStorageClient.get()', (assert) => {
 });
 
 /**
- * StorageClient.set()
+ * HubStorageClient.set()
  */
 
-test('StorageClient.set() should proxy CrossStorageClient.set()', (assert) => {
+test('HubStorageClient.set() should proxy CrossStorageClient.set()', (assert) => {
   assert.plan(3);
   const instances = mockCrossStore(sandbox);
-  const storageClient = new StorageClient('https://login.domain.com/hub', instances.Client);
-  storageClient.set('key', 'value').then(() => {
+  const hubStorageClient = new HubStorageClient('https://login.domain.com/hub', instances.Client);
+  hubStorageClient.set('key', 'value').then(() => {
     assert.equals(instances.ClientConnectStub.callCount, 1);
     assert.equals(instances.ClientSetStub.callCount, 1);
     assert.deepEquals(instances.ClientSetStub.getCall(0).args, ['key', 'value']);
@@ -67,11 +67,11 @@ test('StorageClient.set() should proxy CrossStorageClient.set()', (assert) => {
  * StorageClient.del()
  */
 
-test('StorageClient.del() should proxy CrossStorageClient.del()', (assert) => {
+test('HubStorageClient.del() should proxy CrossStorageClient.del()', (assert) => {
   assert.plan(3);
   const instances = mockCrossStore(sandbox);
-  const storageClient = new StorageClient('https://login.domain.com/hub', instances.Client);
-  storageClient.del('key').then(() => {
+  const hubStorageClient = new HubStorageClient('https://login.domain.com/hub', instances.Client);
+  hubStorageClient.del('key').then(() => {
     assert.equals(instances.ClientConnectStub.callCount, 1);
     assert.equals(instances.ClientDelStub.callCount, 1);
     assert.deepEquals(instances.ClientDelStub.getCall(0).args, ['key']);

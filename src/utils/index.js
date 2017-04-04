@@ -136,16 +136,16 @@ module.exports.validatePassword = validatePassword;
  * @return {String} url - The URL to
  *
  */
-const extractLoginToken = (url) => {
-  const params = decodeURIComponent(url).split('?')[1].split('&');
-  const loginTokenParam = params.find(param => String(param).includes('loginToken'));
-  if (!loginTokenParam) {
+const extractLoginTokenFromURL = (url) => {
+  try {
+    const params = decodeURIComponent(url).split('?')[1].split('&');
+    return params.find(param => String(param).includes('loginToken')).replace('loginToken=', '');
+  } catch (err) {
     return '';
   }
-  return loginTokenParam.replace('loginToken=', '');
 };
 
-module.exports.extractLoginToken = extractLoginToken;
+module.exports.extractLoginTokenFromURL = extractLoginTokenFromURL;
 
 /**
  * Returns browser name

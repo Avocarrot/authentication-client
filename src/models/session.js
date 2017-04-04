@@ -49,7 +49,6 @@ class Session {
     return this._user.syncWithStore();
   }
 
-
   /**
    * Invalidates Session
    *

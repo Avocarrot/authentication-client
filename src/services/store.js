@@ -1,5 +1,12 @@
 const assert = require('assert');
-const StorageClient = require('./storage-client');
+const HubStorageClient = require('./hub-storage-client');
+const retrieveBrowserName = require('../utils').retrieveBrowserName;
+
+/**
+ * Determines if browser supports cross storage
+ * @ignore
+ */
+const supportsCrossStorage = (retrieveBrowserName() !== 'Safari');
 
 /**
  * @class Store
@@ -14,15 +21,17 @@ class Store {
    * @param {String} iframeHub - The iframe URL where all the values will be attached
    * @param {Object} iframeHub - The iframe URL where all the values will be attached
    * @param {Class} StorageClientClass - The CrossStorageClient Class to be instantiated
+   * @param {Boolean} isCrossStorageAvailable - Flaf that determines if cross storage canb be used or not
    * @return {Store}
    *
    */
-  constructor(domain, iframeHub, StorageClientClass = StorageClient) {
+  constructor(domain, iframeHub, HubStorageClientClass = HubStorageClient, isCrossStorageAvailable = supportsCrossStorage) {
     assert(domain, 'Missing `domain`');
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
     this._iframeHub = iframeHub;
-    this._storage = new StorageClientClass(iframeHub);
+    this._hubStorage = new HubStorageClientClass(iframeHub);
+    this._isCrossStorageAvailable = isCrossStorageAvailable;
   }
 
   /**
@@ -38,6 +47,16 @@ class Store {
   }
 
   /**
+   * Detrmines if Store supports cross storage
+   *
+   * @return {Boolean} value
+   *
+   */
+  supportsCrossStorage() {
+    return this._isCrossStorageAvailable;
+  }
+
+  /**
    * Sets value for a key
    *
    * @param {String} key - The key to use
@@ -45,7 +64,7 @@ class Store {
    *
    */
   set(key, value) {
-    return this._storage.set(this._normalizeKey(key), value);
+    return this._hubStorage.set(this._normalizeKey(key), value);
   }
 
   /**
@@ -56,7 +75,7 @@ class Store {
    *
    */
   get(key) {
-    return this._storage.get(this._normalizeKey(key));
+    return this._hubStorage.get(this._normalizeKey(key));
   }
 
   /**
@@ -67,7 +86,7 @@ class Store {
    */
   remove(...keys) {
     const normalizedKeys = keys.map(key => this._normalizeKey(key));
-    return this._storage.del(...normalizedKeys);
+    return this._hubStorage.del(...normalizedKeys);
   }
 
 }

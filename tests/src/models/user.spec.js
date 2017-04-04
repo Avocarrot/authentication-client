@@ -27,7 +27,7 @@ function getUserInstances() {
   const crossStoreInstances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Client);
   const consumer = new Consumer(client, api);
-  const user = new User(store, consumer);
+  const user = new User(store, consumer, () => 'https://app.domain.com?loginToken=123456789');
   return {
     client,
     api,
@@ -143,10 +143,26 @@ test('User.lastName should be read-write', (assert) => {
   assert.equals(instances.user.lastName, 'Doe');
 });
 
+
+/**
+ * User._retrieveToken
+ */
+
+test('User.retriveToken() should return extracted URL login token from URL if store does not support cross storage', (assert) => {
+  assert.plan(1);
+  const storeSupportsCrossStorageStub = sandbox.stub();
+  storeSupportsCrossStorageStub.returns(false);
+  const instances = getUserInstances();
+  instances.store.supportsCrossStorage = storeSupportsCrossStorageStub;
+  instances.user.retriveToken().then((token) => {
+    assert.equals(token, '123456789');
+  });
+  sandbox.restore();
+});
+
 /**
  * User.authenticate(username, password)
  */
-
 test('User.authenticate(username, password) should throw an error for', (t) => {
   t.test('missing `username`', (assert) => {
     assert.plan(1);
@@ -220,6 +236,7 @@ test('User.syncWithStore() should synrchronize data with Store', (assert) => {
   const instances = getUserInstances();
   const storeGetStub = sandbox.stub();
   const retrieveUserStub = sandbox.stub();
+
   storeGetStub.returns(Promise.resolve('rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'));
   retrieveUserStub.returns(Promise.resolve({
     id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',

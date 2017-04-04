@@ -7,7 +7,7 @@ const stripBearer = Utils.stripBearer;
 const extractErrorMessage = Utils.extractErrorMessage;
 const validatePassword = Utils.validatePassword;
 const retrieveBrowserName = Utils.retrieveBrowserName;
-const extractLoginToken = Utils.extractLoginToken;
+const extractLoginTokenFromURL = Utils.extractLoginTokenFromURL;
 
 /**
  * generateRandomString(radix)
@@ -138,10 +138,10 @@ test('retrieveBrowserName(lookupMap) returns correct browser name', (assert) => 
 });
 
 /**
- * extractLoginToken(url)
+ * extractLoginTokenFromURL(url)
  */
-test('extractLoginToken(url) extracts loginToken from URL', (assert) => {
+test('extractLoginTokenFromURL(url) extracts loginToken from URL', (assert) => {
   assert.plan(2);
-  assert.equals(extractLoginToken('http://mock.host.com/resource?flag=true&loginToken=123456789&query[1]=1&query[2]=2'), '123456789');
-  assert.equals(extractLoginToken('http://mock.host.com/resource?flag=true&query[1]=1&query[2]=2'), '');
+  assert.equals(extractLoginTokenFromURL('http://mock.host.com/resource?flag=true&loginToken=123456789&query[1]=1&query[2]=2'), '123456789');
+  assert.equals(extractLoginTokenFromURL('http://mock.host.com/resource?flag=true&query[1]=1&query[2]=2'), '');
 });

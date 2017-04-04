@@ -4,6 +4,7 @@ const User = require('./models/user');
 const Client = require('./models/client');
 const Session = require('./models/session');
 const Authenticator = require('./models/authenticator');
+const Redirector = require('./services/redirector');
 const Consumer = require('./services/consumer');
 const API = require('./api');
 const SandboxDatabase = require('./databases/sandbox');
@@ -93,10 +94,12 @@ const AuthenticationClient = (function immediate() {
     const user = new User(store, consumer);
     const session = new Session(user, loginHost);
     const authenticator = new Authenticator(consumer);
+    const redirector = new Redirector(store);
     return {
       user,
       session,
       authenticator,
+      redirector,
     };
   }
 
