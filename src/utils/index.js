@@ -1,3 +1,5 @@
+const bowser = require('bowser');
+
 /**
  * @namespace Utils
  */
@@ -126,6 +128,17 @@ const validatePassword = (password) => {
 };
 
 module.exports.validatePassword = validatePassword;
+
+/**
+ * Returns browser name
+ *
+ * @memberof Utils
+ * @return {String} name - The browser name
+ *
+ */
+const getBrowserName = ((lookupMap = bowser) => lookupMap.name);
+
+module.exports.getBrowserName = getBrowserName;
 
 /* istanbul ignore next */
 

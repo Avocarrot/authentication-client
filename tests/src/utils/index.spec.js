@@ -6,6 +6,7 @@ const generateRandomUUID = Utils.generateRandomUUID;
 const stripBearer = Utils.stripBearer;
 const extractErrorMessage = Utils.extractErrorMessage;
 const validatePassword = Utils.validatePassword;
+const getBrowserName = Utils.getBrowserName;
 
 /**
  * generateRandomString(radix)
@@ -123,4 +124,14 @@ test('validatePassword(password, repeatPassword) should', (t) => {
       message: 'Password must contain both numbers and characters',
     });
   });
+});
+
+/**
+ * getBrowserName(lookupMap)
+ */
+test('getBrowserName(lookupMap) returns correct browser name', (assert) => {
+  assert.plan(1);
+  assert.equals(getBrowserName({
+    name: 'Chrome',
+  }), 'Chrome');
 });
