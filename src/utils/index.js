@@ -130,15 +130,33 @@ const validatePassword = (password) => {
 module.exports.validatePassword = validatePassword;
 
 /**
+ * Extracts loginToken from URL
+ *
+ * @memberof Utils
+ * @return {String} url - The URL to
+ *
+ */
+const extractLoginToken = (url) => {
+  const params = decodeURIComponent(url).split('?')[1].split('&');
+  const loginTokenParam = params.find(param => String(param).includes('loginToken'));
+  if (!loginTokenParam) {
+    return '';
+  }
+  return loginTokenParam.replace('loginToken=', '');
+};
+
+module.exports.extractLoginToken = extractLoginToken;
+
+/**
  * Returns browser name
  *
  * @memberof Utils
  * @return {String} name - The browser name
  *
  */
-const getBrowserName = ((lookupMap = bowser) => lookupMap.name);
+const retrieveBrowserName = ((lookupMap = bowser) => lookupMap.name);
 
-module.exports.getBrowserName = getBrowserName;
+module.exports.retrieveBrowserName = retrieveBrowserName;
 
 /* istanbul ignore next */
 

@@ -6,7 +6,8 @@ const generateRandomUUID = Utils.generateRandomUUID;
 const stripBearer = Utils.stripBearer;
 const extractErrorMessage = Utils.extractErrorMessage;
 const validatePassword = Utils.validatePassword;
-const getBrowserName = Utils.getBrowserName;
+const retrieveBrowserName = Utils.retrieveBrowserName;
+const extractLoginToken = Utils.extractLoginToken;
 
 /**
  * generateRandomString(radix)
@@ -127,11 +128,20 @@ test('validatePassword(password, repeatPassword) should', (t) => {
 });
 
 /**
- * getBrowserName(lookupMap)
+ * retrieveBrowserName(lookupMap)
  */
-test('getBrowserName(lookupMap) returns correct browser name', (assert) => {
+test('retrieveBrowserName(lookupMap) returns correct browser name', (assert) => {
   assert.plan(1);
-  assert.equals(getBrowserName({
+  assert.equals(retrieveBrowserName({
     name: 'Chrome',
   }), 'Chrome');
+});
+
+/**
+ * extractLoginToken(url)
+ */
+test('extractLoginToken(url) extracts loginToken from URL', (assert) => {
+  assert.plan(2);
+  assert.equals(extractLoginToken('http://mock.host.com/resource?flag=true&loginToken=123456789&query[1]=1&query[2]=2'), '123456789');
+  assert.equals(extractLoginToken('http://mock.host.com/resource?flag=true&query[1]=1&query[2]=2'), '');
 });
