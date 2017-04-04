@@ -39,8 +39,7 @@ class Consumer {
     return this._api.invoke(resource, payload).then((res) => {
       const { status, body } = res;
       if (parseInt(status, 10) >= 400) {
-        const error = new Error(extractErrorMessage(body.error));
-        error.name = body.error;
+        const error = new Error(extractErrorMessage(body));
         return Promise.reject(error);
       }
       return Promise.resolve(body);
