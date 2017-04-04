@@ -114,12 +114,9 @@ class User {
    *
    */
   retriveToken() {
-    console.log('retriveToken 1');
     if (this._store.supportsCrossStorage()) {
-      console.log('retriveToken 2');
       return this._store.get('access_token');
     }
-    console.log('retriveToken 3');
     return Promise.resolve(extractLoginTokenFromURL(this._retrieveURLFn()));
   }
 
