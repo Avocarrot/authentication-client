@@ -1,6 +1,8 @@
 const assert = require('assert');
 const HubStorageClient = require('./hub-storage-client');
 const retrieveBrowserName = require('../utils').retrieveBrowserName;
+const extractLoginTokenFromURL = require('../utils').extractLoginTokenFromURL;
+const retrieveURL = require('../utils').retrieveURL;
 
 /**
  * Determines if browser supports cross storage
@@ -22,16 +24,18 @@ class Store {
    * @param {Object} iframeHub - The iframe URL where all the values will be attached
    * @param {Class} StorageClientClass - The CrossStorageClient Class to be instantiated
    * @param {Boolean} isCrossStorageAvailable - Flaf that determines if cross storage canb be used or not
+   * @param {Function} retrieveURLFn - The function that returns the current URL
    * @return {Store}
    *
    */
-  constructor(domain, iframeHub, HubStorageClientClass = HubStorageClient, isCrossStorageAvailable = supportsCrossStorage) {
+  constructor(domain, iframeHub, HubStorageClientClass = HubStorageClient, isCrossStorageAvailable = supportsCrossStorage, retrieveURLFn = retrieveURL) {
     assert(domain, 'Missing `domain`');
     assert(iframeHub, 'Missing `iframeHub`');
     this._domain = domain;
     this._iframeHub = iframeHub;
     this._hubStorage = new HubStorageClientClass(iframeHub);
     this._isCrossStorageAvailable = isCrossStorageAvailable;
+    this._retrieveURLFn = retrieveURLFn;
   }
 
   /**
@@ -54,6 +58,19 @@ class Store {
    */
   supportsCrossStorage() {
     return this._isCrossStorageAvailable;
+  }
+
+  /**
+   * Retieves token
+   *
+   * @return {Promise}
+   *
+   */
+  retriveToken() {
+    if (this._isCrossStorageAvailable) {
+      return this.get('access_token');
+    }
+    return Promise.resolve(extractLoginTokenFromURL(this._retrieveURLFn()));
   }
 
   /**

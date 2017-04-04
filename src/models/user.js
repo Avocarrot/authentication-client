@@ -2,8 +2,6 @@ const assert = require('assert');
 const Consumer = require('../services/consumer');
 const Store = require('../services/store');
 const validatePassword = require('../utils').validatePassword;
-const extractLoginTokenFromURL = require('../utils').extractLoginTokenFromURL;
-const retrieveURL = require('../utils').retrieveURL;
 
 /**
  * @class User
@@ -16,11 +14,10 @@ class User {
    * @constructor
    * @param {Store} store - The Store instance to use
    * @param {Consumer} consumer - The Consumer instance to use
-   * @param {Function} retrieveURLFn - The function that returns the current URL
    * @return {User}
    *
    */
-  constructor(store, consumer, retrieveURLFn = retrieveURL) {
+  constructor(store, consumer) {
     assert(store instanceof Store, '`store` should be instance of Store');
     assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
     this._store = store;
@@ -32,7 +29,6 @@ class User {
     this._lastName = undefined;
     this._email = undefined;
     this._isDirty = false;
-    this._retrieveURLFn = retrieveURLFn;
   }
 
   /**
@@ -108,20 +104,6 @@ class User {
   }
 
   /**
-   * Retieves token
-   *
-   * @return {Promise}
-   *
-   */
-  retriveToken() {
-    if (this._store.supportsCrossStorage()) {
-      return this._store.get('access_token');
-    }
-    return Promise.resolve(extractLoginTokenFromURL(this._retrieveURLFn()));
-  }
-
-
-  /**
    * Syncs User data from Store
    * - Currently on bearer is synced to Store
    * - Store priority proceeds dirty data
@@ -131,7 +113,7 @@ class User {
    */
   syncWithStore() {
     let bearer;
-    return this.retriveToken().then((accessToken) => {
+    return this._store.retriveToken().then((accessToken) => {
       // Cache bearer
       bearer = accessToken;
       return this._consumer.retrieveUser(accessToken);

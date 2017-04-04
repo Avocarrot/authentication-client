@@ -72,3 +72,17 @@ test('Store.remove(key) should call StorageClient.del(key) with normalized key',
   });
   sandbox.restore();
 });
+
+/**
+ * Store.retrieveToken()
+ */
+
+test('Store.retriveToken() should return extracted URL login token from URL if store does not support cross storage', (assert) => {
+  assert.plan(1);
+  const instances = mockCrossStore(sandbox);
+  const store = new Store('domain', 'https://login.domain.com/hub', instances.Client, false, () => 'http://mock.app?loginToken=123456789');
+  store.retriveToken().then((token) => {
+    assert.equals(token, '123456789');
+  });
+  sandbox.restore();
+});

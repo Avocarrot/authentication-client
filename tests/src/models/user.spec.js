@@ -27,7 +27,7 @@ function getUserInstances() {
   const crossStoreInstances = mockCrossStore(sandbox);
   const store = new Store('domain', 'https://login.domain.com/hub', crossStoreInstances.Client);
   const consumer = new Consumer(client, api);
-  const user = new User(store, consumer, () => 'https://app.domain.com?loginToken=123456789');
+  const user = new User(store, consumer);
   return {
     client,
     api,
@@ -141,23 +141,6 @@ test('User.lastName should be read-write', (assert) => {
   assert.equals(instances.user.lastName, 'Doe');
   instances.user.lastName = null;
   assert.equals(instances.user.lastName, 'Doe');
-});
-
-
-/**
- * User._retrieveToken
- */
-
-test('User.retriveToken() should return extracted URL login token from URL if store does not support cross storage', (assert) => {
-  assert.plan(1);
-  const storeSupportsCrossStorageStub = sandbox.stub();
-  storeSupportsCrossStorageStub.returns(false);
-  const instances = getUserInstances();
-  instances.store.supportsCrossStorage = storeSupportsCrossStorageStub;
-  instances.user.retriveToken().then((token) => {
-    assert.equals(token, '123456789');
-  });
-  sandbox.restore();
 });
 
 /**

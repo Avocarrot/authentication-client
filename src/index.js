@@ -94,7 +94,7 @@ const AuthenticationClient = (function immediate() {
     const user = new User(store, consumer);
     const session = new Session(user, loginHost);
     const authenticator = new Authenticator(consumer);
-    const redirector = new Redirector(store);
+    const redirector = new Redirector(store, user);
     return {
       user,
       session,
