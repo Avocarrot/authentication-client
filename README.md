@@ -79,6 +79,7 @@ https://circleci.com/api/v1/project/Avocarrot/authentication-client/latest/artif
 - [Setup](https://github.com/Avocarrot/authentication-client/blob/master/README.md#setup)
 - [Environments](https://github.com/Avocarrot/authentication-client/blob/master/README.md#environments)
 - [Session operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#session-operations)
+- [AdblockerDetector operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#adblockerdetector-operations)
 - [Redirector operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#redirector-operations)
 - [User operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#user-operations)
 - [Password operations](https://github.com/Avocarrot/authentication-client/blob/master/README.md#password-operations)
@@ -190,6 +191,25 @@ authClient.session.validate();
  *
  */
 authClient.session.invalidate();
+```
+
+### AdblockerDetector operations
+
+When an adblocker is enabled you should invalidate the authentication session
+
+```javascript
+/**
+ * Redirects to url
+ *
+ * @param {String} url - The target url
+ * @return {Void}
+ *
+ */
+authClient.adblockerDetector.detect((isEnabled) => {
+  if (isEnabled) {
+    authClient.session.invalidate();
+  }
+});
 ```
 
 ### Redirector operations
