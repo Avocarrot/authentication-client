@@ -8,6 +8,7 @@
     "no-bitwise": 0,
     "no-underscore-dangle": 0,
     "camelcase": 0,
+    "func-names": 0,
     "wrap-iife": 0,
     "max-len": 0,
     "no-useless-escape":0,

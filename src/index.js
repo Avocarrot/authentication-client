@@ -4,6 +4,7 @@ const User = require('./models/user');
 const Client = require('./models/client');
 const Session = require('./models/session');
 const Authenticator = require('./models/authenticator');
+const AdblockerDetector = require('./services/adblocker-detector');
 const Redirector = require('./services/redirector');
 const Consumer = require('./services/consumer');
 const API = require('./api');
@@ -27,7 +28,6 @@ require('es6-promise').polyfill();
  * Global polyfill for {fetch}
  */
 require('whatwg-fetch');
-
 
 /**
  * @namespace AuthenticationClient
@@ -95,16 +95,17 @@ const AuthenticationClient = (function immediate() {
     const session = new Session(user, loginHost);
     const authenticator = new Authenticator(consumer);
     const redirector = new Redirector(store, user);
+    const adblockerDetector = new AdblockerDetector();
     return {
       user,
       session,
       authenticator,
       redirector,
+      adblockerDetector,
     };
   }
 
   return {
-
     /**
      * Environment enum
      *
