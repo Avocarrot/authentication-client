@@ -4,18 +4,6 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var assert = _interopDefault(require('assert'));
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
-}
-
-
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
 var _default = {
   api: {
     host: '//auth.avocarrot.com'
@@ -27,6 +15,18 @@ var _default = {
     domain: 'avocarrot'
   }
 };
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
+}
+
+
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
 
 var client = createCommonjsModule(function (module, exports) {
 (function(root) {
@@ -1324,31 +1324,10 @@ var bowser = createCommonjsModule(function (module) {
       result.linux = t;
     }
 
-    function getWindowsVersion (s) {
-      switch (s) {
-        case 'NT': return 'NT'
-        case 'XP': return 'XP'
-        case 'NT 5.0': return '2000'
-        case 'NT 5.1': return 'XP'
-        case 'NT 5.2': return '2003'
-        case 'NT 6.0': return 'Vista'
-        case 'NT 6.1': return '7'
-        case 'NT 6.2': return '8'
-        case 'NT 6.3': return '8.1'
-        case 'NT 10.0': return '10'
-        default: return undefined
-      }
-    }
-    
     // OS version extraction
     var osVersion = '';
-    if (result.windows) {
-      osVersion = getWindowsVersion(getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i));
-    } else if (result.windowsphone) {
+    if (result.windowsphone) {
       osVersion = getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i);
-    } else if (result.mac) {
-      osVersion = getFirstMatch(/Mac OS X (\d+([_\.\s]\d+)*)/i);
-      osVersion = osVersion.replace(/[_\s]/g, '.');
     } else if (iosdevice) {
       osVersion = getFirstMatch(/os (\d+([_\s]\d+)*) like mac os x/i);
       osVersion = osVersion.replace(/[_\s]/g, '.');
@@ -1368,7 +1347,7 @@ var bowser = createCommonjsModule(function (module) {
     }
 
     // device type extraction
-    var osMajorVersion = !result.windows && osVersion.split('.')[0];
+    var osMajorVersion = osVersion.split('.')[0];
     if (
          tablet
       || nexusTablet
@@ -5911,12 +5890,6 @@ var AuthenticationClient = function immediate() {
     }
   };
 }();
-
-/* istanbul ignore next */
-
-if (commonjsGlobal.window) {
-  commonjsGlobal.window.AuthenticationClient = AuthenticationClient;
-}
 
 var index = AuthenticationClient;
 
