@@ -167,10 +167,4 @@ const AuthenticationClient = (function immediate() {
   };
 })();
 
-/* istanbul ignore next */
-
-if (global.window) {
-  global.window.AuthenticationClient = AuthenticationClient;
-}
-
 module.exports = AuthenticationClient;

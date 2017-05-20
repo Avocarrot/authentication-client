@@ -353,9 +353,6 @@ authClient.authenticator.resetPassword(token, password)
 ```
 ---
 
-## :warning: Bower Setup
-Currently the `dist` directory is commited and exposes through the Bower config, to support a deprecated app integration.
----
 
 ## Built With
 
