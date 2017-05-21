@@ -9,6 +9,7 @@ const UserMocks = {
     first_name: 'John',
     last_name: 'Doe',
     email: 'john.doe@mail.com',
+    roles: ['developer'],
     _links: {
       self: {
         href: 'https://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d',
@@ -27,6 +28,7 @@ const UserMocks = {
     first_name: options.first_name,
     last_name: options.last_name,
     email: options.email,
+    roles: options.roles,
     _links: {
       self: {
         href: 'http://auth.mock.com/users/44d2c8e0-762b-4fa5-8571-097c81c3130d',

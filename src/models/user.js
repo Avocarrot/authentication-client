@@ -22,6 +22,7 @@ class User {
     assert(consumer instanceof Consumer, '`consumer` should be instance of Consumer');
     this._store = store;
     this._consumer = consumer;
+    this._roles = [];
     this._bearer = undefined;
     this._id = undefined;
     this._publisherId = undefined;
@@ -69,6 +70,16 @@ class User {
    */
   get bearer() {
     return this._bearer;
+  }
+
+  /**
+   * Returns User roles
+   *
+   * @return {Array} [read-only] roles
+   *
+   */
+  get roles() {
+    return this._roles;
   }
 
   /**
@@ -123,6 +134,7 @@ class User {
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      this._roles = data.roles;
       this._bearer = bearer;
       this._isDirty = false;
       return Promise.resolve({
@@ -180,6 +192,7 @@ class User {
       this._publisherId = data.publisher_id;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      this._roles = data.roles;
       this._email = data.email;
       this._isDirty = false;
       return Promise.resolve({
@@ -216,6 +229,7 @@ class User {
       this._publisherId = data.publisher_id;
       this._email = data.email;
       this._firstName = data.first_name;
+      this._roles = data.roles;
       this._lastName = data.last_name;
       this._isDirty = false;
       return Promise.resolve({
@@ -263,6 +277,7 @@ class User {
       this._email = data.email;
       this._firstName = data.first_name;
       this._lastName = data.last_name;
+      this._roles = data.roles;
       this._isDirty = false;
       return Promise.resolve({
         data,
@@ -284,6 +299,7 @@ class User {
     this._firstName = undefined;
     this._lastName = undefined;
     this._email = undefined;
+    this._roles = [];
     this._isDirty = false;
     return this._store.remove('access_token', 'refresh_token').then(() => Promise.resolve({
       message: 'Flushed User data',

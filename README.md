@@ -281,6 +281,7 @@ authClient.user.create(email, password, firstName, lastName)
  authClient.user.email;
  authClient.user.bearer;
  authClient.user.publisherId;
+ authClient.user.roles;
 
 /**
  * Update User
