@@ -153,6 +153,7 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
     body: UserMocks.UserWithDetails({
       first_name: 'first_name',
       last_name: 'last_name',
+      roles: ['developer'],
     }),
   }));
   instances.consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {

@@ -5,6 +5,7 @@
     "first_name": "John",
     "last_name": "Doe",
     "email": "john.doe@mail.com",
-    "password": "qwerty123"
+    "password": "qwerty123",
+    "roles": ["developer"]
   }
 ]

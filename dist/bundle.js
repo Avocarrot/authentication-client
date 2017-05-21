@@ -3057,6 +3057,7 @@ var User = function () {
     assert(consumer$$1 instanceof consumer, '`consumer` should be instance of Consumer');
     this._store = store$$1;
     this._consumer = consumer$$1;
+    this._roles = [];
     this._bearer = undefined;
     this._id = undefined;
     this._publisherId = undefined;
@@ -3100,6 +3101,7 @@ var User = function () {
         _this._email = data.email;
         _this._firstName = data.first_name;
         _this._lastName = data.last_name;
+        _this._roles = data.roles;
         _this._bearer = bearer;
         _this._isDirty = false;
         return Promise.resolve({
@@ -3171,6 +3173,7 @@ var User = function () {
         _this3._publisherId = data.publisher_id;
         _this3._firstName = data.first_name;
         _this3._lastName = data.last_name;
+        _this3._roles = data.roles;
         _this3._email = data.email;
         _this3._isDirty = false;
         return Promise.resolve({
@@ -3216,6 +3219,7 @@ var User = function () {
         _this4._publisherId = data.publisher_id;
         _this4._email = data.email;
         _this4._firstName = data.first_name;
+        _this4._roles = data.roles;
         _this4._lastName = data.last_name;
         _this4._isDirty = false;
         return Promise.resolve({
@@ -3268,6 +3272,7 @@ var User = function () {
         _this5._email = data.email;
         _this5._firstName = data.first_name;
         _this5._lastName = data.last_name;
+        _this5._roles = data.roles;
         _this5._isDirty = false;
         return Promise.resolve({
           data: data,
@@ -3292,6 +3297,7 @@ var User = function () {
       this._firstName = undefined;
       this._lastName = undefined;
       this._email = undefined;
+      this._roles = [];
       this._isDirty = false;
       return this._store.remove('access_token', 'refresh_token').then(function () {
         return Promise.resolve({
@@ -3342,6 +3348,19 @@ var User = function () {
     key: 'bearer',
     get: function get$$1() {
       return this._bearer;
+    }
+
+    /**
+     * Returns User roles
+     *
+     * @return {Array} [read-only] roles
+     *
+     */
+
+  }, {
+    key: 'roles',
+    get: function get$$1() {
+      return this._roles;
     }
 
     /**
@@ -4075,7 +4094,8 @@ var users = [{
   "first_name": "John",
   "last_name": "Doe",
   "email": "john.doe@mail.com",
-  "password": "qwerty123"
+  "password": "qwerty123",
+  "roles": ["developer"]
 }];
 
 var users$1 = Object.freeze({
