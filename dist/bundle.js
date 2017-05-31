@@ -1755,7 +1755,7 @@ var retrieveBrowserName_1 = retrieveBrowserName$1;
 /* istanbul ignore next */
 
 /**
- * Wrapper around window.history.pushState()
+ * Wrapper around window.location.assign()
  *
  * @memberof Utils
  * @param {String} url - The url to redirect to
@@ -1763,7 +1763,7 @@ var retrieveBrowserName_1 = retrieveBrowserName$1;
  *
  */
 var redirectToURL = function redirectToURL(url) {
-  window.history.pushState({}, '', url);
+  window.location.assign(url);
 };
 
 var redirectToURL_1 = redirectToURL;
