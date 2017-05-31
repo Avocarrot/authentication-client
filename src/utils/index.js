@@ -161,7 +161,7 @@ module.exports.retrieveBrowserName = retrieveBrowserName;
 /* istanbul ignore next */
 
 /**
- * Wrapper around window.location.replace()
+ * Wrapper around window.history.pushState()
  *
  * @memberof Utils
  * @param {String} url - The url to redirect to
@@ -169,7 +169,7 @@ module.exports.retrieveBrowserName = retrieveBrowserName;
  *
  */
 const redirectToURL = (url) => {
-  window.location.replace(url);
+  window.history.pushState({}, '', url);
 };
 
 module.exports.redirectToURL = redirectToURL;
