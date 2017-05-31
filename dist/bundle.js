@@ -1324,10 +1324,31 @@ var bowser = createCommonjsModule(function (module) {
       result.linux = t;
     }
 
+    function getWindowsVersion (s) {
+      switch (s) {
+        case 'NT': return 'NT'
+        case 'XP': return 'XP'
+        case 'NT 5.0': return '2000'
+        case 'NT 5.1': return 'XP'
+        case 'NT 5.2': return '2003'
+        case 'NT 6.0': return 'Vista'
+        case 'NT 6.1': return '7'
+        case 'NT 6.2': return '8'
+        case 'NT 6.3': return '8.1'
+        case 'NT 10.0': return '10'
+        default: return undefined
+      }
+    }
+    
     // OS version extraction
     var osVersion = '';
-    if (result.windowsphone) {
+    if (result.windows) {
+      osVersion = getWindowsVersion(getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i));
+    } else if (result.windowsphone) {
       osVersion = getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i);
+    } else if (result.mac) {
+      osVersion = getFirstMatch(/Mac OS X (\d+([_\.\s]\d+)*)/i);
+      osVersion = osVersion.replace(/[_\s]/g, '.');
     } else if (iosdevice) {
       osVersion = getFirstMatch(/os (\d+([_\s]\d+)*) like mac os x/i);
       osVersion = osVersion.replace(/[_\s]/g, '.');
@@ -1347,7 +1368,7 @@ var bowser = createCommonjsModule(function (module) {
     }
 
     // device type extraction
-    var osMajorVersion = osVersion.split('.')[0];
+    var osMajorVersion = !result.windows && osVersion.split('.')[0];
     if (
          tablet
       || nexusTablet
@@ -1734,7 +1755,7 @@ var retrieveBrowserName_1 = retrieveBrowserName$1;
 /* istanbul ignore next */
 
 /**
- * Wrapper around window.location.replace()
+ * Wrapper around window.history.pushState()
  *
  * @memberof Utils
  * @param {String} url - The url to redirect to
@@ -1742,7 +1763,7 @@ var retrieveBrowserName_1 = retrieveBrowserName$1;
  *
  */
 var redirectToURL = function redirectToURL(url) {
-  window.location.replace(url);
+  window.history.pushState({}, '', url);
 };
 
 var redirectToURL_1 = redirectToURL;
