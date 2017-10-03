@@ -104,7 +104,6 @@ AuthenticationClient.initStorage([
 ```
 The corresponding Client is generated automatically. For more information see https://github.com/zendesk/cross-storage
 
-
 ### Setup
 
 The library can be instantiated with the following arguments
