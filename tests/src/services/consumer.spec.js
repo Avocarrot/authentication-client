@@ -56,26 +56,19 @@ test('Consumer.constructor(options) should throw an error for', (t) => {
  */
 
 test('Consumer._request(resource, options) should', (t) => {
-  t.test('reject with specific error on failure', (assert) => {
+  t.test('reject propagating the server reponse on failure', (assert) => {
     assert.plan(1);
     const instances = getConsumerInstances();
-    sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+    const serverResponse = {
       status: 400,
       body: {
         error: 'invalid_client',
       },
-    }));
-    instances.consumer._request().catch(err => assert.equals(err.message, 'Client authentication failed'));
-    sandbox.restore();
-  });
-  t.test('reject with generic error on failure', (assert) => {
-    assert.plan(1);
-    const instances = getConsumerInstances();
-    sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
-      status: 500,
-      body: {},
-    }));
-    instances.consumer._request('resource', {}).catch(err => assert.equals(err.message, 'Unexpected error'));
+    };
+    sandbox.stub(instances.api, 'invoke', () => Promise.resolve(serverResponse));
+    instances.consumer._request().catch((err) => {
+      assert.deepEquals(err, serverResponse.body);
+    });
     sandbox.restore();
   });
 });
