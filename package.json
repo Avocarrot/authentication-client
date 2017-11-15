@@ -1,9 +1,9 @@
 {
   "name": "authentication-client",
-  "version": "2.9.2",
+  "version": "3.0.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
-  "main": "dist/bundle.js",
+  "main": "src/index.js",
   "private": true,
   "repository": {
     "type": "git",

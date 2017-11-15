@@ -4,7 +4,6 @@ const Utils = require('../../../src/utils');
 const generateRandomString = Utils.generateRandomString;
 const generateRandomUUID = Utils.generateRandomUUID;
 const stripBearer = Utils.stripBearer;
-const extractErrorMessage = Utils.extractErrorMessage;
 const validatePassword = Utils.validatePassword;
 const retrieveBrowserName = Utils.retrieveBrowserName;
 const extractLoginTokenFromURL = Utils.extractLoginTokenFromURL;
@@ -45,54 +44,6 @@ test('generateRandomUUID() should generate', (t) => {
 test('stripBearer(header) should strip Bearer token from Authorization header', (assert) => {
   assert.plan(1);
   assert.equals(stripBearer('Bearer d4149324285e46bfb8065b6c816a12b2'), 'd4149324285e46bfb8065b6c816a12b2');
-});
-
-/**
- * extractErrorMessage(errorCode)
- */
-
-test('extractErrorMessage(errorCode) should extract the correct messages', (assert) => {
-  assert.plan(13);
-  assert.equals(extractErrorMessage({
-    error: 'validation_failed',
-    error_description: 'custom message',
-  }), 'Validation failed: custom message');
-  assert.equals(extractErrorMessage({
-    error: 'not_found',
-  }), 'Not found');
-  assert.equals(extractErrorMessage({
-    error: 'forbidden_resource',
-  }), 'Forbidden resource');
-  assert.equals(extractErrorMessage({
-    error: 'access_denied',
-  }), 'The resource owner or authorization server denied the request');
-  assert.equals(extractErrorMessage({
-    error: 'unsupported_grant_type',
-  }), 'The authorization grant type is not supported');
-  assert.equals(extractErrorMessage({
-    error: 'invalid_grant',
-  }), 'Invalid credentials');
-  assert.equals(extractErrorMessage({
-    error: 'unauthorized_request',
-  }), 'Unauthorized request');
-  assert.equals(extractErrorMessage({
-    error: 'unauthorized_client',
-  }), 'The authenticated client is not authorized');
-  assert.equals(extractErrorMessage({
-    error: 'invalid_token',
-  }), 'The access token provided is expired, revoked, malformed, or invalid');
-  assert.equals(extractErrorMessage({
-    error: 'invalid_scope',
-  }), 'The requested scope is invalid, unknown, or malformed');
-  assert.equals(extractErrorMessage({
-    error: 'invalid_client',
-  }), 'Client authentication failed');
-  assert.equals(extractErrorMessage({
-    error: 'invalid_request',
-  }), 'The request is missing a required parameter');
-  assert.equals(extractErrorMessage({
-    error: 'error',
-  }), 'Unexpected error');
 });
 
 /**
