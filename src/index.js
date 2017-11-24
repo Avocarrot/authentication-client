@@ -12,6 +12,7 @@ const SandboxDatabase = require('./databases/sandbox');
 const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
 const PasswordFixtures = require('../fixtures/passwords.json');
+const ConfirmationFixtures = require('../fixtures/confirmations.json');
 
 /**
  * CrossStorageHub
@@ -68,7 +69,7 @@ const AuthenticationClient = (function immediate() {
       return new API.Production(host);
     }
     if (environment === ENV.Sandbox) {
-      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures));
+      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures, ConfirmationFixtures));
     }
     throw new Error('Invalid `environment` passed');
   }

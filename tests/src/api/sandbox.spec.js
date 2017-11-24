@@ -33,7 +33,11 @@ function getSandboxInstances() {
     user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     token: 'yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC',
   }];
-  const sandboxDatabase = new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures);
+  const ConfirmationFixtures = [{
+    uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+    user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+  }];
+  const sandboxDatabase = new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures, ConfirmationFixtures);
   const sandboxAPI = new SandboxAPI(sandboxDatabase);
   return {
     database: sandboxDatabase,
@@ -412,5 +416,89 @@ test('APISandbox.invoke() should mock /passwords PUT', (t) => {
       assert.equals(res.status, 404);
     });
     sandbox.restore();
+  });
+});
+
+/**
+ * APISandbox - GET /confirmations
+ */
+test('APISandbox.invoke() should mock /confirmations GET', (t) => {
+  t.test('on success', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, {
+        uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+        user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+      });
+      assert.equals(res.status, 200);
+    });
+  });
+  t.test('on error', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations/gibberish', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, { error: 'not_found' });
+      assert.equals(res.status, 404);
+    });
+  });
+});
+
+/**
+ * APISandbox - PUT /confirmations
+ */
+test('APISandbox.invoke() should mock /confirmations PUT', (t) => {
+  t.test('on success', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, {});
+      assert.equals(res.status, 204);
+    });
+  });
+  t.test('on error', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations/gibberish', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    }).then((res) => {
+      assert.deepEquals(res.body, { error: 'not_found' });
+      assert.equals(res.status, 404);
+    });
+  });
+});
+
+/**
+ * APISandbox - POST /confirmations
+ */
+test('APISandbox.invoke() should mock /confimations POST', (t) => {
+  t.test('on success', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({
+        email: 'john.doe@mail.com',
+      }),
+    }).then((res) => {
+      assert.deepEquals(res.body, {});
+      assert.equals(res.status, 201);
+    });
   });
 });

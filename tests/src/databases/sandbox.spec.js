@@ -22,7 +22,11 @@ function getSandboxDatabaseInstance(options = {}) {
     user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     token: 'yJhbGcieOiJIUzI1NiIsIJ9nR5cCI6IkpXVC',
   }];
-  return new SandboxDatabase(users, tokens, passwords);
+  const confirmations = options.confirmations || [{
+    uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+    user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+  }];
+  return new SandboxDatabase(users, tokens, passwords, confirmations);
 }
 
 /**

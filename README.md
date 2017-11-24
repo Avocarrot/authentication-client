@@ -232,7 +232,7 @@ While in Sandbox mode you can authenticate using the default Sandbox User found 
 
 **Default Sandbox User**
 
-| Property      | Value               |                                 
+| Property      | Value               |
 |:--------------|:-------------------:|
 | `email`       | john.doe@mail.com   |
 | `password`    | qwerty123           |
@@ -353,6 +353,41 @@ authClient.authenticator.resetPassword(token, password)
 ```
 ---
 
+### Confirmation Operations
+
+```javascript
+
+/**
+ * Get information about a confirmation token
+ * @param {String} token - Confirmation token UUID
+ * @return {Promise} - res.{uuid, expires, user_id, id}, err
+ *
+ */
+authClient.confirmation.get(token)
+  .then((res) => {/* ... */})
+  .catch((err) => {/* ... */})
+
+/**
+ * Create a new confirmation token for a user (Resend Confirmation Email)
+ * @param {String} email - The email where the confirmation link will be sent
+ * @return {Promise} - res.{uuid, expires, user_id, id}, err
+ *
+ */
+authClient.confirmation.resend(email)
+  .then((res) => {/* ... */})
+  .catch((err) => {/* ... */});
+
+/**
+ * Confirm user email using a confirmation token
+ * @param {String} token - The token
+ * @return {Promise} - Status 204, err
+ *
+ */
+authClient.confirmation.confirm(token)
+  .then(() => {})
+  .catch((err) => {/* ... */});
+```
+---
 
 ## Built With
 

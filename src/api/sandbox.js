@@ -110,6 +110,24 @@ class SandboxAPI {
           return response();
         },
       },
+      /**
+       * Maps `/confirmations` resource
+       *
+       * @private
+       *
+       */
+      confirmations: {
+        GET: (database, id) => {
+          const c = database.getConfirmationById(id);
+          return c ? response(200, c) : response(404, { error: 'not_found' });
+        },
+        PUT: (database, id) =>
+          (database.getConfirmationById(id) ? response(204) : response(404, { error: 'not_found' })),
+        POST: (database, id, body) => {
+          const { email } = JSON.parse(body);
+          return database.hasUserWithEmail(email) ? response(201) : response(404, { error: 'not_found' });
+        },
+      },
     };
   }
 

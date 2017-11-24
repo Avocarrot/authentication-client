@@ -2689,6 +2689,27 @@ var SandboxAPI$1 = function () {
             }
             return response();
           }
+        },
+        /**
+         * Maps `/confirmations` resource
+         *
+         * @private
+         *
+         */
+        confirmations: {
+          GET: function GET(database, id) {
+            var c = database.getConfirmationById(id);
+            return c ? response(200, c) : response(404, { error: 'not_found' });
+          },
+          PUT: function PUT(database, id) {
+            return database.getConfirmationById(id) ? response(204) : response(404, { error: 'not_found' });
+          },
+          POST: function POST(database, id, body) {
+            var _JSON$parse4 = JSON.parse(body),
+                email = _JSON$parse4.email;
+
+            return database.hasUserWithEmail(email) ? response(201) : response(404, { error: 'not_found' });
+          }
         }
       };
     }
@@ -3751,15 +3772,17 @@ var SandboxDatabase = function () {
    * @param {JSON} users - The initial user fixtures
    * @param {JSON} tokens - The initial token fixtures
    * @param {JSON} passwords - The initial passwords fixtures
+   * @param {JSON} confirmations - The initial confirmation fixtures
    * @return SandboxDatabase
    *
    */
-  function SandboxDatabase(users, tokens, passwords) {
+  function SandboxDatabase(users, tokens, passwords, confirmations) {
     classCallCheck(this, SandboxDatabase);
 
     this._users = [].concat(toConsumableArray(users));
     this._tokens = [].concat(toConsumableArray(tokens));
     this._passwords = [].concat(toConsumableArray(passwords));
+    this._confirmations = [].concat(toConsumableArray(confirmations));
   }
 
   /**
@@ -3956,6 +3979,22 @@ var SandboxDatabase = function () {
     }
 
     /**
+     * Returns confirmation from fixtures based on token uuid
+     *
+     * @param {String} id - The token id
+     * @return {Object} confirmation
+     *
+     */
+
+  }, {
+    key: 'getConfirmationById',
+    value: function getConfirmationById(id) {
+      return this._confirmations.find(function (conf) {
+        return conf.uuid === id;
+      });
+    }
+
+    /**
      * Adds user to fixtures
      *
      * @param {String} email - The email to set
@@ -4093,6 +4132,15 @@ var passwords = [{
 
 var passwords$1 = Object.freeze({
 	default: passwords
+});
+
+var confirmations = [{
+  "uuid": "653a6d48-c38c-4414-8cd4-acea0a3d7804",
+  "user_id": "44d2c8e0-762b-4fa5-8571-097c81c3130d"
+}];
+
+var confirmations$1 = Object.freeze({
+	default: confirmations
 });
 
 var es6Promise = createCommonjsModule(function (module, exports) {
@@ -5718,6 +5766,8 @@ var TokenFixtures = ( tokens$1 && tokens ) || tokens$1;
 
 var PasswordFixtures = ( passwords$1 && passwords ) || passwords$1;
 
+var ConfirmationFixtures = ( confirmations$1 && confirmations ) || confirmations$1;
+
 /**
  * CrossStorageHub
  * @see https://github.com/zendesk/cross-storage
@@ -5774,7 +5824,7 @@ var AuthenticationClient = function immediate() {
       return new index$8.Production(host);
     }
     if (environment === ENV.Sandbox) {
-      return new index$8.Sandbox(new sandbox$2(UserFixtures, TokenFixtures, PasswordFixtures));
+      return new index$8.Sandbox(new sandbox$2(UserFixtures, TokenFixtures, PasswordFixtures, ConfirmationFixtures));
     }
     throw new Error('Invalid `environment` passed');
   }
