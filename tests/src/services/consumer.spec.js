@@ -219,3 +219,66 @@ test('Consumer.retrieveUser(token) should retrieve User based on token', (assert
   });
   sandbox.restore();
 });
+
+/**
+ * Consumer.getConfirmationToken(token)
+ */
+test('Consumer.getConfirmationToken(token) should retrieve confirmation', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = {
+    status: 200,
+    body: {
+      uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+      user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    },
+  };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.getConfirmationToken('653a6d48-c38c-4414-8cd4-acea0a3d7804').then((res) => {
+    assert.ok(res, 'Response is returned');
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804');
+    assert.deepEquals(payload.method, 'GET');
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.updateConfirmation(token)
+ */
+test('Consumer.updateConfirmation(token) should send a PUT request to the API', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = { status: 204 };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.updateConfirmation('653a6d48-c38c-4414-8cd4-acea0a3d7804').then((res) => {
+    assert.ok(!res);
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804');
+    assert.deepEquals(payload.method, 'PUT');
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.createConfirmation(email)
+ */
+test('Consumer.createConfirmation(email) should send a POST request to the API', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = {
+    status: 201,
+    body: {
+      uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+      user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    },
+  };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.createConfirmation('foo@bar.com').then((res) => {
+    assert.deepEquals(res, response.body);
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations');
+    assert.deepEquals(payload.method, 'POST');
+  });
+  sandbox.restore();
+});

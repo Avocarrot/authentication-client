@@ -219,6 +219,49 @@ class Consumer {
     });
   }
 
+  /**
+   * Fetches a confirmation token
+   * @param {String} token - The token uuid
+   * @return {Promise}
+   */
+  getConfirmationToken(token) {
+    return this._request(`confirmations/${token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  /**
+   * Updates user confirmation
+   * @param {String} token - The token uuid
+   * @return {Promise}
+   */
+  updateConfirmation(token) {
+    return this._request(`confirmations/${token}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  /**
+   * Creates new user confirmation (Resend Confirmation Email)
+   * @param {String} email - User email
+   * @return {Promise}
+   */
+  createConfirmation(email) {
+    return this._request('confirmations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+  }
+
 }
 
 module.exports = Consumer;

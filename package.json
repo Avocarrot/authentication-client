@@ -16,7 +16,7 @@
     "test": "gulp test",
     "pretest": "eslint src/** tests/**",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
-    "cov:thresdhold": "istanbul check-coverage"
+    "cov:threshold": "istanbul check-coverage"
   },
   "bugs": {
     "url": "https://github.com/Avocarrot/authentication-client/issues"
@@ -43,7 +43,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "sinon": "^1.17.7",
+    "sinon": "^2.4.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
     "vinyl-buffer": "^1.0.0",

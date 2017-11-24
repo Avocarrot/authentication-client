@@ -501,4 +501,19 @@ test('APISandbox.invoke() should mock /confimations POST', (t) => {
       assert.equals(res.status, 201);
     });
   });
+  t.test('on error', (assert) => {
+    assert.plan(2);
+    getSandboxInstances().API.invoke('confirmations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        email: 'foo@bar.com',
+      }),
+    }).then((res) => {
+      assert.deepEquals(res.body, { error: 'not_found' });
+      assert.equals(res.status, 404);
+    });
+  });
 });
