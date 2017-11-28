@@ -3022,6 +3022,58 @@ var Consumer = function () {
         })
       });
     }
+
+    /**
+     * Fetches a confirmation token
+     * @param {String} token - The token uuid
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'getConfirmationToken',
+    value: function getConfirmationToken(token) {
+      return this._request('confirmations/' + token, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    /**
+     * Updates user confirmation
+     * @param {String} token - The token uuid
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'updateConfirmation',
+    value: function updateConfirmation(token) {
+      return this._request('confirmations/' + token, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    /**
+     * Creates new user confirmation (Resend Confirmation Email)
+     * @param {String} email - User email
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'createConfirmation',
+    value: function createConfirmation(email) {
+      return this._request('confirmations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      });
+    }
   }]);
   return Consumer;
 }();
@@ -3569,6 +3621,38 @@ var Authenticator = function () {
 }();
 
 var authenticator = Authenticator;
+
+var Confirmation = function () {
+  function Confirmation(consumer$$1) {
+    classCallCheck(this, Confirmation);
+
+    assert(consumer$$1 instanceof consumer, '`consumer` should be instance of Consumer');
+    this._consumer = consumer$$1;
+  }
+
+  createClass(Confirmation, [{
+    key: 'get',
+    value: function get$$1(token) {
+      assert(token, 'Missing `token`');
+      return this._consumer.getConfirmationToken(token);
+    }
+  }, {
+    key: 'confirm',
+    value: function confirm(token) {
+      assert(token, 'Missing `token`');
+      return this._consumer.updateConfirmation(token);
+    }
+  }, {
+    key: 'resend',
+    value: function resend(email) {
+      assert(email, 'Missing `email`');
+      return this._consumer.createConfirmation(email);
+    }
+  }]);
+  return Confirmation;
+}();
+
+var confirmation = Confirmation;
 
 var index$10 = createCommonjsModule(function (module) {
 (function(root, factory) {
@@ -5857,12 +5941,14 @@ var AuthenticationClient = function immediate() {
     var authenticator$$1 = new authenticator(consumer$$1);
     var redirector$$1 = new redirector(store$$1, user$$1);
     var adblockerDetector$$1 = new adblockerDetector();
+    var confirmation$$1 = new confirmation(consumer$$1);
     return {
       user: user$$1,
       session: session$$1,
       authenticator: authenticator$$1,
       redirector: redirector$$1,
-      adblockerDetector: adblockerDetector$$1
+      adblockerDetector: adblockerDetector$$1,
+      confirmation: confirmation$$1
     };
   }
 

@@ -4,6 +4,7 @@ const User = require('./models/user');
 const Client = require('./models/client');
 const Session = require('./models/session');
 const Authenticator = require('./models/authenticator');
+const Confirmation = require('./models/confirmation');
 const AdblockerDetector = require('./services/adblocker-detector');
 const Redirector = require('./services/redirector');
 const Consumer = require('./services/consumer');
@@ -97,12 +98,14 @@ const AuthenticationClient = (function immediate() {
     const authenticator = new Authenticator(consumer);
     const redirector = new Redirector(store, user);
     const adblockerDetector = new AdblockerDetector();
+    const confirmation = new Confirmation(consumer);
     return {
       user,
       session,
       authenticator,
       redirector,
       adblockerDetector,
+      confirmation,
     };
   }
 
