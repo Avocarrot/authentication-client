@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "dist/bundle.js",
