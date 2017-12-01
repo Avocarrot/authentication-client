@@ -89,13 +89,24 @@ const extractErrorMessage = (body) => {
 
 module.exports.extractErrorMessage = extractErrorMessage;
 
-const transformError = (body, status = 500) => ({
-  meta: {
-    httpStatus: parseInt(status, 10),
-    logref: body.error || 'unknown_error',
-    message: extractErrorMessage(body),
-  },
-});
+const transformError = (body, status = 500) => {
+  if (body.meta) {
+    return {
+      meta: {
+        httpStatus: parseInt(status, 10),
+        logref: body.meta.logref || 'unknown_error',
+        message: body.meta.message || 'Unexpected error',
+      },
+    };
+  }
+  return {
+    meta: {
+      httpStatus: parseInt(status, 10),
+      logref: body.error || 'unknown_error',
+      message: extractErrorMessage(body),
+    },
+  };
+};
 
 module.exports.transformError = transformError;
 

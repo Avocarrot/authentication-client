@@ -56,6 +56,6 @@
     "cross-storage": "^1.0.0",
     "es6-promise": "4.0.5",
     "qs": "^6.3.0",
-    "whatwg-fetch": "2.0.2"
+    "whatwg-fetch": "^2.0.3"
   }
 }

@@ -150,7 +150,7 @@ test('extractErrorMessage(errorCode) should extract the correct messages', (asse
  * transformError(body, status)
  */
 test('transformError(error, status) should transform OAUTH error to JSONAPI', (it) => {
-  it.test('when error is standard', (assert) => {
+  it.test('when error is in oauth format', (assert) => {
     assert.plan(1);
     const error = {
       error: 'invalid_request',
@@ -165,6 +165,43 @@ test('transformError(error, status) should transform OAUTH error to JSONAPI', (i
     };
     assert.deepEquals(transformError(error, 401), expected);
   });
+
+  it.test('when error is in jsonapi format', (assert) => {
+    assert.plan(1);
+    const error = {
+      meta: {
+        logref: 'jsonapi_forwarded_error',
+        message: 'Foo',
+      },
+    };
+    const expected = {
+      meta: {
+        httpStatus: 418,
+        logref: 'jsonapi_forwarded_error',
+        message: 'Foo',
+      },
+    };
+    assert.deepEquals(transformError(error, 418), expected);
+  });
+
+  it.test('when error is in half-assed jsonapi format', (assert) => {
+    assert.plan(1);
+    const error = {
+      meta: {},
+      errors: [
+        { foo: 'bar' },
+      ],
+    };
+    const expected = {
+      meta: {
+        httpStatus: 418,
+        logref: 'unknown_error',
+        message: 'Unexpected error',
+      },
+    };
+    assert.deepEquals(transformError(error, 418), expected);
+  });
+
   it.test('when error is unexpected', (assert) => {
     assert.plan(1);
     const error = {

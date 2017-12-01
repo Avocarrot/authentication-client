@@ -1635,6 +1635,73 @@ function stripBearer(header) {
 var stripBearer_1 = stripBearer;
 
 /**
+ * Returns error message for `errorCode`
+ *
+ * @private
+ * @memberof Utils
+ * @param {String} body - The `body` response to parse
+ * @param {String} body.error - The error code to use for mapping
+ * @param {String} body.error_description - The optional error description to show
+ * @return {String}
+ *
+ */
+var extractErrorMessage = function extractErrorMessage(body) {
+  switch (body.error) {
+    case 'validation_failed':
+      return 'Validation failed: ' + body.error_description;
+    case 'not_found':
+      return 'Not found';
+    case 'forbidden_resource':
+      return 'Forbidden resource';
+    case 'access_denied':
+      return 'The resource owner or authorization server denied the request';
+    case 'unsupported_grant_type':
+      return 'The authorization grant type is not supported';
+    case 'invalid_grant':
+      return 'Invalid credentials';
+    case 'unauthorized_request':
+      return 'Unauthorized request';
+    case 'unauthorized_client':
+      return 'The authenticated client is not authorized';
+    case 'invalid_token':
+      return 'The access token provided is expired, revoked, malformed, or invalid';
+    case 'invalid_scope':
+      return 'The requested scope is invalid, unknown, or malformed';
+    case 'invalid_client':
+      return 'Client authentication failed';
+    case 'invalid_request':
+      return 'The request is missing a required parameter';
+    default:
+      return 'Unexpected error';
+  }
+};
+
+var extractErrorMessage_1 = extractErrorMessage;
+
+var transformError = function transformError(body) {
+  var status = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+
+  if (body.meta) {
+    return {
+      meta: {
+        httpStatus: parseInt(status, 10),
+        logref: body.meta.logref || 'unknown_error',
+        message: body.meta.message || 'Unexpected error'
+      }
+    };
+  }
+  return {
+    meta: {
+      httpStatus: parseInt(status, 10),
+      logref: body.error || 'unknown_error',
+      message: extractErrorMessage(body)
+    }
+  };
+};
+
+var transformError_1 = transformError;
+
+/**
  * Validates a password pair agains the following rules:
  * - Password cannot contain spaces
  * - Password must contain both numbers and characters
@@ -1743,6 +1810,8 @@ var index$4 = {
   generateRandomString: generateRandomString_1,
   generateRandomUUID: generateRandomUUID_1,
   stripBearer: stripBearer_1,
+  extractErrorMessage: extractErrorMessage_1,
+  transformError: transformError_1,
   validatePassword: validatePassword_1,
   extractLoginTokenFromURL: extractLoginTokenFromURL_1,
   retrieveBrowserName: retrieveBrowserName_1,
@@ -2771,6 +2840,7 @@ var index$8 = {
 
 var ProductionAPI = index$8.Production;
 var SandboxAPI = index$8.Sandbox;
+var transformError$1 = index$4.transformError;
 
 /**
  * @class Consumer
@@ -2815,9 +2885,9 @@ var Consumer = function () {
             body = res.body;
 
         if (parseInt(status, 10) >= 400) {
-          return Promise.reject(body);
+          throw transformError$1(body, status);
         }
-        return Promise.resolve(body);
+        return body;
       });
     }
 
@@ -5471,7 +5541,10 @@ return Promise;
       headers.forEach(function(value, name) {
         this.append(name, value);
       }, this);
-
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1]);
+      }, this);
     } else if (headers) {
       Object.getOwnPropertyNames(headers).forEach(function(name) {
         this.append(name, headers[name]);
