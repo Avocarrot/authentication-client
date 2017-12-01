@@ -1,6 +1,6 @@
 {
   "name": "authentication-client",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A thin Authentication API consumer",
   "homepage": "https://github.com/Avocarrot/authentication-client",
   "main": "dist/bundle.js",
@@ -16,7 +16,7 @@
     "test": "gulp test",
     "pretest": "eslint src/** tests/**",
     "cov": "find ./tests -name '*.spec.js' | xargs istanbul cover tape",
-    "cov:thresdhold": "istanbul check-coverage"
+    "cov:threshold": "istanbul check-coverage"
   },
   "bugs": {
     "url": "https://github.com/Avocarrot/authentication-client/issues"
@@ -43,7 +43,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "sinon": "^1.17.7",
+    "sinon": "^2.4.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
     "vinyl-buffer": "^1.0.0",
@@ -56,6 +56,6 @@
     "cross-storage": "^1.0.0",
     "es6-promise": "4.0.5",
     "qs": "^6.3.0",
-    "whatwg-fetch": "2.0.2"
+    "whatwg-fetch": "^2.0.3"
   }
 }

@@ -1635,6 +1635,73 @@ function stripBearer(header) {
 var stripBearer_1 = stripBearer;
 
 /**
+ * Returns error message for `errorCode`
+ *
+ * @private
+ * @memberof Utils
+ * @param {String} body - The `body` response to parse
+ * @param {String} body.error - The error code to use for mapping
+ * @param {String} body.error_description - The optional error description to show
+ * @return {String}
+ *
+ */
+var extractErrorMessage = function extractErrorMessage(body) {
+  switch (body.error) {
+    case 'validation_failed':
+      return 'Validation failed: ' + body.error_description;
+    case 'not_found':
+      return 'Not found';
+    case 'forbidden_resource':
+      return 'Forbidden resource';
+    case 'access_denied':
+      return 'The resource owner or authorization server denied the request';
+    case 'unsupported_grant_type':
+      return 'The authorization grant type is not supported';
+    case 'invalid_grant':
+      return 'Invalid credentials';
+    case 'unauthorized_request':
+      return 'Unauthorized request';
+    case 'unauthorized_client':
+      return 'The authenticated client is not authorized';
+    case 'invalid_token':
+      return 'The access token provided is expired, revoked, malformed, or invalid';
+    case 'invalid_scope':
+      return 'The requested scope is invalid, unknown, or malformed';
+    case 'invalid_client':
+      return 'Client authentication failed';
+    case 'invalid_request':
+      return 'The request is missing a required parameter';
+    default:
+      return 'Unexpected error';
+  }
+};
+
+var extractErrorMessage_1 = extractErrorMessage;
+
+var transformError = function transformError(body) {
+  var status = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+
+  if (body.meta) {
+    return {
+      meta: {
+        httpStatus: parseInt(status, 10),
+        logref: body.meta.logref || 'unknown_error',
+        message: body.meta.message || 'Unexpected error'
+      }
+    };
+  }
+  return {
+    meta: {
+      httpStatus: parseInt(status, 10),
+      logref: body.error || 'unknown_error',
+      message: extractErrorMessage(body)
+    }
+  };
+};
+
+var transformError_1 = transformError;
+
+/**
  * Validates a password pair agains the following rules:
  * - Password cannot contain spaces
  * - Password must contain both numbers and characters
@@ -1743,6 +1810,8 @@ var index$4 = {
   generateRandomString: generateRandomString_1,
   generateRandomUUID: generateRandomUUID_1,
   stripBearer: stripBearer_1,
+  extractErrorMessage: extractErrorMessage_1,
+  transformError: transformError_1,
   validatePassword: validatePassword_1,
   extractLoginTokenFromURL: extractLoginTokenFromURL_1,
   retrieveBrowserName: retrieveBrowserName_1,
@@ -2689,6 +2758,27 @@ var SandboxAPI$1 = function () {
             }
             return response();
           }
+        },
+        /**
+         * Maps `/confirmations` resource
+         *
+         * @private
+         *
+         */
+        confirmations: {
+          GET: function GET(database, id) {
+            var c = database.getConfirmationById(id);
+            return c ? response(200, c) : response(404, { error: 'not_found' });
+          },
+          PUT: function PUT(database, id) {
+            return database.getConfirmationById(id) ? response(204) : response(404, { error: 'not_found' });
+          },
+          POST: function POST(database, id, body) {
+            var _JSON$parse4 = JSON.parse(body),
+                email = _JSON$parse4.email;
+
+            return database.hasUserWithEmail(email) ? response(201) : response(404, { error: 'not_found' });
+          }
         }
       };
     }
@@ -2750,6 +2840,7 @@ var index$8 = {
 
 var ProductionAPI = index$8.Production;
 var SandboxAPI = index$8.Sandbox;
+var transformError$1 = index$4.transformError;
 
 /**
  * @class Consumer
@@ -2794,9 +2885,9 @@ var Consumer = function () {
             body = res.body;
 
         if (parseInt(status, 10) >= 400) {
-          return Promise.reject(body);
+          throw transformError$1(body, status);
         }
-        return Promise.resolve(body);
+        return body;
       });
     }
 
@@ -2999,6 +3090,58 @@ var Consumer = function () {
         body: this._jsonEncode({
           password: password
         })
+      });
+    }
+
+    /**
+     * Fetches a confirmation token
+     * @param {String} token - The token uuid
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'getConfirmationToken',
+    value: function getConfirmationToken(token) {
+      return this._request('confirmations/' + token, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    /**
+     * Updates user confirmation
+     * @param {String} token - The token uuid
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'updateConfirmation',
+    value: function updateConfirmation(token) {
+      return this._request('confirmations/' + token, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+
+    /**
+     * Creates new user confirmation (Resend Confirmation Email)
+     * @param {String} email - User email
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'createConfirmation',
+    value: function createConfirmation(email) {
+      return this._request('confirmations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
       });
     }
   }]);
@@ -3549,6 +3692,38 @@ var Authenticator = function () {
 
 var authenticator = Authenticator;
 
+var Confirmation = function () {
+  function Confirmation(consumer$$1) {
+    classCallCheck(this, Confirmation);
+
+    assert(consumer$$1 instanceof consumer, '`consumer` should be instance of Consumer');
+    this._consumer = consumer$$1;
+  }
+
+  createClass(Confirmation, [{
+    key: 'get',
+    value: function get$$1(token) {
+      assert(token, 'Missing `token`');
+      return this._consumer.getConfirmationToken(token);
+    }
+  }, {
+    key: 'confirm',
+    value: function confirm(token) {
+      assert(token, 'Missing `token`');
+      return this._consumer.updateConfirmation(token);
+    }
+  }, {
+    key: 'resend',
+    value: function resend(email) {
+      assert(email, 'Missing `email`');
+      return this._consumer.createConfirmation(email);
+    }
+  }]);
+  return Confirmation;
+}();
+
+var confirmation = Confirmation;
+
 var index$10 = createCommonjsModule(function (module) {
 (function(root, factory) {
 
@@ -3751,15 +3926,17 @@ var SandboxDatabase = function () {
    * @param {JSON} users - The initial user fixtures
    * @param {JSON} tokens - The initial token fixtures
    * @param {JSON} passwords - The initial passwords fixtures
+   * @param {JSON} confirmations - The initial confirmation fixtures
    * @return SandboxDatabase
    *
    */
-  function SandboxDatabase(users, tokens, passwords) {
+  function SandboxDatabase(users, tokens, passwords, confirmations) {
     classCallCheck(this, SandboxDatabase);
 
     this._users = [].concat(toConsumableArray(users));
     this._tokens = [].concat(toConsumableArray(tokens));
     this._passwords = [].concat(toConsumableArray(passwords));
+    this._confirmations = [].concat(toConsumableArray(confirmations));
   }
 
   /**
@@ -3956,6 +4133,22 @@ var SandboxDatabase = function () {
     }
 
     /**
+     * Returns confirmation from fixtures based on token uuid
+     *
+     * @param {String} id - The token id
+     * @return {Object} confirmation
+     *
+     */
+
+  }, {
+    key: 'getConfirmationById',
+    value: function getConfirmationById(id) {
+      return this._confirmations.find(function (conf) {
+        return conf.uuid === id;
+      });
+    }
+
+    /**
      * Adds user to fixtures
      *
      * @param {String} email - The email to set
@@ -4093,6 +4286,15 @@ var passwords = [{
 
 var passwords$1 = Object.freeze({
 	default: passwords
+});
+
+var confirmations = [{
+  "uuid": "653a6d48-c38c-4414-8cd4-acea0a3d7804",
+  "user_id": "44d2c8e0-762b-4fa5-8571-097c81c3130d"
+}];
+
+var confirmations$1 = Object.freeze({
+	default: confirmations
 });
 
 var es6Promise = createCommonjsModule(function (module, exports) {
@@ -5339,7 +5541,10 @@ return Promise;
       headers.forEach(function(value, name) {
         this.append(name, value);
       }, this);
-
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1]);
+      }, this);
     } else if (headers) {
       Object.getOwnPropertyNames(headers).forEach(function(name) {
         this.append(name, headers[name]);
@@ -5718,6 +5923,8 @@ var TokenFixtures = ( tokens$1 && tokens ) || tokens$1;
 
 var PasswordFixtures = ( passwords$1 && passwords ) || passwords$1;
 
+var ConfirmationFixtures = ( confirmations$1 && confirmations ) || confirmations$1;
+
 /**
  * CrossStorageHub
  * @see https://github.com/zendesk/cross-storage
@@ -5774,7 +5981,7 @@ var AuthenticationClient = function immediate() {
       return new index$8.Production(host);
     }
     if (environment === ENV.Sandbox) {
-      return new index$8.Sandbox(new sandbox$2(UserFixtures, TokenFixtures, PasswordFixtures));
+      return new index$8.Sandbox(new sandbox$2(UserFixtures, TokenFixtures, PasswordFixtures, ConfirmationFixtures));
     }
     throw new Error('Invalid `environment` passed');
   }
@@ -5807,12 +6014,14 @@ var AuthenticationClient = function immediate() {
     var authenticator$$1 = new authenticator(consumer$$1);
     var redirector$$1 = new redirector(store$$1, user$$1);
     var adblockerDetector$$1 = new adblockerDetector();
+    var confirmation$$1 = new confirmation(consumer$$1);
     return {
       user: user$$1,
       session: session$$1,
       authenticator: authenticator$$1,
       redirector: redirector$$1,
-      adblockerDetector: adblockerDetector$$1
+      adblockerDetector: adblockerDetector$$1,
+      confirmation: confirmation$$1
     };
   }
 

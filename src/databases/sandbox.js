@@ -1,7 +1,4 @@
-const Utils = require('../utils');
-
-const generateRandomString = Utils.generateRandomString;
-const generateRandomUUID = Utils.generateRandomUUID;
+const { generateRandomString, generateRandomUUID } = require('../utils');
 
 /**
  * @class SandboxDatabase
@@ -15,13 +12,15 @@ class SandboxDatabase {
    * @param {JSON} users - The initial user fixtures
    * @param {JSON} tokens - The initial token fixtures
    * @param {JSON} passwords - The initial passwords fixtures
+   * @param {JSON} confirmations - The initial confirmation fixtures
    * @return SandboxDatabase
    *
    */
-  constructor(users, tokens, passwords) {
+  constructor(users, tokens, passwords, confirmations) {
     this._users = [...users];
     this._tokens = [...tokens];
     this._passwords = [...passwords];
+    this._confirmations = [...confirmations];
   }
 
   /**
@@ -176,6 +175,18 @@ class SandboxDatabase {
     const userId = this._tokens.find(token => token.access_token === accessToken).user_id;
     return this.getUserWithId(userId);
   }
+
+  /**
+   * Returns confirmation from fixtures based on token uuid
+   *
+   * @param {String} id - The token id
+   * @return {Object} confirmation
+   *
+   */
+  getConfirmationById(id) {
+    return this._confirmations.find(conf => conf.uuid === id);
+  }
+
 
   /**
    * Adds user to fixtures

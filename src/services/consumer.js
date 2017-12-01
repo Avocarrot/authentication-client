@@ -3,6 +3,7 @@ const qs = require('qs');
 const Client = require('../models/client');
 const ProductionAPI = require('../api').Production;
 const SandboxAPI = require('../api').Sandbox;
+const { transformError } = require('../utils');
 
 /**
  * @class Consumer
@@ -38,9 +39,9 @@ class Consumer {
     return this._api.invoke(resource, payload).then((res) => {
       const { status, body } = res;
       if (parseInt(status, 10) >= 400) {
-        return Promise.reject(body);
+        throw transformError(body, status);
       }
-      return Promise.resolve(body);
+      return body;
     });
   }
 
@@ -216,6 +217,49 @@ class Consumer {
       body: this._jsonEncode({
         password,
       }),
+    });
+  }
+
+  /**
+   * Fetches a confirmation token
+   * @param {String} token - The token uuid
+   * @return {Promise}
+   */
+  getConfirmationToken(token) {
+    return this._request(`confirmations/${token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  /**
+   * Updates user confirmation
+   * @param {String} token - The token uuid
+   * @return {Promise}
+   */
+  updateConfirmation(token) {
+    return this._request(`confirmations/${token}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  /**
+   * Creates new user confirmation (Resend Confirmation Email)
+   * @param {String} email - User email
+   * @return {Promise}
+   */
+  createConfirmation(email) {
+    return this._request('confirmations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
     });
   }
 

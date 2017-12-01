@@ -46,6 +46,78 @@ function stripBearer(header) {
 module.exports.stripBearer = stripBearer;
 
 /**
+ * Returns error message for `errorCode`
+ *
+ * @private
+ * @memberof Utils
+ * @param {String} body - The `body` response to parse
+ * @param {String} body.error - The error code to use for mapping
+ * @param {String} body.error_description - The optional error description to show
+ * @return {String}
+ *
+ */
+const extractErrorMessage = (body) => {
+  switch (body.error) {
+    case 'validation_failed':
+      return `Validation failed: ${body.error_description}`;
+    case 'not_found':
+      return 'Not found';
+    case 'forbidden_resource':
+      return 'Forbidden resource';
+    case 'access_denied':
+      return 'The resource owner or authorization server denied the request';
+    case 'unsupported_grant_type':
+      return 'The authorization grant type is not supported';
+    case 'invalid_grant':
+      return 'Invalid credentials';
+    case 'unauthorized_request':
+      return 'Unauthorized request';
+    case 'unauthorized_client':
+      return 'The authenticated client is not authorized';
+    case 'invalid_token':
+      return 'The access token provided is expired, revoked, malformed, or invalid';
+    case 'invalid_scope':
+      return 'The requested scope is invalid, unknown, or malformed';
+    case 'invalid_client':
+      return 'Client authentication failed';
+    case 'invalid_request':
+      return 'The request is missing a required parameter';
+    default:
+      return 'Unexpected error';
+  }
+};
+
+module.exports.extractErrorMessage = extractErrorMessage;
+
+/**
+ * Transforms errors to JSONAPI format
+ * @memberof Utils
+ * @param {String} body - The body of the response
+ * @params {String} status - Response http status
+ * @return {Object} JSONAPI formatted error object
+ */
+const transformError = (body, status = 500) => {
+  if (body.meta) {
+    return {
+      meta: {
+        httpStatus: parseInt(status, 10),
+        logref: body.meta.logref || 'unknown_error',
+        message: body.meta.message || 'Unexpected error',
+      },
+    };
+  }
+  return {
+    meta: {
+      httpStatus: parseInt(status, 10),
+      logref: body.error || 'unknown_error',
+      message: extractErrorMessage(body),
+    },
+  };
+};
+
+module.exports.transformError = transformError;
+
+/**
  * Validates a password pair agains the following rules:
  * - Password cannot contain spaces
  * - Password must contain both numbers and characters

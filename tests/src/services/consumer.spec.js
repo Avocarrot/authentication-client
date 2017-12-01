@@ -9,7 +9,7 @@ const sandbox = sinon.sandbox.create();
 /**
  * Instances
  */
-function getConsumerInstances() {
+const getConsumerInstances = () => {
   const client = new Client('id', 'secret');
   const api = new API();
   const consumer = new Consumer(new Client('id', 'secret'), api);
@@ -18,7 +18,7 @@ function getConsumerInstances() {
     api,
     consumer,
   };
-}
+};
 
 /**
  * Mocks
@@ -29,7 +29,6 @@ const UserMocks = require('../../mocks/user');
 /**
  * Consumer.constructor(options)
  */
-
 test('Consumer.constructor(options) should throw an error for', (t) => {
   t.test('missing `client` configuration', (assert) => {
     assert.plan(1);
@@ -56,34 +55,61 @@ test('Consumer.constructor(options) should throw an error for', (t) => {
  */
 
 test('Consumer._request(resource, options) should', (t) => {
-  t.test('reject propagating the server reponse on failure', (assert) => {
+  const instances = getConsumerInstances();
+
+  t.test('reject with specific message on error', (assert) => {
     assert.plan(1);
-    const instances = getConsumerInstances();
     const serverResponse = {
       status: 400,
       body: {
         error: 'invalid_client',
       },
     };
-    sandbox.stub(instances.api, 'invoke', () => Promise.resolve(serverResponse));
+    sandbox.stub(instances.api, 'invoke').resolves(serverResponse);
+    const expected = {
+      meta: {
+        httpStatus: 400,
+        logref: 'invalid_client',
+        message: 'Client authentication failed',
+      },
+    };
+
     instances.consumer._request().catch((err) => {
-      assert.deepEquals(err, serverResponse.body);
+      assert.deepEquals(err, expected);
     });
     sandbox.restore();
+  });
+  t.test('reject with generic message on error', (assert) => {
+    assert.plan(1);
+    const serverResponse = {
+      status: 418,
+      body: {},
+    };
+    sandbox.stub(instances.api, 'invoke').resolves(serverResponse);
+    const expected = {
+      meta: {
+        httpStatus: 418,
+        logref: 'unknown_error',
+        message: 'Unexpected error',
+      },
+    };
+
+    instances.consumer._request().catch((err) => {
+      assert.deepEquals(err, expected);
+    });
   });
 });
 
 /**
  * Consumer.retrieveToken(username, password)
  */
-
 test('Consumer.retrieveToken(username, password) should return `access_token` and `refresh_token` on success', (assert) => {
   assert.plan(4);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: TokenMocks.PaswordGrant,
-  }));
+  });
   instances.consumer.retrieveToken('username+char@email.com', 'password').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
@@ -96,14 +122,13 @@ test('Consumer.retrieveToken(username, password) should return `access_token` an
 /**
  * Consumer.refreshToken(refresh_token)
  */
-
 test('Consumer.refreshToken(refresh_token) should return a renewed token', (assert) => {
   assert.plan(4);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: TokenMocks.RefreshGrant,
-  }));
+  });
   instances.consumer.refreshToken('refresh_token').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'token');
@@ -117,14 +142,13 @@ test('Consumer.refreshToken(refresh_token) should return a renewed token', (asse
 /**
  * Consumer.createUser(email, firstName, lastName, password)
  */
-
 test('Consumer.createUser(email, firstName, lastName, password) should return details for a new User', (assert) => {
   assert.plan(4);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 201,
     body: Object.assign(UserMocks.User, {}),
-  }));
+  });
   instances.consumer.createUser('john.doe@mail.com', 'password', 'John', 'Doe').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users');
@@ -137,18 +161,17 @@ test('Consumer.createUser(email, firstName, lastName, password) should return de
 /**
  * Consumer.updateUser(userId, bearer, options)
  */
-
 test('Consumer.updateUser(userId, bearer, options) should update User and return new details', (assert) => {
   assert.plan(4);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: UserMocks.UserWithDetails({
       first_name: 'first_name',
       last_name: 'last_name',
       roles: ['developer'],
     }),
-  }));
+  });
   instances.consumer.updateUser('44d2c8e0-762b-4fa5-8571-097c81c3130d', 'd4149324285e46bfb8065b6c816a12b2', {
     firstName: 'John',
     lastName: 'Doe',
@@ -164,14 +187,13 @@ test('Consumer.updateUser(userId, bearer, options) should update User and return
 /**
  * Consumer.requestPasswordReset(email)
  */
-
 test('Consumer.requestPasswordReset(email) should send a password reset request', (assert) => {
   assert.plan(3);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: {},
-  }));
+  });
   instances.consumer.requestPasswordReset('john.doe@mail.com').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'POST');
@@ -184,14 +206,13 @@ test('Consumer.requestPasswordReset(email) should send a password reset request'
 /**
  * Consumer.resetPassword(token, password)
  */
-
 test('Consumer.resetPassword(token, password) should reset password', (assert) => {
   assert.plan(3);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: {},
-  }));
+  });
   instances.consumer.resetPassword('f734c7f2-0452-414d-867b-84e4166325a', 'password').then(() => {
     assert.deepEquals(apiStub.getCall(0).args[0], 'passwords/f734c7f2-0452-414d-867b-84e4166325a');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'PUT');
@@ -203,19 +224,81 @@ test('Consumer.resetPassword(token, password) should reset password', (assert) =
 /**
  * Consumer.retrieveUser(token)
  */
-
 test('Consumer.retrieveUser(token) should retrieve User based on token', (assert) => {
   assert.plan(4);
   const instances = getConsumerInstances();
-  const apiStub = sandbox.stub(instances.api, 'invoke', () => Promise.resolve({
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves({
     status: 200,
     body: Object.assign(UserMocks.User, {}),
-  }));
+  });
   instances.consumer.retrieveUser('f734c7f2-0452-414d-867b-84e4166325a').then((res) => {
     assert.ok(res, 'Response is filled');
     assert.deepEquals(apiStub.getCall(0).args[0], 'users/me');
     assert.deepEquals(apiStub.getCall(0).args[1].method, 'GET');
     assert.deepEquals(apiStub.getCall(0).args[1].headers.Authorization, 'Bearer f734c7f2-0452-414d-867b-84e4166325a');
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.getConfirmationToken(token)
+ */
+test('Consumer.getConfirmationToken(token) should retrieve confirmation', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = {
+    status: 200,
+    body: {
+      uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+      user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    },
+  };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.getConfirmationToken('653a6d48-c38c-4414-8cd4-acea0a3d7804').then((res) => {
+    assert.ok(res, 'Response is returned');
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804');
+    assert.deepEquals(payload.method, 'GET');
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.updateConfirmation(token)
+ */
+test('Consumer.updateConfirmation(token) should send a PUT request to the API', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = { status: 204 };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.updateConfirmation('653a6d48-c38c-4414-8cd4-acea0a3d7804').then((res) => {
+    assert.ok(!res);
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations/653a6d48-c38c-4414-8cd4-acea0a3d7804');
+    assert.deepEquals(payload.method, 'PUT');
+  });
+  sandbox.restore();
+});
+
+/**
+ * Consumer.createConfirmation(email)
+ */
+test('Consumer.createConfirmation(email) should send a POST request to the API', (assert) => {
+  assert.plan(3);
+  const instances = getConsumerInstances();
+  const response = {
+    status: 201,
+    body: {
+      uuid: '653a6d48-c38c-4414-8cd4-acea0a3d7804',
+      user_id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+    },
+  };
+  const apiStub = sandbox.stub(instances.api, 'invoke').resolves(response);
+  instances.consumer.createConfirmation('foo@bar.com').then((res) => {
+    assert.deepEquals(res, response.body);
+    const [resource, payload] = apiStub.getCall(0).args;
+    assert.deepEquals(resource, 'confirmations');
+    assert.deepEquals(payload.method, 'POST');
   });
   sandbox.restore();
 });

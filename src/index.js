@@ -4,6 +4,7 @@ const User = require('./models/user');
 const Client = require('./models/client');
 const Session = require('./models/session');
 const Authenticator = require('./models/authenticator');
+const Confirmation = require('./models/confirmation');
 const AdblockerDetector = require('./services/adblocker-detector');
 const Redirector = require('./services/redirector');
 const Consumer = require('./services/consumer');
@@ -12,6 +13,7 @@ const SandboxDatabase = require('./databases/sandbox');
 const UserFixtures = require('../fixtures/users.json');
 const TokenFixtures = require('../fixtures/tokens.json');
 const PasswordFixtures = require('../fixtures/passwords.json');
+const ConfirmationFixtures = require('../fixtures/confirmations.json');
 
 /**
  * CrossStorageHub
@@ -68,7 +70,7 @@ const AuthenticationClient = (function immediate() {
       return new API.Production(host);
     }
     if (environment === ENV.Sandbox) {
-      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures));
+      return new API.Sandbox(new SandboxDatabase(UserFixtures, TokenFixtures, PasswordFixtures, ConfirmationFixtures));
     }
     throw new Error('Invalid `environment` passed');
   }
@@ -96,12 +98,14 @@ const AuthenticationClient = (function immediate() {
     const authenticator = new Authenticator(consumer);
     const redirector = new Redirector(store, user);
     const adblockerDetector = new AdblockerDetector();
+    const confirmation = new Confirmation(consumer);
     return {
       user,
       session,
       authenticator,
       redirector,
       adblockerDetector,
+      confirmation,
     };
   }
 

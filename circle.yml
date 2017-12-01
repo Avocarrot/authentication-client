@@ -12,7 +12,7 @@ test:
     - npm run pretest
   override:
     - npm run cov
-    - npm run cov:thresdhold
+    - npm run cov:threshold
   post:
     - npm run build
     - npm run docs
