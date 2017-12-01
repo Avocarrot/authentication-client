@@ -89,6 +89,13 @@ const extractErrorMessage = (body) => {
 
 module.exports.extractErrorMessage = extractErrorMessage;
 
+/**
+ * Transforms errors to JSONAPI format
+ * @memberof Utils
+ * @param {String} body - The body of the response
+ * @params {String} status - Response http status
+ * @return {Object} JSONAPI formatted error object
+ */
 const transformError = (body, status = 500) => {
   if (body.meta) {
     return {
