@@ -3,6 +3,7 @@ const qs = require('qs');
 const Client = require('../models/client');
 const ProductionAPI = require('../api').Production;
 const SandboxAPI = require('../api').Sandbox;
+const { transformError } = require('../utils');
 
 /**
  * @class Consumer
@@ -38,9 +39,9 @@ class Consumer {
     return this._api.invoke(resource, payload).then((res) => {
       const { status, body } = res;
       if (parseInt(status, 10) >= 400) {
-        return Promise.reject(body);
+        throw transformError(body, status);
       }
-      return Promise.resolve(body);
+      return body;
     });
   }
 

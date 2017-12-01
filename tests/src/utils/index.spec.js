@@ -7,6 +7,8 @@ const stripBearer = Utils.stripBearer;
 const validatePassword = Utils.validatePassword;
 const retrieveBrowserName = Utils.retrieveBrowserName;
 const extractLoginTokenFromURL = Utils.extractLoginTokenFromURL;
+const extractErrorMessage = Utils.extractErrorMessage;
+const transformError = Utils.transformError;
 
 /**
  * generateRandomString(radix)
@@ -95,4 +97,86 @@ test('extractLoginTokenFromURL(url) extracts loginToken from URL', (assert) => {
   assert.plan(2);
   assert.equals(extractLoginTokenFromURL('http://mock.host.com/resource?flag=true&loginToken=123456789&query[1]=1&query[2]=2'), '123456789');
   assert.equals(extractLoginTokenFromURL('http://mock.host.com/resource?flag=true&query[1]=1&query[2]=2'), '');
+});
+
+/**
+ * extractErrorMessage(error)
+ */
+test('extractErrorMessage(errorCode) should extract the correct messages', (assert) => {
+  assert.plan(13);
+  assert.equals(extractErrorMessage({
+    error: 'validation_failed',
+    error_description: 'custom message',
+  }), 'Validation failed: custom message');
+  assert.equals(extractErrorMessage({
+    error: 'not_found',
+  }), 'Not found');
+  assert.equals(extractErrorMessage({
+    error: 'forbidden_resource',
+  }), 'Forbidden resource');
+  assert.equals(extractErrorMessage({
+    error: 'access_denied',
+  }), 'The resource owner or authorization server denied the request');
+  assert.equals(extractErrorMessage({
+    error: 'unsupported_grant_type',
+  }), 'The authorization grant type is not supported');
+  assert.equals(extractErrorMessage({
+    error: 'invalid_grant',
+  }), 'Invalid credentials');
+  assert.equals(extractErrorMessage({
+    error: 'unauthorized_request',
+  }), 'Unauthorized request');
+  assert.equals(extractErrorMessage({
+    error: 'unauthorized_client',
+  }), 'The authenticated client is not authorized');
+  assert.equals(extractErrorMessage({
+    error: 'invalid_token',
+  }), 'The access token provided is expired, revoked, malformed, or invalid');
+  assert.equals(extractErrorMessage({
+    error: 'invalid_scope',
+  }), 'The requested scope is invalid, unknown, or malformed');
+  assert.equals(extractErrorMessage({
+    error: 'invalid_client',
+  }), 'Client authentication failed');
+  assert.equals(extractErrorMessage({
+    error: 'invalid_request',
+  }), 'The request is missing a required parameter');
+  assert.equals(extractErrorMessage({
+    error: 'error',
+  }), 'Unexpected error');
+});
+
+/**
+ * transformError(body, status)
+ */
+test('transformError(error, status) should transform OAUTH error to JSONAPI', (it) => {
+  it.test('when error is standard', (assert) => {
+    assert.plan(1);
+    const error = {
+      error: 'invalid_request',
+      error_description: 'Something happened',
+    };
+    const expected = {
+      meta: {
+        httpStatus: 401,
+        logref: 'invalid_request',
+        message: 'The request is missing a required parameter',
+      },
+    };
+    assert.deepEquals(transformError(error, 401), expected);
+  });
+  it.test('when error is unexpected', (assert) => {
+    assert.plan(1);
+    const error = {
+      foo: 'bar',
+    };
+    const expected = {
+      meta: {
+        httpStatus: 500,
+        logref: 'unknown_error',
+        message: 'Unexpected error',
+      },
+    };
+    assert.deepEquals(transformError(error), expected);
+  });
 });
