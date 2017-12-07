@@ -1678,6 +1678,13 @@ var extractErrorMessage = function extractErrorMessage(body) {
 
 var extractErrorMessage_1 = extractErrorMessage;
 
+/**
+ * Transforms errors to JSONAPI format
+ * @memberof Utils
+ * @param {String} body - The body of the response
+ * @params {String} status - Response http status
+ * @return {Object} JSONAPI formatted error object
+ */
 var transformError = function transformError(body) {
   var status = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
 
@@ -3293,10 +3300,10 @@ var User = function () {
         _this3._roles = data.roles;
         _this3._email = data.email;
         _this3._isDirty = false;
-        return Promise.resolve({
+        return {
           data: data,
           message: 'Created User'
-        });
+        };
       });
     }
 
@@ -3338,6 +3345,7 @@ var User = function () {
         _this4._firstName = data.first_name;
         _this4._roles = data.roles;
         _this4._lastName = data.last_name;
+        _this4._lastLogin = data.last_login;
         _this4._isDirty = false;
         return Promise.resolve({
           data: data,

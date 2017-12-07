@@ -195,10 +195,10 @@ class User {
       this._roles = data.roles;
       this._email = data.email;
       this._isDirty = false;
-      return Promise.resolve({
+      return {
         data,
         message: 'Created User',
-      });
+      };
     });
   }
 
@@ -231,6 +231,7 @@ class User {
       this._firstName = data.first_name;
       this._roles = data.roles;
       this._lastName = data.last_name;
+      this._lastLogin = data.last_login;
       this._isDirty = false;
       return Promise.resolve({
         data,
