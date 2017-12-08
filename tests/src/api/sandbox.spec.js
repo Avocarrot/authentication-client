@@ -57,8 +57,8 @@ test('APISandbox.invoke() should mock /users GET', (t) => {
   t.test('on success', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithToken', () => true);
-    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'hasUserWithToken').returns(true);
+    sandbox.stub(instances.database, 'getUserWithToken').returns(Object.assign(UserMocks.User, {}));
     instances.API.invoke('users/me', {
       method: 'GET',
       headers: {
@@ -74,7 +74,7 @@ test('APISandbox.invoke() should mock /users GET', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithToken', () => false);
+    sandbox.stub(instances.database, 'hasUserWithToken').returns(false);
     instances.API.invoke('users/me', {
       method: 'GET',
       headers: {
@@ -105,8 +105,8 @@ test('APISandbox.invoke() should mock /users POST', (t) => {
       first_name: 'Foo',
       last_name: 'Bar',
     };
-    sandbox.stub(instances.database, 'hasUserWithData', () => (false));
-    sandbox.stub(instances.database, 'addUser', () => (newUser));
+    sandbox.stub(instances.database, 'hasUserWithData').returns(false);
+    sandbox.stub(instances.database, 'addUser').returns(newUser);
     instances.API.invoke('users', {
       method: 'POST',
       headers: {
@@ -127,7 +127,7 @@ test('APISandbox.invoke() should mock /users POST', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithData', () => (true));
+    sandbox.stub(instances.database, 'hasUserWithData').returns(true);
     instances.API.invoke('users', {
       method: 'POST',
       headers: {
@@ -160,9 +160,9 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
       first_name: 'Foo',
       last_name: 'Bar',
     });
-    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User, {}));
-    sandbox.stub(instances.database, 'getUserWithId', () => Object.assign(UserMocks.User, {}));
-    sandbox.stub(instances.database, 'updateUser', () => updatedUser);
+    sandbox.stub(instances.database, 'getUserWithToken').returns(Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'getUserWithId').returns(Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'updateUser').returns(updatedUser);
     instances.API.invoke('users/44d2c8e0-762b-4fa5-8571-097c81c3130d', {
       method: 'PATCH',
       headers: {
@@ -182,8 +182,8 @@ test('APISandbox.invoke() should mock /users PATCH', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'getUserWithToken', () => Object.assign(UserMocks.User, {}));
-    sandbox.stub(instances.database, 'getUserWithId', () => {});
+    sandbox.stub(instances.database, 'getUserWithToken').returns(Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'getUserWithId');
     instances.API.invoke('users/44d2c8e0-762b-4fa5-8571-097c81c3130d', {
       method: 'PATCH',
       headers: {
@@ -211,9 +211,9 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
   t.test('on success', (assert) => {
     assert.plan(3);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithData', () => true);
-    sandbox.stub(instances.database, 'getUserWithData', () => Object.assign(UserMocks.User, {}));
-    sandbox.stub(instances.database, 'getTokenFor', () => Object.assign(TokenMocks.PaswordGrant, {}));
+    sandbox.stub(instances.database, 'hasUserWithData').returns(true);
+    sandbox.stub(instances.database, 'getUserWithData').returns(Object.assign(UserMocks.User, {}));
+    sandbox.stub(instances.database, 'getTokenFor').returns(Object.assign(TokenMocks.PaswordGrant, {}));
     instances.API.invoke('token', {
       method: 'POST',
       headers: {
@@ -237,7 +237,7 @@ test('APISandbox.invoke() should mock /token POST retrieval', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithData', () => false);
+    sandbox.stub(instances.database, 'hasUserWithData').returns(false);
     instances.API.invoke('token', {
       method: 'POST',
       headers: {
@@ -272,8 +272,8 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
       access_token: 'IUzI1NieyJhbGciOiJIsInR5cCI6IkpXVCJ9',
       refresh_token: 'eyJhbGciOiJIsIIUzI1NipXVCJnR5cCI6Ik9',
     };
-    sandbox.stub(instances.database, 'hasTokenWithRefresh', () => true);
-    sandbox.stub(instances.database, 'updateToken', () => mockToken);
+    sandbox.stub(instances.database, 'hasTokenWithRefresh').returns(true);
+    sandbox.stub(instances.database, 'updateToken').returns(mockToken);
     instances.API.invoke('token', {
       method: 'POST',
       headers: {
@@ -295,7 +295,7 @@ test('APISandbox.invoke() should mock /token POST refreshement', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasTokenWithRefresh', () => false);
+    sandbox.stub(instances.database, 'hasTokenWithRefresh').returns(false);
     instances.API.invoke('token', {
       method: 'POST',
       headers: {
@@ -363,7 +363,7 @@ test('APISandbox.invoke() should mock /passwords POST', (t) => {
   t.test('on failure', (assert) => {
     assert.plan(2);
     const instances = getSandboxInstances();
-    sandbox.stub(instances.database, 'hasUserWithEmail', () => false);
+    sandbox.stub(instances.database, 'hasUserWithEmail').returns(false);
     instances.API.invoke('passwords', {
       method: 'POST',
       headers: {

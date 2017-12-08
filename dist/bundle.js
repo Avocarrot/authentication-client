@@ -3050,7 +3050,8 @@ var Consumer = function () {
         },
         body: this._jsonEncode({
           first_name: options.firstName,
-          last_name: options.lastName
+          last_name: options.lastName,
+          last_login: options.lastLogin
         })
       });
     }
@@ -3257,7 +3258,8 @@ var User = function () {
       }
       return this._consumer.updateUser(this._id, this._bearer, {
         firstName: this._firstName,
-        lastName: this._lastName
+        lastName: this._lastName,
+        lastLogin: this._lastLogin
       }).then(function () {
         _this2._isDirty = false;
         return Promise.resolve({
@@ -3523,6 +3525,17 @@ var User = function () {
       if (newLastName) {
         this._isDirty = true;
         this._lastName = newLastName;
+      }
+    }
+  }, {
+    key: 'lastLogin',
+    get: function get$$1() {
+      return this._lastLogin;
+    },
+    set: function set$$1(newLastLogin) {
+      if (newLastLogin) {
+        this._isDirty = true;
+        this._lastLogin = newLastLogin;
       }
     }
   }]);

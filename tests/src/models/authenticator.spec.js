@@ -70,7 +70,7 @@ test('Authenticator.requestPasswordReset(email) should', (t) => {
   t.test('resolve on success', (assert) => {
     assert.plan(2);
     const instances = getAuthenticatorInstances(sandbox);
-    sandbox.stub(instances.consumer, 'requestPasswordReset', () => Promise.resolve());
+    sandbox.stub(instances.consumer, 'requestPasswordReset').resolves();
     instances.authenticator.requestPasswordReset('john.doe@mail.com').then((res) => {
       assert.ok('requestPasswordReset() resolved');
       assert.equals(res.message, 'A reset link has been sent to your email');
@@ -107,7 +107,7 @@ test('Authenticator.resetPassword(token, password) should', (t) => {
   t.test('reject for invalid password', (assert) => {
     assert.plan(1);
     const instances = getAuthenticatorInstances(sandbox);
-    sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
+    sandbox.stub(instances.consumer, 'resetPassword').resolves();
     instances.authenticator.resetPassword('token', 'password').catch((err) => {
       assert.equals(err.message, 'Password must contain both numbers and characters');
     });
@@ -117,7 +117,7 @@ test('Authenticator.resetPassword(token, password) should', (t) => {
   t.test('resolve on success', (assert) => {
     assert.plan(2);
     const instances = getAuthenticatorInstances(sandbox);
-    sandbox.stub(instances.consumer, 'resetPassword', () => Promise.resolve());
+    sandbox.stub(instances.consumer, 'resetPassword').resolves();
     instances.authenticator.resetPassword('token', 'password123456').then((res) => {
       assert.ok('resetPassword() resolved');
       assert.equals(res.message, 'Your password has been reset');

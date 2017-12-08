@@ -64,7 +64,7 @@ test('AuthenticationClient.getInstanceFor(client_id, client_secret, environment)
 
 test('AuthenticationClient.initStorage(options) should initialise CrossStorageHub', (assert) => {
   assert.plan(2);
-  const initStorageStub = sandbox.stub(CrossStorageHub, 'init', () => {});
+  const initStorageStub = sandbox.stub(CrossStorageHub, 'init');
   AuthenticationClient.initStorage([
     {
       origin: /.*subdomain.domain.com\d$/,

@@ -114,6 +114,16 @@ class User {
     }
   }
 
+  get lastLogin() {
+    return this._lastLogin;
+  }
+  set lastLogin(newLastLogin) {
+    if (newLastLogin) {
+      this._isDirty = true;
+      this._lastLogin = newLastLogin;
+    }
+  }
+
   /**
    * Syncs User data from Store
    * - Currently on bearer is synced to Store
@@ -162,6 +172,7 @@ class User {
     return this._consumer.updateUser(this._id, this._bearer, {
       firstName: this._firstName,
       lastName: this._lastName,
+      lastLogin: this._lastLogin,
     }).then(() => {
       this._isDirty = false;
       return Promise.resolve({
