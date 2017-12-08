@@ -172,7 +172,7 @@ class User {
     return this._consumer.updateUser(this._id, this._bearer, {
       firstName: this._firstName,
       lastName: this._lastName,
-      lastLogin: this._lastLogin
+      lastLogin: this._lastLogin,
     }).then(() => {
       this._isDirty = false;
       return Promise.resolve({

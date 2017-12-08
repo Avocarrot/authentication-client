@@ -177,7 +177,7 @@ class Consumer {
       body: this._jsonEncode({
         first_name: options.firstName,
         last_name: options.lastName,
-        last_login: options.lastLogin
+        last_login: options.lastLogin,
       }),
     });
   }
