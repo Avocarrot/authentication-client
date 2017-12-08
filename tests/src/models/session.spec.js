@@ -63,8 +63,7 @@ test('Session.constructor(options) should throw an error for', (t) => {
 test('Session.initialize() should initialize session', (assert) => {
   assert.plan(1);
   const instances = getSessionInstances();
-  const syncWithStoreStub = sandbox.stub();
-  syncWithStoreStub.returns(Promise.resolve());
+  const syncWithStoreStub = sandbox.stub().resolves();
   instances.user.syncWithStore = syncWithStoreStub;
   instances.session.initialize().then(() => {
     assert.equals(syncWithStoreStub.callCount, 1);
@@ -114,8 +113,7 @@ test('Session.invalidate() should redirect to login host', (assert) => {
 test('Session.validate() should redirect to login host with a return URL', (assert) => {
   assert.plan(3);
   const redirectFnSpy = sandbox.spy();
-  const pageURLStub = sandbox.stub();
-  pageURLStub.returns('http://subdomain.mock.com');
+  const pageURLStub = sandbox.stub().returns('http://subdomain.mock.com');
   const instances = getSessionInstances(redirectFnSpy, pageURLStub);
   instances.session.validate();
   assert.equals(pageURLStub.callCount, 1);

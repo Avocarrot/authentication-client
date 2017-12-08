@@ -9,13 +9,13 @@ const sandbox = sinon.sandbox.create();
  */
 test('ProductionAPI.invoke() should call API fetcher with correct resources and payload', (assert) => {
   assert.plan(4);
-  const clientStub = sandbox.stub();
-  clientStub.returns(Promise.resolve({
+  const response = {
     status: 200,
     json: () => Promise.resolve({
       key: 'value',
     }),
-  }));
+  };
+  const clientStub = sandbox.stub().resolves(response);
   const payload = {
     method: 'POST',
     body: {
@@ -42,10 +42,7 @@ test('ProductionAPI.invoke() should call API fetcher with correct resources and 
 
 test('ProductionAPI.invoke() should handle 204 requests gracefully', (assert) => {
   assert.plan(4);
-  const clientStub = sandbox.stub();
-  clientStub.returns(Promise.resolve({
-    status: 204,
-  }));
+  const clientStub = sandbox.stub().resolves({ status: 204 });
   const payload = {
     method: 'POST',
     body: {

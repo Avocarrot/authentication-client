@@ -192,10 +192,9 @@ test('User.authenticate(username, password) should throw an error for', (t) => {
 test('User.authenticate(username, password) should store user and token on success', (assert) => {
   assert.plan(10);
   const instances = getUserInstances();
-  const storeSetStub = sandbox.stub();
+  const storeSetStub = sandbox.stub().resolves();
   const retrieveUserStub = sandbox.stub();
   const retrieveTokenStub = sandbox.stub();
-  storeSetStub.returns(Promise.resolve());
   retrieveUserStub.returns({
     id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
@@ -204,10 +203,10 @@ test('User.authenticate(username, password) should store user and token on succe
     email: 'john.doe@mail.com',
     roles: ['developer'],
   });
-  retrieveTokenStub.returns(Promise.resolve({
+  retrieveTokenStub.resolves({
     refresh_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
     access_token: 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
-  }));
+  });
   instances.store.set = storeSetStub;
   instances.consumer.retrieveUser = retrieveUserStub;
   instances.consumer.retrieveToken = retrieveTokenStub;
@@ -241,18 +240,16 @@ test('User.authenticate(username, password) should store user and token on succe
 test('User.syncWithStore() should synrchronize data with Store', (assert) => {
   assert.plan(9);
   const instances = getUserInstances();
-  const storeGetStub = sandbox.stub();
-  const retrieveUserStub = sandbox.stub();
-
-  storeGetStub.returns(Promise.resolve('rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7'));
-  retrieveUserStub.returns(Promise.resolve({
+  const storeGetStub = sandbox.stub().resolves('rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7');
+  const retrieveUserStub = sandbox.stub().resolves({
     id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
     publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
     first_name: 'John',
     last_name: 'Doe',
     email: 'john.doe@mail.com',
     roles: ['developer'],
-  }));
+  });
+
   instances.store.get = storeGetStub;
   instances.consumer.retrieveUser = retrieveUserStub;
   instances.user.syncWithStore().then((res) => {
@@ -288,19 +285,17 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
   t.test('store user and token on success', (assert) => {
     assert.plan(9);
     const instances = getUserInstances();
-    const storeSetStub = sandbox.stub();
-    const storeRemoveStub = sandbox.stub();
-    const retrieveUserStub = sandbox.stub();
-    storeSetStub.returns(Promise.resolve());
-    storeRemoveStub.returns(Promise.resolve());
-    retrieveUserStub.returns(Promise.resolve({
+    const storeSetStub = sandbox.stub().resolves();
+    const storeRemoveStub = sandbox.stub().resolves();
+    const retrieveUserStub = sandbox.stub().resolves({
       id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
       publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
       first_name: 'John',
       last_name: 'Doe',
       email: 'john.doe@mail.com',
       roles: ['developer'],
-    }));
+    });
+
     instances.store.set = storeSetStub;
     instances.store.remove = storeRemoveStub;
     instances.consumer.retrieveUser = retrieveUserStub;
@@ -328,25 +323,23 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
   t.test('successfully refresh tokens on `invalid_grant` failure', (assert) => {
     assert.plan(15);
     const instances = getUserInstances();
-    const storeSetStub = sandbox.stub();
-    const storeRemoveStub = sandbox.stub();
-    const retrieveUserStub = sandbox.stub();
+    const storeSetStub = sandbox.stub().resolves();
+    const storeRemoveStub = sandbox.stub().resolves();
     const refreshTokenStub = sandbox.stub();
-    storeSetStub.returns(Promise.resolve());
-    storeRemoveStub.returns(Promise.resolve());
-    refreshTokenStub.onCall(0).returns(Promise.resolve(TokenMocks.RefreshGrant));
-    retrieveUserStub.onCall(0).returns(Promise.reject(generateError({
+    const retrieveUserStub = sandbox.stub();
+    refreshTokenStub.onCall(0).resolves(TokenMocks.RefreshGrant);
+    retrieveUserStub.onCall(0).rejects(generateError({
       name: 'invalid_token',
       message: 'The access token provided is expired, revoked, malformed, or invalid',
-    })));
-    retrieveUserStub.onCall(1).returns(Promise.resolve({
+    }));
+    retrieveUserStub.onCall(1).resolves({
       id: '44d2c8e0-762b-4fa5-8571-097c81c3130d',
       publisher_id: '55f5c8e0-762b-4fa5-8571-197c8183130a',
       first_name: 'John',
       last_name: 'Doe',
       email: 'john.doe@mail.com',
       roles: ['developer'],
-    }));
+    });
     instances.store.set = storeSetStub;
     instances.store.remove = storeRemoveStub;
     instances.consumer.retrieveUser = retrieveUserStub;
@@ -381,17 +374,13 @@ test('User.authenticateWithToken(accessToken, refreshToken) should', (t) => {
   t.test('gracefully skip token refresh if `refreshToken` is not defined', (assert) => {
     assert.plan(7);
     const instances = getUserInstances();
-    const storeSetStub = sandbox.stub();
-    const storeRemoveStub = sandbox.stub();
-    const retrieveUserStub = sandbox.stub();
-    const refreshTokenStub = sandbox.stub();
-    storeSetStub.returns(Promise.resolve());
-    storeRemoveStub.returns(Promise.resolve());
-    refreshTokenStub.onCall(0).returns(Promise.resolve(TokenMocks.RefreshGrant));
-    retrieveUserStub.onCall(0).returns(Promise.reject(generateError({
+    const storeSetStub = sandbox.stub().resolves();
+    const storeRemoveStub = sandbox.stub().resolves();
+    const refreshTokenStub = sandbox.stub().resolves(TokenMocks.RefreshGrant);
+    const retrieveUserStub = sandbox.stub().rejects(generateError({
       name: 'unauthorized_client',
       message: 'The authenticated client is not authorized',
-    })));
+    }));
     instances.store.set = storeSetStub;
     instances.store.remove = storeRemoveStub;
     instances.consumer.retrieveUser = retrieveUserStub;
@@ -447,7 +436,7 @@ test('User.create(email, password, firstName, lastName) should set User data on 
   assert.plan(12);
   const response = Object.assign(UserMocks.User, {});
   const instances = getUserInstances();
-  sandbox.stub(instances.consumer, 'createUser', () => Promise.resolve(response));
+  sandbox.stub(instances.consumer, 'createUser').resolves(response);
   instances.user.create('john.doe@mail.com', 'password123456', 'firstName', 'lastName').then((res) => {
     assert.equals(res.message, 'Created User');
     assert.equals(instances.user.id, response.id);
@@ -492,7 +481,7 @@ test('User.save() should update User with new data', (assert) => {
   instances.user._isDirty = true;
   instances.user._bearer = TokenMocks.PaswordGrant.access_token;
   // Stub consumer
-  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser').resolves();
   // Update data
   instances.user.firstName = 'Foo';
   instances.user.lastName = 'Bar';
@@ -526,7 +515,7 @@ test('User.save() should skip update of synced User data', (assert) => {
   instances.user._roles = userData.roles;
   instances.user._bearer = TokenMocks.PaswordGrant.access_token;
   // Stub consumer
-  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser', () => Promise.resolve());
+  const updateUserStub = sandbox.stub(instances.consumer, 'updateUser').resolves();
   // Update data
   instances.user.firstName = 'Foo';
   instances.user.lastName = 'Bar';
@@ -547,7 +536,7 @@ test('User.save() should skip update of synced User data', (assert) => {
 test('User.flush() removes user data', (assert) => {
   assert.plan(11);
   const instances = getUserInstances();
-  const storeRemoveStub = sandbox.stub(instances.store, 'remove', () => Promise.resolve({}));
+  const storeRemoveStub = sandbox.stub(instances.store, 'remove').resolves({});
   instances.user.flush().then((res) => {
     assert.equals(res.message, 'Flushed User data');
     assert.equals(storeRemoveStub.callCount, 1);

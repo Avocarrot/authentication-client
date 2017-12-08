@@ -46,8 +46,7 @@ test('Redirector.authenticatedRedirect(url, loginToken) should', (t) => {
   t.test('redirect to url if store supports cross storage', (assert) => {
     assert.plan(2);
     const redirectFnSpy = sandbox.spy();
-    const retrieveURLStub = sandbox.stub();
-    retrieveURLStub.returns(() => 'http://mock.app.com/resource');
+    const retrieveURLStub = sandbox.stub().returns('http://mock.app.com/resource');
     const instances = getRedirectorInstances(sandbox, true);
     const redirector = new Redirector(instances.store, instances.user, redirectFnSpy, retrieveURLStub);
 
@@ -60,8 +59,7 @@ test('Redirector.authenticatedRedirect(url, loginToken) should', (t) => {
   t.test('redirect to url with token parameter from user.bearer if store supports does not support cross storage', (assert) => {
     assert.plan(2);
     const redirectFnSpy = sandbox.spy();
-    const retrieveURLStub = sandbox.stub();
-    retrieveURLStub.returns(() => 'http://mock.app.com/resource');
+    const retrieveURLStub = sandbox.stub().returns('http://mock.app.com/resource');
     const instances = getRedirectorInstances(sandbox, false);
     instances.user._bearer = 'abcdefghij';
     const redirector = new Redirector(instances.store, instances.user, redirectFnSpy, retrieveURLStub);
@@ -74,8 +72,7 @@ test('Redirector.authenticatedRedirect(url, loginToken) should', (t) => {
   t.test('redirect to url with token parameter in function call if store supports does not support cross storage', (assert) => {
     assert.plan(2);
     const redirectFnSpy = sandbox.spy();
-    const retrieveURLStub = sandbox.stub();
-    retrieveURLStub.returns(() => 'http://mock.app.com/resource');
+    const retrieveURLStub = sandbox.stub().returns('http://mock.app.com/resource');
     const instances = getRedirectorInstances(sandbox, false);
     const redirector = new Redirector(instances.store, instances.user, redirectFnSpy, retrieveURLStub);
 
@@ -88,8 +85,7 @@ test('Redirector.authenticatedRedirect(url, loginToken) should', (t) => {
   t.test('redirect to url with ?loginToken parameter from URL if store supports does not support cross storage', (assert) => {
     assert.plan(2);
     const redirectFnSpy = sandbox.spy();
-    const retrieveURLStub = sandbox.stub();
-    retrieveURLStub.returns('http://mock.app.com/resource?loginToken=123456789');
+    const retrieveURLStub = sandbox.stub().returns('http://mock.app.com/resource?loginToken=123456789');
     const instances = getRedirectorInstances(sandbox, false);
     const redirector = new Redirector(instances.store, instances.user, redirectFnSpy, retrieveURLStub);
 
@@ -102,8 +98,7 @@ test('Redirector.authenticatedRedirect(url, loginToken) should', (t) => {
   t.test('redirect to url with &loginToken parameter from URL if store supports does not support cross storage', (assert) => {
     assert.plan(2);
     const redirectFnSpy = sandbox.spy();
-    const retrieveURLStub = sandbox.stub();
-    retrieveURLStub.returns('http://mock.app.com/resource?loginToken=123456789');
+    const retrieveURLStub = sandbox.stub().returns('http://mock.app.com/resource?loginToken=123456789');
     const instances = getRedirectorInstances(sandbox, false);
     const redirector = new Redirector(instances.store, instances.user, redirectFnSpy, retrieveURLStub);
 
