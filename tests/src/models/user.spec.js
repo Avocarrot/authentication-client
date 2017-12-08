@@ -155,6 +155,15 @@ test('User.lastName should be read-write', (assert) => {
   assert.equals(instances.user.lastName, 'Doe');
 });
 
+test('User.lastLogin should be read-write', (assert) => {
+  assert.plan(2);
+  const instances = getUserInstances();
+  instances.user.lastLogin = '2012-12-08T09:12:26.430Z';
+  assert.equals(instances.user.lastLogin, '2012-12-08T09:12:26.430Z');
+  instances.user.lastLogin = null;
+  assert.equals(instances.user.lastLogin, '2012-12-08T09:12:26.430Z');
+});
+
 /**
  * User.authenticate(username, password)
  */
