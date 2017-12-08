@@ -479,6 +479,7 @@ test('User.save() should update User with new data', (assert) => {
   instances.user._firstName = userData.first_name;
   instances.user._lastName = userData.last_name;
   instances.user._email = userData.email;
+  instances.user._lastLogin = userData.last_login;
   instances.user._isDirty = true;
   instances.user._bearer = TokenMocks.PaswordGrant.access_token;
   // Stub consumer
@@ -486,13 +487,19 @@ test('User.save() should update User with new data', (assert) => {
   // Update data
   instances.user.firstName = 'Foo';
   instances.user.lastName = 'Bar';
+  instances.user.lastLogin = '2012-12-08T09:12:26.430Z';
   // Include role update (should be declined)
   instances.user.roles = ['admin'];
   // Save model
   instances.user.save().then((res) => {
     assert.equals(instances.user._isDirty, false);
     assert.equals(updateUserStub.callCount, 1);
-    assert.deepEquals(updateUserStub.getCall(0).args, ['44d2c8e0-762b-4fa5-8571-097c81c3130d', 'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7', { firstName: 'Foo', lastName: 'Bar' }]);
+    const expectedArgs = [
+      '44d2c8e0-762b-4fa5-8571-097c81c3130d',
+      'rkdkJHVBdCjLIIjsIK4NalauxPP8uo5hY8tTN7',
+      { firstName: 'Foo', lastName: 'Bar', lastLogin: '2012-12-08T09:12:26.430Z' },
+    ];
+    assert.deepEquals(updateUserStub.getCall(0).args, expectedArgs);
     assert.equals(res.message, 'Updated User model');
   });
   sandbox.restore();

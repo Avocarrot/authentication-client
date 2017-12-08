@@ -4,6 +4,7 @@
     "publisher_id": "55f5c8e0-762b-4fa5-8571-197c8183130a",
     "first_name": "John",
     "last_name": "Doe",
+    "last_login": "2011-12-08T09:12:26.430Z",
     "email": "john.doe@mail.com",
     "password": "qwerty123",
     "roles": ["developer"]
